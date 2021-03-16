@@ -1,0 +1,113 @@
+commit d6b3b1ac3dde40bc15a78fccea70db5ce6f809e1
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 20:47:17 2021 +0200
+
+    muutoksia
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit f28f27df605a4afca2f6bcedd266d2c80977d441
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 20:43:58 2021 +0200
+
+    lisätty tiedostoja
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 9c0fd64a562e8e37434b4ef6a995db6b58d57225
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:15:08 2021 +0200
+
+    muutokset
+
+ eka.txt    |  6 +-----
+ kolmas.txt | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+commit 93f75e7bb6a31c2740d66753db77e2e148a71e1d
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:12:48 2021 +0200
+
+    renamed files
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 05cefa91c5861b7636fcf9f533633abfd8ca7d33
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:11:32 2021 +0200
+
+    deleted toinen.txt
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 24d8db4e1eec666acc1ab37749ca0ffc9c8c82d3
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:09:54 2021 +0200
+
+    poistettu ja lisätty tekstiä
+
+ tiedosto.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+commit 4c7ac0a10651e11bbbff7336d644f5d3f95cd1c5
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:08:31 2021 +0200
+
+    lisätty tekstiä
+
+ tiedosto.txt | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+commit eaf00f8b9f236eb0641b4a4dcff538761ccbc488
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:05:33 2021 +0200
+
+    lisätty stuff/jokintiedosto.txt
+
+ stuff/jokintiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 2d081f4de928e033d63d6f13916d6a10776dd9c5
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:04:38 2021 +0200
+
+    muokattu tiedostoja
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 19935ac21a019e045d619276a48c1983954e1bee
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:03:42 2021 +0200
+
+    luotu kolmas.txt
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 9396e319b39892fabd6a9dfdbd0897d1a3de9f14
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 19:01:17 2021 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit c171af20db1aaffe5b40280761e2c692fcb469b7
+Author: Pekka <75335748+P3Xu@users.noreply.github.com>
+Date:   Tue Mar 16 18:51:45 2021 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
