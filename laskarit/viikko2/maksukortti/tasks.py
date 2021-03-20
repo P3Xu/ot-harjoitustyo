@@ -1,5 +1,5 @@
 from invoke import task
 
 @task
-def foo():
-    print("bar")
+def test(ctx):
+    ctx.run("pytest")
