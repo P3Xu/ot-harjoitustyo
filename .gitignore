@@ -1,6 +1,6 @@
 /laskarit/viikko2/unicafe/.pytest_cache
 *__pycache__*
 *.coverage
-*.coveragerc
+#*.coveragerc
 *htmlcov
 poetry.lock
