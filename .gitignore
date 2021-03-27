@@ -2,4 +2,4 @@
 #laskarit/viikko2/unicafe/.coverage
 /laskarit/viikko2/unicafe/htmlcov
 *__pycache__*
-*.coverage
+*.coveragerc
