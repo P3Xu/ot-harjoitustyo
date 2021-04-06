@@ -1,4 +1,14 @@
-/laskarit/viikko2/unicafe/.pytest_cache
-*__pycache__*
-*.coverage
-*htmlcov
+/laskarit/*
+__pycache__
+.coverage
+htmlcov
+.vscode
+vaatimusmaaritelma.odt
+index.py
+
+# Databases
+data/*
+!data/.gitkeep
+
+# Sandboxes etc
+temp/*

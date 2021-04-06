@@ -7,8 +7,29 @@ Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja
 - [Työaikakirjanpito](https://github.com/P3Xu/ot-harjoitustyo/blob/master/sovellus/dokumentaatio/tuntikirjanpito.md)
 - [Vaatimusmäärittely](https://github.com/P3Xu/ot-harjoitustyo/blob/master/sovellus/dokumentaatio/vaatimusmaarittely.md)
 
-## Laskarit
+## Asennus
 
-- [Viikko 1](https://github.com/P3Xu/ot-harjoitustyo/tree/master/laskarit/viikko1)
-- [Viikko 2](https://github.com/P3Xu/ot-harjoitustyo/tree/master/laskarit/viikko2)
+Ensiksi täytyy asentaa riippuvuudet komennolla:
+```shell
+poetry install
+```
 
+Tämän jälkeen projekti täytyy alustaa komennolla:
+```shell
+poetry run invoke build
+```
+
+Näiden toimenpiteiden jälkeen sovelluksen voi käynnistää komennolla:
+```shell
+poetry run invoke start
+```
+
+Testit voi suorittaa komennolla:
+```shell
+poetry run invoke test
+```
+
+Testikattavuusraportin puolestaan saa ulos (ilmestyy htmlcov -nimiseen hakemistoon) komennolla:
+```shell
+poetry run coverage-report
+```
