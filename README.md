@@ -9,6 +9,8 @@ Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja
 
 ## Asennus
 
+Sovellus käyttää [Poetrya](https://python-poetry.org/docs/) riippuvuuksien hallintaan.
+
 Ensiksi täytyy asentaa riippuvuudet komennolla:
 ```shell
 poetry install
