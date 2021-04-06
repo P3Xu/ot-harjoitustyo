@@ -4,8 +4,8 @@ Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja
 
 ## Dokumentaatio
 
-- [Työaikakirjanpito](https://github.com/P3Xu/ot-harjoitustyo/blob/master/sovellus/dokumentaatio/tuntikirjanpito.md)
-- [Vaatimusmäärittely](https://github.com/P3Xu/ot-harjoitustyo/blob/master/sovellus/dokumentaatio/vaatimusmaarittely.md)
+- [Työaikakirjanpito](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
+- [Vaatimusmäärittely](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
 
 ## Asennus
 
