@@ -1,3 +1,8 @@
+"""
+    Alkuun deadlineja/testailua varten nopeasti tehty tekstipohjainen käyttis,
+    joka korvataan myöhemmin graafisella ja koodataan siis täysin uusiksi.
+"""
+
 from services import controller
 
 COMMANDS = {
