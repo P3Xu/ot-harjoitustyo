@@ -11,4 +11,5 @@
 | 3.4. | 6 | Perustoiminnallisuuden parissa jatkaminen |
 | 4.4. | 2 | Perustoiminnallisuuden hiomista |
 | 5.4. | 4 | Valmistelua ensimmäiseen palautukseen |
-| Yht. | 36 | |
+| 12.4. | 5 | Repository-luokan refaktorointi, toiminnallisuuden lisäämistä |
+| Yht. | 41 | |
