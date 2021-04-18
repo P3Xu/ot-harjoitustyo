@@ -23,11 +23,18 @@ class TestMealRepository(unittest.TestCase):
         self.insert_meal_1 = self.repository.insert_meal(self.meal_1.name)
         self.insert_meal_2 = self.repository.insert_meal(self.meal_2.name)
 
-        #for ingredient in self.ingredients:
-        #    self.repository.insert_ingredient(ingredient.name)
-
         self.inserted_ingredients = [
-            self.repository.insert_ingredient(ingredient.name) for ingredient in self.ingredients]
+            self.repository.insert_ingredient(ingredient.name)
+            for ingredient in self.ingredients
+        ]
+
+        self.meals = [self.meal_1, self.meal_2]
+        self.relations = [
+            (meal.db_id, ingredient)
+            for meal in self.meals for ingredient in meal.ingredients
+        ]
+
+        self.repository.update_relations(self.relations)
 
     def test_insert_meal(self):
         self.assertEqual(self.insert_meal_1, 1)
@@ -66,7 +73,10 @@ class TestMealRepository(unittest.TestCase):
         self.assertIsInstance(result, Ingredient)
 
     def test_find_meal_ingredients(self):
-        
+        self.assertEqual(len(self.repository.find_meal_ingredients(self.meal_1.name)), len(self.meal_1.ingredients))
+
+
+
     """def test_find_meal_by_name(self):
         name = self.meal_1.name
         result = self.repository.find_meal_by_name(name)
