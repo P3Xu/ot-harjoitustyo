@@ -1,12 +1,12 @@
 import unittest
 from datetime import date
-from repositories.generator_repository import GeneratorRepository
+from repositories.meal_repository import MealRepository
 from services.generator import GeneratorService
 from entities.menu import Menu
 
 class TestGeneratorService(unittest.TestCase):
     def setUp(self):
-        self.repository = GeneratorRepository()
+        self.repository = MealRepository()
         self.generator = GeneratorService(self.repository)
         self.test_menu = self.generator.generate()
 

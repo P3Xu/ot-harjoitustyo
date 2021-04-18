@@ -24,34 +24,13 @@ class MealRepository:
 
         return meals
 
-    #def find_meal_by_name(self, name):
-    #    return self._read("SELECT * FROM meals WHERE name = ?", name)
-
-    """def find_meal_by_name(self, name):
-        result = self._read("SELECT * FROM meals WHERE name = ?", name)
-
-        if len(result) > 0:
-            meal = result[0]
-
-            return Meal(meal['name'], self.find_meal_ingredients(meal['name']), meal['id'])
-
-
-
-    def find_meal_by_id(self, meal_id):
-        result = self._read("SELECT * FROM meals WHERE id = ?", meal_id)
-
-        if len(result) > 0:
-            meal = result[0]
-
-            return Meal(meal['name'], self.find_meal_ingredients(meal['name']), meal['id'])
-
-        return result"""
-
     def find_single_meal(self, criterion):
-        if type(criterion) is str:
+        if isinstance(criterion, str):
             query = "SELECT * FROM meals WHERE name = ?"
-        elif type(criterion) is int:
+        elif isinstance(criterion, int):
             query = "SELECT * FROM meals WHERE id = ?"
+        else:
+            return None
 
         result = self._read(query, criterion)
 
@@ -74,11 +53,23 @@ class MealRepository:
 
         return ingredients
 
-    def find_ingredient_by_name(self, ingredient):
-        """POISTA DUPLIKAATIT, NYT SAMANLAINEN FIND_INGREDIENTIN KANSSA"""
-        return self._read("SELECT * FROM ingredients WHERE name = ?", ingredient)
+    def find_single_ingredient(self, criterion):
+        if isinstance(criterion, str):
+            query = "SELECT * FROM ingredients WHERE name = ?"
+        else:
+            return None
+
+        result = self._read(query, criterion)
+
+        if len(result) > 0:
+            ingredient = result[0]
+
+            return Ingredient(ingredient['name'], ingredient['id'])
+
+        return result
 
     def find_meal_ingredients(self, meal):
+        """Potentiaalinen vaaranpaikka jos tuloksia ei löydy!"""
         query = """SELECT I.id, I.name FROM ingredients I
             LEFT JOIN relations R ON I.id = R.ingredientID
             LEFT JOIN meals M ON R.mealID = M.id
@@ -104,6 +95,7 @@ class MealRepository:
         return self._read("SELECT id FROM meals ORDER BY id DESC LIMIT 1")
 
     def update_relations(self, relations):
+        """Tämä ehkä insert mealin yhteyteen?"""
         query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
 
         for relation in relations:
@@ -124,12 +116,11 @@ class MealRepository:
             with self.connection:
                 if var is False:
                     results = self.connection.execute(query).fetchall()
-                    items.append(results)
-                    return results
                 else:
                     results = self.connection.execute(query,[var]).fetchall()
-                    items.append(results)
-                    return results
+
+                items.append(results)
+                return results
 
         except self.connection.Error as error:
             return error

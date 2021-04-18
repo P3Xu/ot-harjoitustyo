@@ -12,7 +12,6 @@ COMMANDS = {
     3: "3: Näytä ruokalajit",
     4: "4: Näytä ruoka-aineet",
     5: "5: Lisää ruokalaji",
-    6: "6: Lisää ruoka-aine"
 }
 
 DAYS = {
@@ -74,7 +73,27 @@ class UI:
 
                 for ingredient in ingredients:
                     print(ingredient)
-            elif command == "5" or command == "6":
-                print("Ei vielä implementoitu, tulossa pian!")
+
+            elif command == "5":
+                ingredients = []
+                meal_name = input("Syötä ruokalajin nimi: ")
+                first_ingredient = input("\nSyötä vähintään yhden raaka-aineen nimi: ")
+
+                ingredients.append(first_ingredient)
+
+                while True:
+                    ask_more = str(input("\nOnko raaka-aineita enemmän, K/E? "))
+
+                    if ask_more in ('K', 'k'):
+                        ingredient = input("\nSyötä raaka-aineen nimi: ")
+                        ingredients.append(ingredient)
+                    else:
+                        if self.ctrl.add_meal(meal_name, ingredients) == 0:
+                            print("\nRuokalaji lisätty onnistuneesti kirjastoon!")
+                            break
+                        else:
+                            print("\nRuokalaji löytyy jo kirjastosta.")
+                            break
+
             else:
                 print("Virheellinen komento, valitse uudestaan:")

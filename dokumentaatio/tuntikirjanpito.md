@@ -12,4 +12,7 @@
 | 4.4. | 2 | Perustoiminnallisuuden hiomista |
 | 5.4. | 4 | Valmistelua ensimmäiseen palautukseen |
 | 12.4. | 5 | Repository-luokan refaktorointi, toiminnallisuuden lisäämistä |
-| Yht. | 41 | |
+| 13.4. | 5 | Perustoiminnallisuus melko valmis, testien aloittaminen |
+| 17.4. | 3 | Testien kirjoittelua |
+| 18.4. | 7 | Testien kirjoittelua, uusi repository-refaktorointi |
+| Yht. | 56 | |

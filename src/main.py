@@ -1,5 +1,5 @@
-from UI import ui
+from ui.ui import UI
 
-UI = ui.UI()
+ui = UI()
 
-UI.start()
+ui.start()

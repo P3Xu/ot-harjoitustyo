@@ -1,9 +1,11 @@
 import unittest
 from entities.meal import Meal
+from entities.menu import Menu
 from entities.ingredient import Ingredient
 from repositories.meal_repository import MealRepository
+from repositories.menu_repository import MenuRepository
 
-class TestMealRepository(unittest.TestCase):
+class TestMenuRepository(unittest.TestCase):
     def setUp(self):
         self.repository = MealRepository()
         self.repository.empty_tables()
