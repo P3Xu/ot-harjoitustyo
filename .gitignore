@@ -12,3 +12,4 @@ data/*
 
 # Sandboxes etc
 temp/*
+src/temp.py
