@@ -15,4 +15,5 @@
 | 13.4. | 5 | Perustoiminnallisuus melko valmis, testien aloittaminen |
 | 17.4. | 3 | Testien kirjoittelua |
 | 18.4. | 7 | Testien kirjoittelua, uusi repository-refaktorointi |
-| Yht. | 56 | |
+| 19.4. | 5 | Jälleen uusi refaktorointi, testin korjailua |
+| Yht. | 61 | |
