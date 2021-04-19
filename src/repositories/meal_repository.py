@@ -83,25 +83,23 @@ class MealRepository:
     def insert_ingredient(self, ingredient):
         query = "INSERT INTO ingredients (name) VALUES (?)"
 
-        return self._write(query, [ingredient])
+        db_id = self._write(query, [ingredient.name])
+
+        return Ingredient(ingredient.name, db_id)
 
     def insert_meal(self, meal):
-        return self._write("INSERT INTO meals (name) VALUES (?)", [meal])
+        query = "INSERT INTO meals (name) VALUES (?)"
 
-    def check_latest_id(self, which=False):
-        if which is False:
-            return self._read("SELECT id FROM ingredients ORDER BY id DESC LIMIT 1")
+        db_id = self._write(query, [meal.name])
 
-        return self._read("SELECT id FROM meals ORDER BY id DESC LIMIT 1")
+        for ingredient in meal.ingredients:
+            self._insert_relation((db_id, ingredient.db_id))
 
-    def update_relations(self, relations):
-        """Tämä ehkä insert mealin yhteyteen?"""
+    def _insert_relation(self, relation):
         query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
+        (meal_id, ingredient_id) = relation
 
-        for relation in relations:
-            (meal_id, ingredient_id) = relation
-
-            self._write(query, [meal_id, ingredient_id])
+        self._write(query, [meal_id, ingredient_id])
 
     def empty_tables(self):
         self.connection.execute("DELETE FROM meals")

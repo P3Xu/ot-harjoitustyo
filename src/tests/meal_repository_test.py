@@ -9,46 +9,53 @@ class TestMealRepository(unittest.TestCase):
         self.repository.empty_tables()
 
         self.ingredients = [
-            Ingredient('Jauheliha', 1),
-            Ingredient('Sipuli', 2),
-            Ingredient('Makaroni', 3),
-            Ingredient('Juusto', 4),
-            Ingredient('Lenkkimakkara', 5),
-            Ingredient('Ketsuppi', 6)
+            Ingredient('Jauheliha'),
+            Ingredient('Sipuli'),
+            Ingredient('Makaroni'),
+            Ingredient('Juusto'),
+            Ingredient('Lenkkimakkara'),
+            Ingredient('Ketsuppi')
         ]
 
         self.meals = [
-            Meal('Makaronilaatikko', [1,2,3,4], 1),
-            Meal('Uunimakkara', [4,5,6], 2)
+            Meal('Makaronilaatikko', [0,1,2]),
+            Meal('Uunimakkara', [3,4,5])
         ]
 
-        self.relations = []
-
         for meal in self.meals:
-            self.repository.insert_meal(meal.name)
+            for i in range(len(meal.ingredients)):
+                meal.ingredients[i] = self.repository.insert_ingredient(self.ingredients[i])
 
-            for ingredient in meal.ingredients:
-                self.relations.append((meal.db_id, ingredient))
-
-        for ingredient in self.ingredients:
-            self.repository.insert_ingredient(ingredient.name)
-
-        self.repository.update_relations(self.relations)
+            self.repository.insert_meal(meal)
 
     def test_insert_meal(self):
         self.repository.empty_tables()
 
-        insert = self.repository.insert_meal(self.meals[0].name)
+        meal = self.meals[0]
+        ingredients = [
+            self.repository.insert_ingredient(Ingredient(ingredient.name))
+            for ingredient in meal.ingredients
+        ]
 
-        self.assertEqual(insert, 1)
-        self.assertEqual(len(self.repository.find_all_meals()), 1)
+        self.repository.insert_meal(Meal(meal.name, ingredients))
+
+        meals = self.repository.find_all_meals()
+
+        self.assertEqual(len(meals), 1)
+        self.assertEqual(meals[0].db_id, 1)
+        self.assertIsInstance(meals[0], Meal)
+        self.assertEqual(meals[0].name, meal.name)
+        self.assertEqual(len(meals[0].ingredients), len(meal.ingredients))
+        self.assertEqual(meals[0].ingredients[0].name, meal.ingredients[0].name)
 
     def test_insert_ingredient(self):
         self.repository.empty_tables()
 
-        insert = self.repository.insert_ingredient(self.ingredients[0].name)
+        insert = self.repository.insert_ingredient(self.ingredients[0])
 
-        self.assertEqual(insert, 1)
+        self.assertEqual(insert.db_id, 1)
+        self.assertIsInstance(insert, Ingredient)
+        self.assertEqual(insert.name, self.ingredients[0].name)
         self.assertEqual(len(self.repository.find_all_ingredients()), 1)
 
     def test_find_all_meals(self):
@@ -94,14 +101,6 @@ class TestMealRepository(unittest.TestCase):
 
         self.assertIsInstance(ingredients[0], Ingredient)
         self.assertEqual(len(ingredients), len(self.meals[0].ingredients))
-
-    def test_check_latest_id(self):
-        id_ingredient = self.ingredients[-1].db_id
-        id_meal = self.meals[-1].db_id
-        check = self.repository.check_latest_id()[0]['id']
-
-        self.assertEqual(self.repository.check_latest_id()[0]['id'], id_ingredient)
-        self.assertEqual(self.repository.check_latest_id(True)[0]['id'], id_meal)
 
     def test_empty_tables(self):
         meals = self.repository.find_all_meals()

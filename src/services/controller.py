@@ -1,6 +1,8 @@
+from entities.meal import Meal
+from entities.ingredient import Ingredient
+from services.generator import GeneratorService
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
-from services.generator import GeneratorService
 
 class Controller:
     """Kontrolleri-luokka."""
@@ -29,27 +31,30 @@ class Controller:
         return self.menu_repository.find_menu().get_meals()
 
     def add_ingredients(self, ingredients):
-        ids = []
+        inserted_ingredients = []
 
         for ingredient in ingredients:
             check = self._check_item(ingredient)
 
-            if len(check) > 0:
-                ids.append(check[0]['id'])
-            else:
-                ids.append(self.meal_repository.insert_ingredient(ingredient))
+            if isinstance(check, list):
+                inserted_ingredient = self.meal_repository.insert_ingredient(
+                    Ingredient(ingredient)
+                )
 
-        return ids
+                inserted_ingredients.append(inserted_ingredient)
+
+            else:
+                inserted_ingredients.append(check)
+
+        return inserted_ingredients
 
     def add_meal(self, meal, ingredients):
         check = self._check_item(meal, True)
 
-        if len(check) == 0:
-            ingredient_ids = self.add_ingredients(ingredients)
-            meal_id = self.meal_repository.insert_meal(meal)
-            relations = [(meal_id, ingredient_id) for ingredient_id in ingredient_ids]
+        if isinstance(check, list):
+            ingredients = self.add_ingredients(ingredients)
 
-            self.meal_repository.update_relations(relations)
+            self.meal_repository.insert_meal(Meal(meal, ingredients))
 
             return 0
 
