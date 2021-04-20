@@ -22,10 +22,10 @@ poetry run invoke build
 ```
 
 Näiden toimenpiteiden jälkeen sovelluksen voi käynnistää komennolla:
-- invoke saattaa rikkoa joitain rivinvaihtoja välillä, ja backspace ei toimi, mutta korjaantunee graafisen käyttöliittymän myötä.
 ```shell
 poetry run invoke start
 ```
+- invoke saattaa rikkoa joitain rivinvaihtoja välillä, ja backspace ei toimi, mutta korjaantunee graafisen käyttöliittymän myötä.
 
 Testit voi suorittaa komennolla:
 ```shell
