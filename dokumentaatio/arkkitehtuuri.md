@@ -1,1 +1,1 @@
-<img src="https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/kaavio.jpg" width="1024" height="768">
+<img src="https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/kaavio.jpg" width="768" height="1024">
