@@ -16,4 +16,5 @@
 | 17.4. | 3 | Testien kirjoittelua |
 | 18.4. | 7 | Testien kirjoittelua, uusi repository-refaktorointi |
 | 19.4. | 5 | Jälleen uusi refaktorointi, testin korjailua |
-| Yht. | 61 | |
+| 20.4. | 11 | Lähes koko päivä yhtä tunkkausta |
+| Yht. | 72 | |

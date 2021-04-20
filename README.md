@@ -6,6 +6,7 @@ Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja
 
 - [Työaikakirjanpito](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 - [Vaatimusmäärittely](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
+- [Arkkitehtuurikuvaus](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)
 
 ## Asennus
 
