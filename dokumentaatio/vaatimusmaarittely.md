@@ -39,8 +39,7 @@ Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänä
 - Käyttäjä voi kirjautua ulos järjestelmästä
 
 Ruokalista luodaan aina viikoksi kerrallaan ja oletusarvoisesti yksi ruokalaji on generoitu aina yhdeksi päiväksi, eli sovellus ei erottele esimerkiksi lounasta ja päivällistä erikseen.
-	
-	- **Tällä hetkellä tilanne on juuri tämä**
+	- **Tällä hetkellä tämä on vielä näin**
 
 **Tilanne:** Projekti laahaa tällä hetkellä hieman jäljessä (omasta) aikataulusta, graafisen käyttöliittymän tekoa ei ole ehditty vielä edes aloittaa. 
 
