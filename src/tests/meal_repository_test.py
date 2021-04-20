@@ -45,8 +45,6 @@ class TestMealRepository(unittest.TestCase):
         self.assertEqual(meals[0].db_id, 1)
         self.assertIsInstance(meals[0], Meal)
         self.assertEqual(meals[0].name, meal.name)
-        self.assertEqual(len(meals[0].ingredients), len(meal.ingredients))
-        self.assertEqual(meals[0].ingredients[0].name, meal.ingredients[0].name)
 
     def test_insert_ingredient(self):
         self.repository.empty_tables()
@@ -60,10 +58,14 @@ class TestMealRepository(unittest.TestCase):
 
     def test_find_all_meals(self):
         meals = self.repository.find_all_meals()
+        meal = meals[0]
 
         self.assertEqual(len(meals), 2)
-        self.assertIsInstance(meals[0], Meal)
-        self.assertEqual(meals[0].name, self.meals[0].name)
+        self.assertIsInstance(meal, Meal)
+        self.assertEqual(meal.name, self.meals[0].name)
+        self.assertIsInstance(meal.ingredients[0], Ingredient)
+        self.assertEqual(meal.ingredients[0].name, self.ingredients[0].name)
+        self.assertEqual(len(meal.ingredients), len(self.meals[0].ingredients))
 
     def test_find_single_meal_by_name(self):
         name = self.meals[0].name
@@ -71,6 +73,8 @@ class TestMealRepository(unittest.TestCase):
 
         self.assertEqual(result.name, name)
         self.assertIsInstance(result, Meal)
+        self.assertIsInstance(result.ingredients[0], Ingredient)
+        self.assertEqual(len(result.ingredients), len(self.meals[0].ingredients))
         self.assertEqual(len(self.repository.find_single_meal(str('Surströmming'))), 0)
 
     def test_find_single_meal_by_id(self):
@@ -78,7 +82,9 @@ class TestMealRepository(unittest.TestCase):
 
         self.assertEqual(result.db_id, 1)
         self.assertIsInstance(result, Meal)
-        self.assertIsNone(self.repository.find_single_meal(float(666)))
+        self.assertIsInstance(result.ingredients[0], Ingredient)
+        self.assertIsNone(self.repository.find_single_meal(self.meals[0]))
+        self.assertEqual(len(self.repository.find_single_meal(int(666))), 0)
 
     def test_find_all_ingredients(self):
         ingredients = self.repository.find_all_ingredients()
@@ -93,26 +99,21 @@ class TestMealRepository(unittest.TestCase):
 
         self.assertEqual(result.name, name)
         self.assertIsInstance(result, Ingredient)
-        self.assertEqual(len(self.repository.find_single_ingredient(str('Mämmi'))), 0)
         self.assertIsNone(self.repository.find_single_ingredient(self.meals[0]))
+        self.assertEqual(len(self.repository.find_single_ingredient(str('Mämmi'))), 0)
 
-    def test_find_meal_ingredients(self):
-        ingredients = self.repository.find_meal_ingredients(self.meals[0].name)
-
-        self.assertIsInstance(ingredients[0], Ingredient)
-        self.assertEqual(len(ingredients), len(self.meals[0].ingredients))
-
-    def test_empty_tables(self):
-        meals = self.repository.find_all_meals()
-        ingredients = self.repository.find_all_ingredients()
+    def test_empty_tables_and_results(self):
+        repo = self.repository
+        meals = repo.find_all_meals()
+        ingredients = repo.find_all_ingredients()
 
         self.assertEqual(len(meals), len(self.meals))
         self.assertEqual(len(ingredients), len(self.ingredients))
 
-        self.repository.empty_tables()
+        repo.empty_tables()
 
-        self.assertEqual(len(self.repository.find_all_meals()), 0)
-        self.assertEqual(len(self.repository.find_all_ingredients()), 0)
-
-    #def empty_results(self):
-    # Entäs jos kanta onkin tyhjä?
+        self.assertEqual(len(repo.find_all_meals()), 0)
+        self.assertEqual(len(repo.find_all_ingredients()), 0)
+        self.assertEqual(len(repo.find_single_meal(int(meals[0].db_id))), 0)
+        self.assertEqual(len(repo.find_single_meal(str(meals[0].name))), 0)
+        self.assertEqual(len(repo.find_single_ingredient(str(ingredients[0].name))), 0)

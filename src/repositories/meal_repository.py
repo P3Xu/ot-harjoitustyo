@@ -17,7 +17,7 @@ class MealRepository:
         meals = [
             Meal(
                 meal['name'],
-                self.find_meal_ingredients(meal['name']),
+                self._find_meal_ingredients(meal['id']),
                 meal['id']
             )
         for meal in meals]
@@ -26,18 +26,18 @@ class MealRepository:
 
     def find_single_meal(self, criterion):
         if isinstance(criterion, str):
-            query = "SELECT * FROM meals WHERE name = ?"
+            query = "SELECT * FROM meals WHERE name = ? LIMIT 1"
         elif isinstance(criterion, int):
-            query = "SELECT * FROM meals WHERE id = ?"
+            query = "SELECT * FROM meals WHERE id = ? LIMIT 1"
         else:
             return None
 
         result = self._read(query, criterion)
 
         if len(result) > 0:
-            meal = result[0]
+            result = result[0]
 
-            return Meal(meal['name'], self.find_meal_ingredients(meal['name']), meal['id'])
+            return Meal(result['name'], self._find_meal_ingredients(result['id']), result['id'])
 
         return result
 
@@ -68,18 +68,6 @@ class MealRepository:
 
         return result
 
-    def find_meal_ingredients(self, meal):
-        """Potentiaalinen vaaranpaikka jos tuloksia ei löydy!"""
-        query = """SELECT I.id, I.name FROM ingredients I
-            LEFT JOIN relations R ON I.id = R.ingredientID
-            LEFT JOIN meals M ON R.mealID = M.id
-            WHERE M.name = ?"""
-
-        items = self._read(query, meal)
-        items = [Ingredient(item['name'], item['id']) for item in items]
-
-        return items
-
     def insert_ingredient(self, ingredient):
         query = "INSERT INTO ingredients (name) VALUES (?)"
 
@@ -95,17 +83,28 @@ class MealRepository:
         for ingredient in meal.ingredients:
             self._insert_relation((db_id, ingredient.db_id))
 
-    def _insert_relation(self, relation):
-        query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
-        (meal_id, ingredient_id) = relation
-
-        self._write(query, [meal_id, ingredient_id])
-
     def empty_tables(self):
         self.connection.execute("DELETE FROM meals")
         self.connection.execute("DELETE FROM relations")
         self.connection.execute("DELETE FROM ingredients")
         self.connection.commit()
+
+    def _find_meal_ingredients(self, meal):
+        query = """SELECT I.id, I.name FROM ingredients I
+            LEFT JOIN relations R ON I.id = R.ingredientID
+            LEFT JOIN meals M ON R.mealID = M.id
+            WHERE M.id = ?"""
+
+        items = self._read(query, meal)
+        items = [Ingredient(item['name'], item['id']) for item in items]
+
+        return items
+
+    def _insert_relation(self, relation):
+        query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
+        (meal_id, ingredient_id) = relation
+
+        self._write(query, [meal_id, ingredient_id])
 
     def _read(self, query, var=False):
         items = []
