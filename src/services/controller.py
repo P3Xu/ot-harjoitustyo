@@ -28,7 +28,7 @@ class Controller:
         if isinstance(menu, int):
             return ["Generoi ruokalista ensin!"]
 
-        return self.menu_repository.find_menu().get_meals()
+        return menu.meals
 
     def add_ingredients(self, ingredients):
         inserted_ingredients = []

@@ -57,8 +57,6 @@ class UI:
                 if len(menu) == 1:
                     print(menu[0])
                 else:
-                    #for i in range(0, len(menu)):
-                    #    print(f"{DAYS[i]: <13} {menu[i]}")
                     for i, day in DAYS.items():
                         print(f"{day: <13}{menu[i]}")
 

@@ -18,7 +18,7 @@ class MenuRepository:
         self.connection.commit()
 
     def insert_menu(self, menu):
-        values = [(meal.db_id,menu.get_date()) for meal in menu.get_meals()]
+        values = [(meal.db_id,menu.date) for meal in menu.meals]
 
         self.initialize_menus()
         self._write("INSERT INTO menus (mealID, date) VALUES (?, ?)", values)
@@ -35,8 +35,6 @@ class MenuRepository:
         return Menu(meals, date)
 
     def _read(self, query, var=False):
-        items = []
-
         try:
             with self.connection:
                 if var is False:
@@ -44,7 +42,6 @@ class MenuRepository:
                 else:
                     results = self.connection.execute(query,[var]).fetchall()
 
-                items.append(results)
                 return results
 
         except self.connection.Error as error:

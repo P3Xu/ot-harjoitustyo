@@ -5,7 +5,29 @@ from entities.default_set import DefaultSet
 from repositories.meal_repository import MealRepository
 
 class TestMealRepository(unittest.TestCase):
-    def setUp(self):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.repository = MealRepository()
+        cls.mealset = DefaultSet().create_meals()
+        cls.ingredients = DefaultSet().create_ingredients()
+        cls.repository.empty_tables()
+        cls.meals = cls._prepare_meal_repository()
+
+    @classmethod
+    def _prepare_meal_repository(cls):
+        meals = []
+
+        for meal in cls.mealset:
+            for i in range(len(meal.ingredients)):
+                ingredient = cls.ingredients[meal.ingredients[i]]
+                meal.ingredients[i] = cls.repository.insert_ingredient(ingredient)
+
+            meals.append(Meal(meal.name, meal.ingredients, cls.repository.insert_meal(meal)))
+
+        return meals
+
+    """def setUp(self):
         self.repository = MealRepository()
         self.ingredients = DefaultSet().create_ingredients()
         self.meals = DefaultSet().create_meals()
@@ -17,35 +39,7 @@ class TestMealRepository(unittest.TestCase):
                 ingredient = self.ingredients[meal.ingredients[i]]
                 meal.ingredients[i] = self.repository.insert_ingredient(ingredient)
 
-            self.repository.insert_meal(meal)
-
-    def test_insert_meal(self):
-        self.repository.empty_tables()
-
-        meal = self.meals[0]
-        ingredients = [
-            self.repository.insert_ingredient(Ingredient(ingredient.name))
-            for ingredient in meal.ingredients
-        ]
-
-        db_id = self.repository.insert_meal(Meal(meal.name, ingredients))
-
-        meals = self.repository.find_all_meals()
-
-        self.assertEqual(len(meals), 1)
-        self.assertEqual(meals[0].db_id, db_id)
-        self.assertIsInstance(meals[0], Meal)
-        self.assertEqual(meals[0].name, meal.name)
-
-    def test_insert_ingredient(self):
-        self.repository.empty_tables()
-
-        insert = self.repository.insert_ingredient(self.ingredients[0])
-
-        self.assertEqual(insert.db_id, 1)
-        self.assertIsInstance(insert, Ingredient)
-        self.assertEqual(insert.name, self.ingredients[0].name)
-        self.assertEqual(len(self.repository.find_all_ingredients()), 1)
+            self.repository.insert_meal(meal)"""
 
     def test_find_all_meals(self):
         meals = self.repository.find_all_meals()
@@ -93,13 +87,41 @@ class TestMealRepository(unittest.TestCase):
         self.assertIsNone(self.repository.find_single_ingredient(self.meals[0]))
         self.assertEqual(len(self.repository.find_single_ingredient(str('Mämmi'))), 0)
 
-    def test_empty_tables_and_results(self):
+    def test_insert_ingredient(self):
+        self.repository.empty_tables()
+
+        insert = self.repository.insert_ingredient(self.ingredients[0])
+
+        self.assertEqual(insert.db_id, 1)
+        self.assertIsInstance(insert, Ingredient)
+        self.assertEqual(insert.name, self.ingredients[0].name)
+        self.assertEqual(len(self.repository.find_all_ingredients()), 1)
+
+    def test_insert_meal(self):
+        self.repository.empty_tables()
+
+        meal = self.meals[0]
+        ingredients = [
+            self.repository.insert_ingredient(Ingredient(ingredient.name))
+            for ingredient in meal.ingredients
+        ]
+
+        db_id = self.repository.insert_meal(Meal(meal.name, ingredients))
+
+        meals = self.repository.find_all_meals()
+
+        self.assertEqual(len(meals), 1)
+        self.assertEqual(meals[0].db_id, db_id)
+        self.assertIsInstance(meals[0], Meal)
+        self.assertEqual(meals[0].name, meal.name)
+
+    def test_when_empty_tables_and_results(self):
         repo = self.repository
         meals = repo.find_all_meals()
         ingredients = repo.find_all_ingredients()
 
-        self.assertEqual(len(meals), len(self.meals))
-        self.assertEqual(len(ingredients), len(self.ingredients))
+        self.assertEqual(len(meals), 1)
+        self.assertEqual(len(ingredients), 3)
 
         repo.empty_tables()
 

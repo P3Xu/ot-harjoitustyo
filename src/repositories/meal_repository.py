@@ -69,19 +69,21 @@ class MealRepository:
         return result
 
     def insert_ingredient(self, ingredient):
-        query = "INSERT INTO ingredients (name) VALUES (?)"
+        query = "INSERT OR IGNORE INTO ingredients (name) VALUES (?)"
 
         db_id = self._write(query, [ingredient.name])
 
         return Ingredient(ingredient.name, db_id)
 
     def insert_meal(self, meal):
-        query = "INSERT INTO meals (name) VALUES (?)"
+        query = "INSERT OR IGNORE INTO meals (name) VALUES (?)"
 
         db_id = self._write(query, [meal.name])
 
         for ingredient in meal.ingredients:
             self._insert_relation((db_id, ingredient.db_id))
+
+        return db_id
 
     def empty_tables(self):
         self.connection.execute("DELETE FROM meals")
@@ -89,13 +91,13 @@ class MealRepository:
         self.connection.execute("DELETE FROM ingredients")
         self.connection.commit()
 
-    def _find_meal_ingredients(self, meal):
+    def _find_meal_ingredients(self, meal_id):
         query = """SELECT I.id, I.name FROM ingredients I
             LEFT JOIN relations R ON I.id = R.ingredientID
             LEFT JOIN meals M ON R.mealID = M.id
             WHERE M.id = ?"""
 
-        items = self._read(query, meal)
+        items = self._read(query, meal_id)
         items = [Ingredient(item['name'], item['id']) for item in items]
 
         return items
@@ -107,8 +109,6 @@ class MealRepository:
         self._write(query, [meal_id, ingredient_id])
 
     def _read(self, query, var=False):
-        items = []
-
         try:
             with self.connection:
                 if var is False:
@@ -116,7 +116,6 @@ class MealRepository:
                 else:
                     results = self.connection.execute(query,[var]).fetchall()
 
-                items.append(results)
                 return results
 
         except self.connection.Error as error:
