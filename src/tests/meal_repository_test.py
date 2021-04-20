@@ -1,30 +1,21 @@
 import unittest
 from entities.meal import Meal
 from entities.ingredient import Ingredient
+from entities.default_set import DefaultSet
 from repositories.meal_repository import MealRepository
 
 class TestMealRepository(unittest.TestCase):
     def setUp(self):
         self.repository = MealRepository()
+        self.ingredients = DefaultSet().create_ingredients()
+        self.meals = DefaultSet().create_meals()
+
         self.repository.empty_tables()
-
-        self.ingredients = [
-            Ingredient('Jauheliha'),
-            Ingredient('Sipuli'),
-            Ingredient('Makaroni'),
-            Ingredient('Juusto'),
-            Ingredient('Lenkkimakkara'),
-            Ingredient('Ketsuppi')
-        ]
-
-        self.meals = [
-            Meal('Makaronilaatikko', [0,1,2]),
-            Meal('Uunimakkara', [3,4,5])
-        ]
 
         for meal in self.meals:
             for i in range(len(meal.ingredients)):
-                meal.ingredients[i] = self.repository.insert_ingredient(self.ingredients[i])
+                ingredient = self.ingredients[meal.ingredients[i]]
+                meal.ingredients[i] = self.repository.insert_ingredient(ingredient)
 
             self.repository.insert_meal(meal)
 
@@ -37,12 +28,12 @@ class TestMealRepository(unittest.TestCase):
             for ingredient in meal.ingredients
         ]
 
-        self.repository.insert_meal(Meal(meal.name, ingredients))
+        db_id = self.repository.insert_meal(Meal(meal.name, ingredients))
 
         meals = self.repository.find_all_meals()
 
         self.assertEqual(len(meals), 1)
-        self.assertEqual(meals[0].db_id, 1)
+        self.assertEqual(meals[0].db_id, db_id)
         self.assertIsInstance(meals[0], Meal)
         self.assertEqual(meals[0].name, meal.name)
 
@@ -60,7 +51,7 @@ class TestMealRepository(unittest.TestCase):
         meals = self.repository.find_all_meals()
         meal = meals[0]
 
-        self.assertEqual(len(meals), 2)
+        self.assertEqual(len(meals), len(self.meals))
         self.assertIsInstance(meal, Meal)
         self.assertEqual(meal.name, self.meals[0].name)
         self.assertIsInstance(meal.ingredients[0], Ingredient)
