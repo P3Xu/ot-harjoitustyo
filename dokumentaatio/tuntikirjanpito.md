@@ -17,4 +17,5 @@
 | 18.4. | 7 | Testien kirjoittelua, uusi repository-refaktorointi |
 | 19.4. | 5 | Jälleen uusi refaktorointi, testin korjailua |
 | 20.4. | 11 | Lähes koko päivä yhtä tunkkausta |
-| Yht. | 72 | |
+| 23.4. | 1 | Tkinteriin tutustumista |
+| Yht. | 73 | |
