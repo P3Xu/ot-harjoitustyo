@@ -36,22 +36,27 @@ class MainUI:
         else:
             #frames = [ttk.LabelFrame(menu, labelwidget = f) for i in range(len(self.days))]
 
-            frames = [ttk.LabelFrame(menu_frame) for i in range(len(self.days))]
-            days = [ttk.Label(frames[i], text = self.days[i]) for i in range(len(frames))]
+            label_frames = []
+            day_labels = []
+            meal_labels = []
 
-            self.meal_variables = [StringVar() for i in range(len(days))]
+            for day in self.days:
+                label_frame = ttk.LabelFrame(menu_frame)
+                day_label = ttk.Label(label_frame, text = day)
+                meal_variable = StringVar()
+                meal_label = ttk.Label(label_frame, textvariable = meal_variable)
 
-            meals = [
-                ttk.Label(frames[i],
-                textvariable = self.meal_variables[i]) for i in range(len(frames))
-            ]
+                label_frames.append(label_frame)
+                day_labels.append(day_label)
+                self.meal_variables.append(meal_variable)
+                meal_labels.append(meal_label)
 
             for (var, meal) in zip(self.meal_variables, menu):
                 var.set(meal.name)
 
             menu_frame.grid(row = 0, column = 0)
 
-            for i, (frame, day, meal) in enumerate(zip(frames, days, meals)):
+            for i, (frame, day, meal) in enumerate(zip(label_frames, day_labels, meal_labels)):
                 frame.grid(row = 1, column = i)
                 day.grid(row = 2, column = i)
                 meal.grid(row = 3, column = i)
