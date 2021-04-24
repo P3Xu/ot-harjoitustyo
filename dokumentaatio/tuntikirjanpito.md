@@ -18,4 +18,5 @@
 | 19.4. | 5 | Jälleen uusi refaktorointi, testin korjailua |
 | 20.4. | 11 | Lähes koko päivä yhtä tunkkausta |
 | 23.4. | 1 | Tkinteriin tutustumista |
-| Yht. | 73 | |
+| 24.4. | 10 | Lisää Tkinteria, GUIn suunnittelua |
+| Yht. | 83 | |

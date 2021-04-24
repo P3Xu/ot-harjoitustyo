@@ -1,4 +1,4 @@
-from ui.ui import UI
+from ui.cli_ui import UI
 
 ui = UI()
 

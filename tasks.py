@@ -2,7 +2,11 @@ from invoke import task
 
 @task
 def start(ctx):
-    ctx.run("python3 src/main.py")
+    ctx.run("python3 src/index.py")
+
+@task
+def start_cli(ctx):
+    ctx.run("python src/main.py")
 
 @task
 def test(ctx):

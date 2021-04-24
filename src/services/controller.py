@@ -26,7 +26,7 @@ class Controller:
         menu = self.menu_repository.find_menu()
 
         if isinstance(menu, int):
-            return ["Generoi ruokalista ensin!"]
+            return None
 
         return menu.meals
 
@@ -38,7 +38,7 @@ class Controller:
 
             if isinstance(check, list):
                 inserted_ingredient = self.meal_repository.insert_ingredient(
-                    Ingredient(ingredient)
+                    Ingredient(ingredient.capitalize())
                 )
 
                 inserted_ingredients.append(inserted_ingredient)
@@ -54,7 +54,7 @@ class Controller:
         if isinstance(check, list):
             ingredients = self.add_ingredients(ingredients)
 
-            self.meal_repository.insert_meal(Meal(meal, ingredients))
+            self.meal_repository.insert_meal(Meal(meal.capitalize(), ingredients))
 
             return 0
 
