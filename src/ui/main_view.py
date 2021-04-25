@@ -1,62 +1,61 @@
-from tkinter import ttk, StringVar
-from services.controller import Controller
+from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label
+from tkinter import LEFT, RIGHT, BOTH, BOTTOM, TOP, X, Y
+from ui.menu_view import MenuView
 
-class MainUI:
-    def __init__(self, root):
+class MainView:
+    def __init__(self, root, controller, views):
         self._root = root
-        self.ctrl = Controller()
-        self.meal_variables = []
-        self.days = [
-            "Maanantai:",
-            "Tiistai:",
-            "Keskiviikko:",
-            "Torstai:",
-            "Perjantai:",
-            "Lauantai:",
-            "Sunnuntai:"
-        ]
+        self._frame = None
+        self._variables = None
+        self._ctrl = controller
+        self._views = views
 
-    def start(self):
-        self._menu()
+        self._initialize()
 
-    def _menu(self):
-        menu = self.ctrl.fetch_menu()
-        #f = tkinter.Frame(relief='flat')
+    def pack(self):
+        self._frame.pack() #fill?
 
-        menu_frame = ttk.LabelFrame(
-            self._root,
-            text = "Ruokalista"
+    def destroy(self):
+        self._frame.destroy()
+
+    def _generate_menu(self):
+        self._ctrl.generate_menu()
+        self.destroy()
+        self._initialize()
+
+    def _initialize(self):
+        self._frame = Frame(self._root)
+
+        self._header()
+        self._variables = MenuView(self._frame, self._ctrl).meal_variables
+        self._actions()
+
+        self._frame.pack()
+
+    def _header(self):
+        header_frame = ttk.Frame(self._frame)
+
+        header_label = Label(header_frame, text = "Tervetuloa!", padx = 10, pady = 10)
+        header_label.configure(anchor = "center")
+
+        header_label.pack()
+        header_frame.pack()
+
+    def _actions(self):
+        action_frame = ttk.LabelFrame(self._frame, text = "Toiminnot")
+
+        generate_menu = ttk.Button(
+            action_frame,
+            text = "Generoi ruokalista",
+            command = lambda: self._generate_menu()
+        )
+        manage_items = ttk.Button(
+            action_frame,
+            text = "Hallitse ruokia ja aineksia",
+            command = self._views[1]
         )
 
-        if len(menu) == 1:
-            msg = ttk.Label(menu_frame, text = menu[0])
+        generate_menu.grid(row = 0, column = 0, padx = 5, pady = 5)
+        manage_items.grid(row = 0, column = 1, padx = 5, pady = 5)
 
-            menu_frame.grid(row = 0, column = 0)
-            msg.grid(row = 1, column = 0)
-        else:
-            #frames = [ttk.LabelFrame(menu, labelwidget = f) for i in range(len(self.days))]
-
-            label_frames = []
-            day_labels = []
-            meal_labels = []
-
-            for day in self.days:
-                label_frame = ttk.LabelFrame(menu_frame)
-                day_label = ttk.Label(label_frame, text = day)
-                meal_variable = StringVar()
-                meal_label = ttk.Label(label_frame, textvariable = meal_variable)
-
-                label_frames.append(label_frame)
-                day_labels.append(day_label)
-                self.meal_variables.append(meal_variable)
-                meal_labels.append(meal_label)
-
-            for (var, meal) in zip(self.meal_variables, menu):
-                var.set(meal.name)
-
-            menu_frame.grid(row = 0, column = 0)
-
-            for i, (frame, day, meal) in enumerate(zip(label_frames, day_labels, meal_labels)):
-                frame.grid(row = 1, column = i)
-                day.grid(row = 2, column = i)
-                meal.grid(row = 3, column = i)
+        action_frame.pack()
