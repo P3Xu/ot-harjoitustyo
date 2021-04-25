@@ -19,4 +19,5 @@
 | 20.4. | 11 | Lähes koko päivä yhtä tunkkausta |
 | 23.4. | 1 | Tkinteriin tutustumista |
 | 24.4. | 10 | Lisää Tkinteria, GUIn suunnittelua |
-| Yht. | 83 | |
+| 25.4. | 10 | GUI jatkuu |
+| Yht. | 93 | |
