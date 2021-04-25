@@ -12,7 +12,7 @@ class MealRepository:
         self.connection = get_database_connection()
 
     def find_all_meals(self):
-        meals = self._read("SELECT * FROM meals")
+        meals = self._read("SELECT * FROM meals ORDER BY name ASC")
 
         meals = [
             Meal(
@@ -42,7 +42,7 @@ class MealRepository:
         return result
 
     def find_all_ingredients(self):
-        ingredients = self._read("SELECT * FROM ingredients")
+        ingredients = self._read("SELECT * FROM ingredients ORDER BY name ASC")
 
         ingredients = [
             Ingredient(
