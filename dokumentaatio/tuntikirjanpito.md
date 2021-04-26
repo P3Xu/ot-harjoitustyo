@@ -20,4 +20,5 @@
 | 23.4. | 1 | Tkinteriin tutustumista |
 | 24.4. | 10 | Lisää Tkinteria, GUIn suunnittelua |
 | 25.4. | 10 | GUI jatkuu |
-| Yht. | 93 | |
+| 26.4. | 9 | GUI |
+| Yht. | 102 | |
