@@ -27,20 +27,6 @@ class TestMealRepository(unittest.TestCase):
 
         return meals
 
-    """def setUp(self):
-        self.repository = MealRepository()
-        self.ingredients = DefaultSet().create_ingredients()
-        self.meals = DefaultSet().create_meals()
-
-        self.repository.empty_tables()
-
-        for meal in self.meals:
-            for i in range(len(meal.ingredients)):
-                ingredient = self.ingredients[meal.ingredients[i]]
-                meal.ingredients[i] = self.repository.insert_ingredient(ingredient)
-
-            self.repository.insert_meal(meal)"""
-
     def test_find_all_meals(self):
         meals = self.repository.find_all_meals()
         meal = meals[0]
