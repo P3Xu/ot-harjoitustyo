@@ -4,7 +4,6 @@ __pycache__
 htmlcov
 .vscode
 vaatimusmaaritelma.odt
-index.py
 
 # Databases
 data/*
