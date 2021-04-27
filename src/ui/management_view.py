@@ -82,7 +82,7 @@ class ManagementView:
         entry_var = self._entry_variables['entry']
         entry_var.set("Kirjoita tähän ruokalajin nimi")
 
-        meal_entry = Entry(parent_frame, width = 30, textvariable = entry_var)
+        meal_entry = Entry(parent_frame, width = 30, textvariable = entry_var, bg = "#FFFFFF")
         meal_entry.focus_set()
         meal_entry.bind("<Button-1>", lambda x: self._entry_event())
 
