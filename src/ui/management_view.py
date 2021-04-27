@@ -71,7 +71,7 @@ class ManagementView:
         else:
             items = self._ctrl.fetch_meals()
 
-        items_box = Listbox(parent)
+        items_box = Listbox(parent, bg = "#FFFFFF")
 
         for i, item in enumerate(items):
             items_box.insert(i, item.name)
@@ -96,7 +96,7 @@ class ManagementView:
         meal_entry.focus_set()
         meal_entry.bind("<Button-1>", lambda x: self._entry_event())
 
-        self._entry_variables['textbox'] = Text(parent_frame, height = 10, width = 35)
+        self._entry_variables['textbox'] = Text(parent_frame, height = 10, width = 35, bg = "#FFFFFF")
         ingredients_entry = self._entry_variables['textbox']
 
         default_text = "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna"
