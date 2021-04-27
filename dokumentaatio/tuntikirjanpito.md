@@ -20,5 +20,6 @@
 | 23.4. | 1 | Tkinteriin tutustumista |
 | 24.4. | 10 | Lisää Tkinteria, GUIn suunnittelua |
 | 25.4. | 10 | GUI jatkuu |
-| 26.4. | 9 | GUI |
-| Yht. | 102 | |
+| 26.4. | 9 | GUI, viimein ymmärrys miten Tkinterin pakkaamiset toimii |
+| 27.4. | 11 | GUI yms viimeistely palautusta varten, **tun kaaviot mm. |
+| Yht. | 113 | |

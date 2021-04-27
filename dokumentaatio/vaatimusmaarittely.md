@@ -12,10 +12,10 @@ Sovelluksen luonteesta johtuen sovelluksella on vain normaaleja käyttäjiä.
 
 Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänäkymä, jossa näkyy generoitu viikon ruokalista sekä toiminnot uuden ruokalistan generoinnille, sekä ruokalajien ja raaka-aineiden lisäämiselle. Ruokalistan generoinnissa näkyy jonkinlainen parametrivalikko. Lisäksi näkyy mahdollisuus kirjautua ulos järjestelmästä.
 	- **Tehty:** Tekstipohjainen käyttöliittymä, käyttäjä voi generoida ruokalistan ja tarkastella ruokalajeja sekä raaka-aineita, sekä lisäksi lisätä uusia ruokalajeja kirjastoon, joista menu generoidaan
-
+	- **Viikko 5:** Graafinen alkanut valmistua myös, samat toiminnot kuin tekstipohjaisessakin. Bugeja ainakin sen verran, että tyhjät merkkijonot ja rivinvaihdot menee lisäyksestä toistaiseksi vielä läpi.
 ## Perusversion toiminnallisuus
 - **Update:** Kirjautuminen puuttuu vielä täysin, tällä hetkellä ei ole oikein tiedossa onko edes tarpeellista implementoida
-
+- **Viikko 5:** Sama tilanne yhä
 ### Ennen sisäänkirjautumista
 
 - Käyttäjätunnuksen luonti, jossa käyttäjä voi luoda itselleen tunnuksen järjestelmään
@@ -42,6 +42,7 @@ Ruokalista luodaan aina viikoksi kerrallaan ja oletusarvoisesti yksi ruokalaji o
 	- **Tällä hetkellä tämä on vielä näin**
 
 **Tilanne:** Projekti laahaa tällä hetkellä hieman jäljessä (omasta) aikataulusta, graafisen käyttöliittymän tekoa ei ole ehditty vielä edes aloittaa. 
+	- **Viikko 5:** Graafinen ihan ok mallilla, seuraavaksi mahdollisesti lisää toiminnallisuutta
 
 ## Jatkokehitysideoita
 
