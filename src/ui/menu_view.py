@@ -1,12 +1,12 @@
-from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label
-from tkinter import LEFT, RIGHT, BOTH, BOTTOM, TOP, X, Y
+from tkinter import ttk, StringVar, Frame, constants
 
 class MenuView:
     def __init__(self, root, controller):
         self._root = root
-        self._frame = None
-        self.menu_frame = None
         self.ctrl = controller
+
+        self._frame = None
+        self._menu_frame = None
         self.meal_variables = []
         self.days = [
             "Maanantai:",
@@ -21,37 +21,39 @@ class MenuView:
         self._initialize()
 
     def pack(self):
-        self._frame.pack() #fill?
+        self._frame.pack()
 
     def destroy(self):
         self._frame.destroy()
 
     def _initialize(self):
-        self._frame = Frame(self._root, padx = 20, pady = 20)
+        self._frame = Frame(self._root, padx = 30, pady = 10)
 
         self._view_menu()
 
         self._frame.pack()
 
     def _view_menu(self):
-        self.menu_frame = ttk.LabelFrame(self._frame, text = "Ruokalista", padding = 10)
-        menu_frame = self.menu_frame
+        self._menu_frame = ttk.LabelFrame(self._frame, text = "Ruokalista", padding = 10)
         menu_items = self._generate_menu_view()
 
         if menu_items is None:
-            msg = ttk.Label(menu_frame, text = "Generoi ruokalista ensin!")
+            msg = ttk.Label(self._menu_frame, text = "Generoi ruokalista ensin!")
 
             msg.pack()
 
         else:
-            (label_frames, day_labels, meal_labels) = menu_items
+            (day_frames, meal_frames, day_labels, meal_labels) = menu_items
 
-            for i, (frame, day, meal) in enumerate(zip(label_frames, day_labels, meal_labels)):
-                frame.grid(row = 0, column = i, padx = 5, pady = 5)
-                day.grid(row = 0, column = i, padx = 5, pady = 5)
-                meal.grid(row = 1, column = i, padx = 5, pady = 5)
+            for i, (day_frame, meal_frame, day, meal) in enumerate(
+                zip(day_frames, meal_frames, day_labels, meal_labels)):
 
-        menu_frame.pack()
+                day_frame.grid(row = 0, column = i, padx = 5)
+                day.grid(row = 0, column = i)
+                meal_frame.grid(row = 1, column = i, padx = 5)
+                meal.grid(row = 1, column = i)
+
+        self._menu_frame.pack()
 
     def _generate_menu_view(self):
         menu = self.ctrl.fetch_menu()
@@ -59,20 +61,21 @@ class MenuView:
         if menu is None:
             return None
 
-        label_frames = [Frame(self.menu_frame) for day in self.days]
+        day_frames = [Frame(self._menu_frame) for day in self.days]
+        meal_frames = [Frame(self._menu_frame) for day in self.days]
         day_labels = []
         meal_labels = []
 
-        for day, frame in zip(self.days, label_frames):
-            day_label = ttk.Label(frame, text = day)
+        for day, day_frame, meal_frame in zip(self.days, day_frames, meal_frames):
+            day_label = ttk.Label(day_frame, text = day)
             meal_variable = StringVar()
-            meal_label = ttk.Label(frame, textvariable = meal_variable, padding = 10)
+            meal_label = ttk.Label(meal_frame, textvariable = meal_variable, padding = 10, justify = constants.CENTER)
 
             day_labels.append(day_label)
             meal_labels.append(meal_label)
             self.meal_variables.append(meal_variable)
 
         for var, meal in zip(self.meal_variables, menu):
-            var.set(meal.name)
+            var.set((meal.name.replace(' ', '\n')))
 
-        return (label_frames, day_labels, meal_labels)
+        return (day_frames, meal_frames, day_labels, meal_labels)

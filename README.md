@@ -26,7 +26,11 @@ Näiden toimenpiteiden jälkeen sovelluksen voi käynnistää komennolla:
 ```shell
 poetry run invoke start
 ```
-- invoke saattaa rikkoa joitain rivinvaihtoja välillä, ja backspace ei toimi, mutta korjaantunee graafisen käyttöliittymän myötä.
+
+Vanhan tekstikäyttöliittymän saa käyntiin komennolla:
+```shell
+poetry run invoke start-cli
+```
 
 Testit voi suorittaa komennolla:
 ```shell
@@ -35,5 +39,11 @@ poetry run invoke test
 
 Testikattavuusraportin puolestaan saa ulos (ilmestyy htmlcov -nimiseen hakemistoon) komennolla:
 ```shell
-poetry run coverage-report
+poetry run invoke coverage-report
 ```
+
+Pylintin voi ajaa kommennolla:
+```shell
+poetry run invoke lint
+```
+

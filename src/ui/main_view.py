@@ -1,19 +1,19 @@
-from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label
-from tkinter import LEFT, RIGHT, BOTH, BOTTOM, TOP, X, Y
+from tkinter import ttk, Frame, Label
 from ui.menu_view import MenuView
 
 class MainView:
     def __init__(self, root, controller, views):
         self._root = root
+        self._views = views
+        self._ctrl = controller
+
         self._frame = None
         self._variables = None
-        self._ctrl = controller
-        self._views = views
 
         self._initialize()
 
     def pack(self):
-        self._frame.pack() #fill?
+        self._frame.pack()
 
     def destroy(self):
         self._frame.destroy()
@@ -24,7 +24,7 @@ class MainView:
         self._root.after(0, self._views[0])
 
     def _initialize(self):
-        self._frame = Frame(self._root)
+        self._frame = Frame(self._root, padx = 50, pady = 20)
 
         self._header()
         self._variables = MenuView(self._frame, self._ctrl).meal_variables
@@ -35,14 +35,15 @@ class MainView:
     def _header(self):
         header_frame = ttk.Frame(self._frame)
 
-        header_label = Label(header_frame, text = "Tervetuloa!", padx = 10, pady = 10)
-        header_label.configure(anchor = "center")
+        header_label = Label(header_frame, text = "Tervetuloa!", pady = 30)
+        header_label.configure(anchor = "center", font = "None 17")
 
         header_label.pack()
         header_frame.pack()
 
     def _actions(self):
-        action_frame = ttk.LabelFrame(self._frame, text = "Toiminnot")
+        wrapper = Frame(self._frame, pady = 30)
+        action_frame = ttk.LabelFrame(wrapper, text = "Toiminnot", padding = 20)
 
         generate_menu = ttk.Button(
             action_frame,
@@ -55,7 +56,15 @@ class MainView:
             command = self._views[1]
         )
 
-        generate_menu.grid(row = 0, column = 0, padx = 5, pady = 5)
-        manage_items.grid(row = 0, column = 1, padx = 5, pady = 5)
+        end_session = ttk.Button(
+            action_frame,
+            text = "Lopeta",
+            command = self._views[3]
+        )
+
+        generate_menu.grid(row = 0, column = 0, padx = 15, pady = 5)
+        manage_items.grid(row = 0, column = 1, padx = 15, pady = 5)
+        end_session.grid(row = 0, column = 2, padx = 15, pady = 5)
 
         action_frame.pack()
+        wrapper.pack()

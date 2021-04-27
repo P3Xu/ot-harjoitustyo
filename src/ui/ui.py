@@ -10,7 +10,8 @@ class UI:
         self._views = [
             self._show_main_view,
             self._show_management_view,
-            self._show_information_view
+            self._show_information_view,
+            self._end_session
         ]
         self.msg = None
 
@@ -41,3 +42,6 @@ class UI:
             self._current_view.destroy()
 
         self._current_view = None
+
+    def _end_session(self):
+        self._root.destroy()
