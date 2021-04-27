@@ -1,5 +1,6 @@
 from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label, Entry, Text
 from tkinter import constants
+from time import time
 from ui.menu_view import MenuView
 
 class ManagementView:
@@ -149,6 +150,8 @@ class InfoView:
         self._show_information()
 
         self._frame.pack()
+
+        self._root.after(5000, self._views[1])
 
     def _show_information(self):
         parent_frame = Frame(self._frame)
