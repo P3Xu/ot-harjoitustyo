@@ -15,8 +15,8 @@ class UI:
         self.msg = None
 
     def start(self):
-        #self._show_main_view()
-        self._show_management_view()
+        self._show_main_view()
+        #self._show_management_view()
 
     def _show_main_view(self):
         self._empty_view()

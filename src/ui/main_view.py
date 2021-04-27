@@ -20,8 +20,8 @@ class MainView:
 
     def _generate_menu(self):
         self._ctrl.generate_menu()
-        self.destroy()
-        self._initialize()
+
+        self._root.after(0, self._views[0])
 
     def _initialize(self):
         self._frame = Frame(self._root)

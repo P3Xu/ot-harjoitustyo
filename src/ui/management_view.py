@@ -151,7 +151,7 @@ class InfoView:
 
         self._frame.pack()
 
-        self._root.after(5000, self._views[1])
+        self._root.after(2000, self._views[1])
 
     def _show_information(self):
         parent_frame = Frame(self._frame)
@@ -159,9 +159,11 @@ class InfoView:
         if self._status == 0:
             status_text = "Ruokalaji lisättiin kirjastoon!"
         if self._status < 0:
-            status_text = """Ruokalaji löytyy jo kirjastosta.\n
-            Lisää toinen ruokalaji, tai poista olemassaoleva 
-            (poistamista ei vielä implementoitu)."""
+            status_text = """
+                Ruokalaji löytyy jo kirjastosta.\n
+                Lisää toinen ruokalaji, tai poista olemassaoleva 
+                (poistamista ei vielä implementoitu).
+            """
 
         # Keskitys?
 

@@ -27,7 +27,7 @@ class MenuView:
         self._frame.destroy()
 
     def _initialize(self):
-        self._frame = Frame(self._root)
+        self._frame = Frame(self._root, padx = 20, pady = 20)
 
         self._view_menu()
 
