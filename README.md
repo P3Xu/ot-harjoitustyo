@@ -2,6 +2,10 @@
 
 Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja helpottamaan arjen ateriasuunnittelua.
 
+## Releaset:
+
+- [Viikko5](https://github.com/P3Xu/ot-harjoitustyo/releases/tag/viikko5)
+
 ## Dokumentaatio
 
 - [Työaikakirjanpito](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
