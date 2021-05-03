@@ -8,6 +8,7 @@ def drop_tables(connection):
     cursor.execute('DROP TABLE IF EXISTS ingredients;')
     cursor.execute('DROP TABLE IF EXISTS relations;')
     cursor.execute('DROP TABLE IF EXISTS menus;')
+    cursor.execute('DROP TABLE IF EXISTS users')
 
     connection.commit()
 
@@ -44,6 +45,15 @@ def create_tables(connection):
             id INTEGER PRIMARY KEY,
             mealID INTEGER REFERENCES meals,
             date DATE
+        );
+    """)
+    connection.commit()
+
+    cursor.execute("""
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            password TEXT
         );
     """)
     connection.commit()

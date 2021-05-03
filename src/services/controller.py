@@ -60,6 +60,9 @@ class Controller:
 
         return -1
 
+    def add_user(self, username, password):
+        pass
+
     def _check_item(self, item, which=False):
         if which is False:
             return self.meal_repository.find_single_ingredient(str(item))
