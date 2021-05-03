@@ -66,7 +66,6 @@ class DefaultSet():
 
     def create_meals(self):
         meals = []
-        self.meals.sort()
 
         for i in range(len(self.meals)):
             ingredients = []
@@ -85,7 +84,6 @@ class DefaultSet():
 
     def create_ingredients(self):
         ingredients = []
-        self.ingredients.sort()
 
         for ingredient in self.ingredients:
             ingredients.append(Ingredient(ingredient))
