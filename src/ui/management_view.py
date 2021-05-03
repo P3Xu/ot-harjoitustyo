@@ -66,8 +66,10 @@ class ManagementView:
     def _generate_listbox(self, parent, meal=True):
         if meal is not True:
             items = self._ctrl.fetch_ingredients()
+            items.sort(key = lambda x: x.name)
         else:
             items = self._ctrl.fetch_meals()
+            items.sort(key = lambda x: x.name)
 
         items_box = Listbox(parent, bg = "#FFFFFF")
 
@@ -180,8 +182,10 @@ class InfoView:
 
         if self._status == 0:
             status_text = "Ruokalaji lisättiin kirjastoon!"
-        if self._status < 0:
+        elif self._status < 0:
             status_text = "Ruokalaji löytyy jo kirjastosta\nLisää toinen ruokalaji, tai poista olemassaoleva (poistamista ei vielä implementoitu)."
+        else:
+            status_text = "VITTUKU EI TAAS MILLÄÄ"
 
         status_label = Label(parent_frame, text = status_text, padx = 10, pady = 10, justify = constants.CENTER)
 
