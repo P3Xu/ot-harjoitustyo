@@ -5,6 +5,7 @@ Sovelluksen avulla käyttäjät voivat generoida itselleen valmiita ruokalistoja
 ## Releaset:
 
 - [Viikko5](https://github.com/P3Xu/ot-harjoitustyo/releases/tag/viikko5)
+- [Viikko6](https://github.com/P3Xu/ot-harjoitustyo/releases/tag/viikko6)
 
 ## Dokumentaatio
 
