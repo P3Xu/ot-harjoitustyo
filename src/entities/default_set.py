@@ -2,11 +2,20 @@ from entities.meal import Meal
 from entities.ingredient import Ingredient
 
 class DefaultSet():
-    """[summary]
+    """
+    Luokka kovakoodatulle setille valmiita ruokalajeja raaka-aineineen.
+    Luokkaa voidaan hyödyntää tietokannan alustuksen lisäksi testeissä, jolloin jokaiseen
+    testiin ei tarvitse erikseen kirjoitella käsin lisättäviä ruokia tai raaka-aineita, vaan
+    riittää importata tämä moduuli ja kutsua moduulin metodeja tai attribuutteja.
+
+    Attributes:
+        meals: kovakoodatut ruokalajit.
+        ingredients: ruokalajien raaka-aineet.
+        relations: ruokalajien ja raaka-aineiden relaatiot.
     """
 
     def __init__(self):
-        """[summary]
+        """Luokan konstruktori, alustaa attribuutti-listat.
         """
 
         self.meals = [
@@ -65,6 +74,14 @@ class DefaultSet():
         ]
 
     def create_meals(self):
+        """
+        Luo meals-attribuutin ruokalaji-listasta Meal-olioita.
+
+        Returns:
+            Palauttaa listallisen Meal-olioita, joiden raaka-aineina on tässä vaiheessa raaka-aine
+            -listan indeksejä.
+        """
+
         meals = []
 
         for i in range(len(self.meals)):
@@ -83,6 +100,12 @@ class DefaultSet():
         return meals
 
     def create_ingredients(self):
+        """
+        Luo ingredients-attribuutin raaka-ainelistasta Ingredient-olioita.
+
+        Returns:
+            Palauttaa listallisen Ingredient-olioita.
+        """
         ingredients = []
 
         for ingredient in self.ingredients:
@@ -91,6 +114,16 @@ class DefaultSet():
         return ingredients
 
     def create_db_relations(self):
+        """
+        Luo relations-attribuutin listasta uuden listan tupleja, joissa on päivitetty indeksointi
+        alkamaan ykkösestä, kuten tietokannan id:kin. Käytetään tietokannan alustamisessa, jolloin
+        saadaan suoraan oikeat raaka-aineet vastaamaan oikeita ruokalajeja.
+
+        Returns:
+            Palauttaa listallisen tupleja, joissa on korotettu jokaisen alkuperäisen tuplen
+            arvoja yhdellä.
+        """
+
         relations = []
 
         for relation in self.relations:

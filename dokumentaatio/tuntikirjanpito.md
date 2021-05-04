@@ -24,4 +24,5 @@
 | 27.4. | 11 | GUI yms viimeistely palautusta varten |
 | 1.5. | 4 | Aloitettu uusi, users-branch |
 | 3.5. | 4 | Users-featuren kanssa puuhastelua, gitin treenaamista |
-| Yht. | 121 | |
+| 4.5. | 7 | Users-featurea, dokumentaatiota |
+| Yht. | 128 | |

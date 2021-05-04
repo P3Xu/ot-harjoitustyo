@@ -1,7 +1,9 @@
 from database_connection import get_database_connection
 from entities.default_set import DefaultSet
 
-def drop_tables(connection):
+connection = get_database_connection()
+
+def drop_tables():
     cursor = connection.cursor()
 
     cursor.execute('DROP TABLE IF EXISTS meals;')
@@ -12,7 +14,7 @@ def drop_tables(connection):
 
     connection.commit()
 
-def create_tables(connection):
+def create_tables():
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -52,13 +54,13 @@ def create_tables(connection):
     cursor.execute("""
         CREATE TABLE users (
             id INTEGER PRIMARY KEY,
-            name TEXT,
+            name TEXT UNIQUE,
             password TEXT
         );
     """)
     connection.commit()
 
-def insert_default_data(connection):
+def insert_default_data():
     cursor = connection.cursor()
     default_set = DefaultSet()
 
@@ -76,11 +78,9 @@ def insert_default_data(connection):
     connection.commit()
 
 def initialize_database():
-    connection = get_database_connection()
-
-    drop_tables(connection)
-    create_tables(connection)
-    insert_default_data(connection)
+    drop_tables()
+    create_tables()
+    insert_default_data()
 
 if __name__ == "__main__":
     initialize_database()

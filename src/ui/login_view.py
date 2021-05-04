@@ -41,7 +41,7 @@ class LoginView:
         username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF")
         password_label = Label(parent_frame, text = "Salasana:", justify = constants.LEFT)
         password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF")
-        submit = Button(parent_frame, text = "Kirjaudu sisään", height = 2)
+        submit = Button(parent_frame, text = "Kirjaudu sisään", height = 2, command = self._views[0])
 
         username_label.grid(row = 0, column = 0, pady = 2   )
         username_entry.grid(row = 0, column = 1, padx = 2)
@@ -110,7 +110,7 @@ class CreateUserView:
         username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF")
         password_label = Label(parent_frame, text = "Salasana:")
         password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF")
-        submit = Button(parent_frame, text = "Luo käyttäjä", height = 2)
+        submit = Button(parent_frame, text = "Luo käyttäjä", height = 2, command = self._views[4])
 
         username_label.grid(row = 0, column = 0, pady = 2   )
         username_entry.grid(row = 0, column = 1, padx = 2)
@@ -125,7 +125,7 @@ class CreateUserView:
         back = ttk.Button(
             action_frame,
             text = "Takaisin",
-            command = self._views[0]
+            command = self._views[4]
         )
         end_session = ttk.Button(
             action_frame,

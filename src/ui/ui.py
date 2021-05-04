@@ -21,8 +21,8 @@ class UI:
 
     def start(self):
         #self._show_testi_view()
-        #self._show_login_view()
-        self._show_main_view()
+        self._show_login_view()
+        #self._show_main_view()
         #self._show_management_view()
 
     def _show_main_view(self):

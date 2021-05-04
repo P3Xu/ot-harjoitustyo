@@ -1,18 +1,29 @@
 class Ingredient:
-    """Class for a single ingredient
+    """
+    Luokka yksittäiselle raaka-aineelle.
+
+    Attributes:
+        name: raaka-aineen nimi.
+        db_id: tietokannan id, mikäli olemassa. Vapaaehtoinen.
     """
 
-    def __init__(self, name, db_id=None, red_meat=False):
-        """Konstruktori, luo uuden ainesosan.
+    def __init__(self, name, db_id=None):
+        """
+        Konstruktori, luo uuden raaka-aineen.
 
         Args:
-            name ([type]): [description]
-            red_meat (bool, optional): [description]. Defaults to False.
+            name: raaka-aineen nimi.
+            db_id: tietokannan id, mikäli sellainen on olemassa. Ei pakollinen.
         """
+
         self.name = name
         self.db_id = db_id
-        self.meat = red_meat
 
     def __str__(self):
+        """Metodi, joka palauttaa olion nimen merkkijonona.
+
+        Returns:
+            Olion nimi merkkijonona.
+        """
+
         return self.name
-        
