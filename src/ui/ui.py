@@ -2,7 +2,6 @@ from ui.main_view import MainView
 from ui.management_view import ManagementView, InfoView
 from ui.login_view import LoginView, CreateUserView
 from services.controller import Controller
-from ui.testi import TestiView
 
 class UI:
     def __init__(self, root):
