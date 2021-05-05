@@ -1,6 +1,6 @@
 from entities.meal import Meal
 from entities.ingredient import Ingredient
-from database_connection import get_database_connection
+from repositories.io import InputOutput
 
 class MealRepository:
     """[summary]
@@ -9,10 +9,10 @@ class MealRepository:
     def __init__(self):
         """[summary]
         """
-        self.connection = get_database_connection()
+        self.i_o = InputOutput()
 
     def find_all_meals(self):
-        meals = self._read("SELECT * FROM meals")
+        meals = self.i_o.read("SELECT * FROM meals")
 
         meals = [
             Meal(
@@ -32,7 +32,7 @@ class MealRepository:
         else:
             return None
 
-        result = self._read(query, criterion)
+        result = self.i_o.read(query, criterion)
 
         if len(result) > 0:
             result = result[0]
@@ -42,7 +42,7 @@ class MealRepository:
         return result
 
     def find_all_ingredients(self):
-        ingredients = self._read("SELECT * FROM ingredients")
+        ingredients = self.i_o.read("SELECT * FROM ingredients")
 
         ingredients = [
             Ingredient(
@@ -59,7 +59,7 @@ class MealRepository:
         else:
             return None
 
-        result = self._read(query, criterion)
+        result = self.i_o.read(query, criterion)
 
         if len(result) > 0:
             ingredient = result[0]
@@ -71,14 +71,14 @@ class MealRepository:
     def insert_ingredient(self, ingredient):
         query = "INSERT OR IGNORE INTO ingredients (name) VALUES (?)"
 
-        db_id = self._write(query, [ingredient.name])
+        db_id = self.i_o.write(query, [ingredient.name])
 
         return Ingredient(ingredient.name, db_id)
 
     def insert_meal(self, meal):
         query = "INSERT OR IGNORE INTO meals (name) VALUES (?)"
 
-        db_id = self._write(query, [meal.name])
+        db_id = self.i_o.write(query, [meal.name])
 
         for ingredient in meal.ingredients:
             self._insert_relation((db_id, ingredient.db_id))
@@ -86,10 +86,9 @@ class MealRepository:
         return db_id
 
     def empty_tables(self):
-        self.connection.execute("DELETE FROM meals")
-        self.connection.execute("DELETE FROM relations")
-        self.connection.execute("DELETE FROM ingredients")
-        self.connection.commit()
+        self.i_o.run_command("DELETE FROM meals")
+        self.i_o.run_command("DELETE FROM relations")
+        self.i_o.run_command("DELETE FROM ingredients")
 
     def _find_meal_ingredients(self, meal_id):
         query = """SELECT I.id, I.name FROM ingredients I
@@ -97,7 +96,7 @@ class MealRepository:
             LEFT JOIN meals M ON R.mealID = M.id
             WHERE M.id = ?"""
 
-        items = self._read(query, meal_id)
+        items = self.i_o.read(query, meal_id)
         items = [Ingredient(item['name'], item['id']) for item in items]
 
         return items
@@ -106,25 +105,4 @@ class MealRepository:
         query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
         (meal_id, ingredient_id) = relation
 
-        self._write(query, [meal_id, ingredient_id])
-
-    def _read(self, query, var=False):
-        try:
-            with self.connection:
-                if var is False:
-                    results = self.connection.execute(query).fetchall()
-                else:
-                    results = self.connection.execute(query,[var]).fetchall()
-
-                return results
-
-        except self.connection.Error as error:
-            return error
-
-    def _write(self, query, value):
-        cursor = self.connection.cursor()
-
-        cursor.execute(query, value)
-        self.connection.commit()
-
-        return cursor.lastrowid
+        self.i_o.write(query, [meal_id, ingredient_id])

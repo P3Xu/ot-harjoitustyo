@@ -25,4 +25,5 @@
 | 1.5. | 4 | Aloitettu uusi, users-branch |
 | 3.5. | 4 | Users-featuren kanssa puuhastelua, gitin treenaamista |
 | 4.5. | 7 | Users-featurea, dokumentaatiota |
-| Yht. | 128 | |
+| 5.5. | 4 | Repository-luokkien refaktorointi, testejä ja uusia luokkia | 
+| Yht. | 132 | |
