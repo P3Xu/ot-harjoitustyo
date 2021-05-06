@@ -26,4 +26,5 @@
 | 3.5. | 4 | Users-featuren kanssa puuhastelua, gitin treenaamista |
 | 4.5. | 7 | Users-featurea, dokumentaatiota |
 | 5.5. | 4 | Repository-luokkien refaktorointi, testejä ja uusia luokkia | 
-| Yht. | 132 | |
+| 6.5. | 8 | Testejä ja refaktorointia, uutta toiminnallisuutta |
+| Yht. | 140 | |

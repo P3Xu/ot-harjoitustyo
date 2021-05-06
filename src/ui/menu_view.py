@@ -56,7 +56,7 @@ class MenuView:
         self._menu_frame.pack()
 
     def _generate_menu_view(self):
-        menu = self.ctrl.fetch_menu()
+        menu = self.ctrl.fetch_menu().meals
 
         if menu is None:
             return None

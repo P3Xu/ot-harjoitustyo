@@ -3,13 +3,20 @@ from entities.ingredient import Ingredient
 from services.generator import GeneratorService
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
+from repositories.user_repository import UserRepository
 
 class Controller:
     """Kontrolleri-luokka."""
 
-    def __init__(self):
-        self.meal_repository = MealRepository()
-        self.menu_repository = MenuRepository(self.meal_repository)
+    def __init__(self, meal_repository = None, menu_repository = None, user_repository = None):
+        if not meal_repository and not menu_repository and not user_repository:
+            self.meal_repository = MealRepository()
+            self.user_repository = UserRepository()
+            self.menu_repository = MenuRepository(self.meal_repository)
+        else:
+            self.meal_repository = meal_repository
+            self.menu_repository = menu_repository
+            self.user_repository = user_repository
 
     def generate_menu(self):
         menu = GeneratorService(self.meal_repository).generate()
@@ -28,13 +35,13 @@ class Controller:
         if isinstance(menu, int):
             return None
 
-        return menu.meals
+        return menu
 
     def add_ingredients(self, ingredients):
         inserted_ingredients = []
 
         for ingredient in ingredients:
-            check = self._check_item(ingredient)
+            check = self._check_duplicates_item(ingredient)
 
             if isinstance(check, list):
                 inserted_ingredient = self.meal_repository.insert_ingredient(
@@ -49,7 +56,7 @@ class Controller:
         return inserted_ingredients
 
     def add_meal(self, meal, ingredients):
-        check = self._check_item(meal, True)
+        check = self._check_duplicates_item(meal, True)
 
         if isinstance(check, list):
             ingredients = self.add_ingredients(ingredients)
@@ -61,10 +68,18 @@ class Controller:
         return -1
 
     def add_user(self, username, password):
-        pass
+        check = self._check_duplicates_username(username)
 
-    def _check_item(self, item, which=False):
+        if not check:
+            return self.user_repository.add_user(username, password)
+
+        return None
+
+    def _check_duplicates_item(self, item, which=False):
         if which is False:
             return self.meal_repository.find_single_ingredient(str(item))
 
         return self.meal_repository.find_single_meal(str(item))
+
+    def _check_duplicates_username(self, username):
+        return self.user_repository.find_by_username(username)
