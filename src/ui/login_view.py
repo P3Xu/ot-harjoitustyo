@@ -152,7 +152,6 @@ class CreateUserView:
         action_frame.pack()
 
     def _add_user(self):
-        print(len(self._username.get()))
         if (len(self._username.get()) < 5 or
             len(self._password.get()) < 5 or
             self._username.get() == len(self._username.get()) * " "):

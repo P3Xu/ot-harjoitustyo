@@ -87,12 +87,12 @@ class MealRepository:
 
     def empty_tables(self):
         self.i_o.run_command("DELETE FROM meals")
-        self.i_o.run_command("DELETE FROM relations")
+        self.i_o.run_command("DELETE FROM meal_relations")
         self.i_o.run_command("DELETE FROM ingredients")
 
     def _find_meal_ingredients(self, meal_id):
         query = """SELECT I.id, I.name FROM ingredients I
-            LEFT JOIN relations R ON I.id = R.ingredientID
+            LEFT JOIN meal_relations R ON I.id = R.ingredientID
             LEFT JOIN meals M ON R.mealID = M.id
             WHERE M.id = ?"""
 
@@ -102,7 +102,7 @@ class MealRepository:
         return items
 
     def _insert_relation(self, relation):
-        query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
+        query = "INSERT INTO meal_relations (mealID, ingredientID) VALUES (?, ?)"
         (meal_id, ingredient_id) = relation
 
         self.i_o.write(query, [meal_id, ingredient_id])

@@ -56,10 +56,10 @@ class MenuView:
         self._menu_frame.pack()
 
     def _generate_menu_view(self):
-        menu = self.ctrl.fetch_menu().meals
-
-        if menu is None:
+        if not self.ctrl.fetch_menu():
             return None
+
+        menu = self.ctrl.fetch_menu().meals
 
         day_frames = [Frame(self._menu_frame) for day in self.days]
         meal_frames = [Frame(self._menu_frame) for day in self.days]

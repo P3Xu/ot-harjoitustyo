@@ -8,10 +8,9 @@ def drop_tables():
 
     cursor.execute('DROP TABLE IF EXISTS meals;')
     cursor.execute('DROP TABLE IF EXISTS ingredients;')
-    cursor.execute('DROP TABLE IF EXISTS relations;')
+    cursor.execute('DROP TABLE IF EXISTS meal_relations;')
     cursor.execute('DROP TABLE IF EXISTS menus;')
     cursor.execute('DROP TABLE IF EXISTS users')
-
     connection.commit()
 
 def create_tables():
@@ -23,7 +22,6 @@ def create_tables():
             name TEXT UNIQUE
         );
     """)
-    connection.commit()
 
     cursor.execute("""
         CREATE TABLE meals (
@@ -31,25 +29,23 @@ def create_tables():
             name TEXT UNIQUE
         );
     """)
-    connection.commit()
 
     cursor.execute("""
-        CREATE TABLE relations (
+        CREATE TABLE meal_relations (
             id INTEGER PRIMARY KEY,
             mealID INTEGER REFERENCES meals,
-            ingredientID INTEGER REFERENCES commodities
+            ingredientID INTEGER REFERENCES ingredients
         );
     """)
-    connection.commit()
 
     cursor.execute("""
         CREATE TABLE menus (
             id INTEGER PRIMARY KEY,
+            userID INTEGER REFERENCES users,
             mealID INTEGER REFERENCES meals,
             date DATE
         );
     """)
-    connection.commit()
 
     cursor.execute("""
         CREATE TABLE users (
@@ -58,6 +54,7 @@ def create_tables():
             password TEXT
         );
     """)
+
     connection.commit()
 
 def insert_default_data():
@@ -73,7 +70,7 @@ def insert_default_data():
     cursor.executemany(
         "INSERT INTO ingredients (name) VALUES (?)", ingredients)
     cursor.executemany(
-        "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)", relations)
+        "INSERT INTO meal_relations (mealID, ingredientID) VALUES (?, ?)", relations)
 
     connection.commit()
 
