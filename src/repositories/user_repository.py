@@ -60,7 +60,7 @@ class UserRepository:
             tapauksessa Nonen, mikäli käyttäjää ei löydy tai sattuu jokin poikkeus.
         """
 
-        result = self.i_o.read("SELECT * FROM users WHERE username = ?", username)
+        result = self.i_o.read("SELECT * FROM users WHERE username = ?", [username])
 
         if isinstance(result, list) and len(result) > 0:
             result = result[0]

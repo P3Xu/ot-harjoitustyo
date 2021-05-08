@@ -28,12 +28,12 @@ class MenuRepository:
         self.i_o.write("INSERT INTO menus (mealID, userID, date) VALUES (?, ?, ?)", values, False)
 
     def find_menu(self, user):
-        meals = self.i_o.read("SELECT * FROM menus WHERE userID = ?", user.id)
+        meals = self.i_o.read("SELECT * FROM menus WHERE userID = ?", [user.id])
 
         if len(meals) == 0:
             return -1
 
         date = meals[0]['date']
-        meals = [self.meal_repo.find_single_meal(int(meal['mealID'])) for meal in meals]
+        meals = [self.meal_repo.find_single_meal(int(meal['mealID']), user) for meal in meals]
 
         return Menu(meals, date)

@@ -34,6 +34,7 @@ def create_tables():
         CREATE TABLE meal_relations (
             id INTEGER PRIMARY KEY,
             mealID INTEGER REFERENCES meals,
+            userID INTEGER REFERENCES users,
             ingredientID INTEGER REFERENCES ingredients
         );
     """)
@@ -70,7 +71,7 @@ def insert_default_data():
     cursor.executemany(
         "INSERT INTO ingredients (name) VALUES (?)", ingredients)
     cursor.executemany(
-        "INSERT INTO meal_relations (mealID, ingredientID) VALUES (?, ?)", relations)
+        "INSERT INTO meal_relations (userID, mealID, ingredientID) VALUES (?, ?, ?)", relations)
 
     connection.commit()
 

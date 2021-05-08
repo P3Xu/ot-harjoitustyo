@@ -28,7 +28,7 @@ class InputOutput:
                 if variables is False:
                     results = self.connection.execute(query).fetchall()
                 else:
-                    results = self.connection.execute(query,[variables]).fetchall()
+                    results = self.connection.execute(query, variables).fetchall()
 
                 return results
 

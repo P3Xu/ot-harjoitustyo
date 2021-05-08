@@ -27,4 +27,5 @@
 | 4.5. | 7 | Users-featurea, dokumentaatiota |
 | 5.5. | 4 | Repository-luokkien refaktorointi, testejä ja uusia luokkia | 
 | 6.5. | 8 | Testejä ja refaktorointia, uutta toiminnallisuutta |
-| Yht. | 140 | |
+| 7.5. | 10 | Users-featurea eteenpäin, eiliset testit kankkulan kaivoon |
+| Yht. | 150 | |

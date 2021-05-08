@@ -51,26 +51,26 @@ class DefaultSet():
         ]
 
         self.relations = [
-            (0, 0),
-            (0, 1),
-            (0, 2),
-            (1, 3),
-            (1, 4),
-            (2, 5),
-            (2, 6),
-            (3, 7),
-            (3, 8),
-            (3, 9),
-            (3, 10),
-            (3, 11),
-            (4, 12),
-            (5, 0),
-            (5, 2),
-            (5, 13),
-            (5, 14),
-            (6, 15),
-            (6, 16),
-            (7, 17),
+            (1, 0, 0),
+            (1, 0, 1),
+            (1, 0, 2),
+            (1, 1, 3),
+            (1, 1, 4),
+            (1, 2, 5),
+            (1, 2, 6),
+            (1, 3, 7),
+            (1, 3, 8),
+            (1, 3, 9),
+            (1, 3, 10),
+            (1, 3, 11),
+            (1, 4, 12),
+            (1, 5, 0),
+            (1, 5, 2),
+            (1, 5, 13),
+            (1, 5, 14),
+            (1, 6, 15),
+            (1, 6, 16),
+            (1, 7, 17),
         ]
 
     def create_meals(self):
@@ -88,7 +88,7 @@ class DefaultSet():
             ingredients = []
 
             for relation in self.relations:
-                (meal_id, ingredient_id) = relation
+                (user_id, meal_id, ingredient_id) = relation
 
                 if meal_id == i:
                     ingredients.append(ingredient_id)
@@ -127,8 +127,8 @@ class DefaultSet():
         relations = []
 
         for relation in self.relations:
-            (meal_id, ingredient_id) = relation
+            (user_id, meal_id, ingredient_id) = relation
 
-            relations.append((meal_id+1, ingredient_id+1))
+            relations.append((user_id, meal_id+1, ingredient_id+1))
 
         return relations
