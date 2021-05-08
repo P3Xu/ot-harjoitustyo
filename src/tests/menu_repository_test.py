@@ -2,6 +2,7 @@ import unittest
 from datetime import date
 from entities.meal import Meal
 from entities.menu import Menu
+from entities.user import User
 from entities.ingredient import Ingredient
 from entities.default_set import DefaultSet
 from repositories.meal_repository import MealRepository
@@ -17,6 +18,7 @@ class TestMenuRepository(unittest.TestCase):
         cls.mealset = DefaultSet().create_meals()
         cls.ingredients = DefaultSet().create_ingredients()
         cls.meals = cls._prepare_meal_repository()
+        cls.test_user = User("Paavo", "Pesusieni", 1)
 
     @classmethod
     def _prepare_meal_repository(cls):
@@ -34,7 +36,7 @@ class TestMenuRepository(unittest.TestCase):
         return meals
 
     def setUp(self):
-        self.menu_repository.initialize_menus()
+        self.menu_repository.empty_menu_table()
 
     def test_insert_and_find_menu(self):
         """
@@ -45,8 +47,8 @@ class TestMenuRepository(unittest.TestCase):
         meals = self.meals.copy()
         meals.pop()
 
-        self.menu_repository.insert_menu(Menu(meals, date.today()))
-        menu = self.menu_repository.find_menu()
+        self.menu_repository.insert_menu(Menu(meals, date.today()), self.test_user)
+        menu = self.menu_repository.find_menu(self.test_user)
 
         self.assertIsInstance(menu, Menu)
         self.assertIsInstance(menu.meals, list)
@@ -56,4 +58,4 @@ class TestMenuRepository(unittest.TestCase):
         self.assertEqual(len(menu.meals[0].ingredients), len(self.meals[0].ingredients))
 
     def test_empty_db(self):
-        self.assertEqual(self.menu_repository.find_menu(), -1)
+        self.assertEqual(self.menu_repository.find_menu(self.test_user), -1)

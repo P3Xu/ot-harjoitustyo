@@ -8,6 +8,8 @@ class LoginView:
         self._views = views
 
         self._frame = None
+        self._username = StringVar()
+        self._password = StringVar()
 
         self._initialize()
 
@@ -39,10 +41,14 @@ class LoginView:
         parent_frame = ttk.Frame(self._frame)
 
         username_label = Label(parent_frame, text = "Käyttäjänimi:")
-        username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF")
+        username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF", textvariable = self._username)
+        username_entry.focus_set()
+
         password_label = Label(parent_frame, text = "Salasana:", justify = constants.LEFT)
-        password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF")
-        submit = Button(parent_frame, text = "Kirjaudu sisään", height = 2, command = self._views[0])
+        password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF", textvariable = self._password)
+        password_entry.bind("<Return>", lambda x: self._process_login())
+        
+        submit = Button(parent_frame, text = "Kirjaudu sisään", height = 2, command = lambda: self._process_login())
 
         username_label.grid(row = 0, column = 0, pady = 2   )
         username_entry.grid(row = 0, column = 1, padx = 2)
@@ -69,6 +75,23 @@ class LoginView:
         end_session.grid(row = 0, column = 1, padx = 15, pady = 5)
 
         action_frame.pack()
+
+    def _process_login(self):
+        uname = self._username.get()
+        pword = self._password.get()
+
+        if (len(uname) < 5 or len(pword) < 5):
+            self._root.after(
+                0,
+                self._views[2]
+                ("Tarkista käyttäjätunnus ja salasana.", 4))
+        else:
+            status = self._ctrl.login_user(uname, pword)
+
+            if isinstance(status, int):
+                self._root.after(0, self._views[0])
+            elif not status:
+                self._root.after(0, self._views[2]("Virheellinen käyttäjätunnus tai salasana.", 4))
 
 class CreateUserView:
     def __init__(self, root, controller, views):
@@ -121,9 +144,12 @@ class CreateUserView:
 
         username_label = Label(parent_frame, text = "Käyttäjänimi:")
         username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF", textvariable = self._username)
+        username_entry.focus_set()
+        
         password_label = Label(parent_frame, text = "Salasana:")
         password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF", textvariable = self._password)
-        submit = Button(parent_frame, text = "Luo käyttäjä", height = 2, command = lambda: self._add_user())
+        password_entry.bind("<Return>", lambda x: self._process_add_user())
+        submit = Button(parent_frame, text = "Luo käyttäjä", height = 2, command = lambda: self._process_add_user())
 
         username_label.grid(row = 0, column = 0, pady = 2   )
         username_entry.grid(row = 0, column = 1, padx = 2)
@@ -151,7 +177,7 @@ class CreateUserView:
 
         action_frame.pack()
 
-    def _add_user(self):
+    def _process_add_user(self):
         if (len(self._username.get()) < 5 or
             len(self._password.get()) < 5 or
             self._username.get() == len(self._username.get()) * " "):

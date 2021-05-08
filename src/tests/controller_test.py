@@ -46,22 +46,40 @@ class TestControllerRepository(unittest.TestCase):
     def _prepare_users(cls):
         users = []
 
-        users.append(User("Paavo", "Pesusieni666_"))
-        users.append(User("MacGyver", "_Käpykranaatti13"))
-        users.append(User("Gunnar", "Surströmming<3"))
+        users.append(User("Paavo", "Pesusieni666_", 1))
+        users.append(User("MacGyver", "_Käpykranaatti13", 2))
+        users.append(User("Gunnar", "Surströmming<3", 3))
 
         return users
 
     def test_a_empty_all(self):
         self.meal_repository.empty_tables()
-        self.menu_repository.initialize_menus()
+        self.menu_repository.empty_menu_table()
         self.user_repository.empty_users_table()
+
+        self.controller.user = self.users[0]
 
         self.assertIsNone(self.controller.fetch_menu())
         self.assertEqual(len(self.controller.fetch_meals()), 0)
         self.assertEqual(len(self.controller.fetch_ingredients()), 0)
 
-    def test_b_add_meal(self):
+    def test_b_add_user(self):
+        returns = [self.controller.add_user(user.name, user.password) for user in self.users]
+
+        for i, user in enumerate(self.users):
+            self.assertEqual(returns[i], user.id)
+
+        self.assertIsNone(self.controller.add_user(self.users[0].name, self.users[0].password))
+        self.assertEqual(len(self.user_repository.find_all_users()), len(self.users))
+
+    def test_c_login_user(self):
+        user = self.users[0]
+
+        self.assertEqual(self.controller.login_user(user.name, user.password), 0)
+        self.assertIsNone(self.controller.login_user(user.name, "Surströmming<3"))
+        self.assertIsNone(self.controller.login_user("Lordi", "Voldemort"))
+
+    def test_d_add_meal(self):
         last_pieces = self.mealset.pop()
         (piece_meal, piece_ingredients) = last_pieces
 
@@ -78,7 +96,7 @@ class TestControllerRepository(unittest.TestCase):
         self.assertEqual(len(results), len(self.meals))
         self.assertEqual(results[0].name, self.meals[0])
 
-    def test_c_add_ingredients(self):
+    def test_e_add_ingredients(self):
         results = self.controller.fetch_ingredients()
         ingredients = self.ingredients
 
@@ -87,7 +105,7 @@ class TestControllerRepository(unittest.TestCase):
         self.assertIsInstance(self.controller.add_ingredients(ingredients), list)
         self.assertEqual(len(self.controller.add_ingredients(ingredients)), len(ingredients))
 
-    def test_d_fetch_meals(self):
+    def test_f_fetch_meals(self):
         results = self.controller.fetch_meals()
         (meal, ingredients) = self.mealset[0]
 
@@ -97,13 +115,13 @@ class TestControllerRepository(unittest.TestCase):
         self.assertEqual(len(results[0].ingredients), len(ingredients))
         self.assertEqual(results[0].ingredients[0].name, ingredients[0])
 
-    def test_e_fetch_ingredients(self):
+    def test_g_fetch_ingredients(self):
         results = self.controller.fetch_ingredients()
 
         self.assertIsInstance(results[0], Ingredient)
         self.assertEqual(results[-1].name, self.ingredients[-1])
 
-    def test_f_generate_and_fetch_menu(self):
+    def test_h_generate_and_fetch_menu(self):
         self.controller.generate_menu()
 
         result = self.controller.fetch_menu()
@@ -112,12 +130,3 @@ class TestControllerRepository(unittest.TestCase):
         self.assertIsInstance(result, Menu)
         self.assertIsInstance(result.meals[0], Meal)
         self.assertIsInstance(result.meals[0].ingredients[0], Ingredient)
-
-    def test_g_add_user(self):
-        returns = [self.controller.add_user(user.name, user.password) for user in self.users]
-
-        self.assertEqual(returns[0], 1)
-        self.assertEqual(returns[1], 2)
-        self.assertEqual(returns[2], 3)
-        self.assertIsNone(self.controller.add_user(self.users[0].name, self.users[0].password))
-        self.assertEqual(len(self.user_repository.find_all_users()), len(self.users))

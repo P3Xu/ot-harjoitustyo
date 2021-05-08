@@ -41,8 +41,8 @@ def create_tables():
     cursor.execute("""
         CREATE TABLE menus (
             id INTEGER PRIMARY KEY,
-            userID INTEGER REFERENCES users,
             mealID INTEGER REFERENCES meals,
+            userID INTEGER REFERENCES users,
             date DATE
         );
     """)

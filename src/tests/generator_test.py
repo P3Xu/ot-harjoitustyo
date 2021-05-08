@@ -1,4 +1,4 @@
-import unittest
+"""import unittest
 from datetime import date
 from repositories.meal_repository import MealRepository
 from services.generator import GeneratorService
@@ -20,3 +20,4 @@ class TestGeneratorService(unittest.TestCase):
 
     def test_generate_correct_timestamp(self):
         self.assertEqual(self.test_menu.get_date(), date.today())
+"""

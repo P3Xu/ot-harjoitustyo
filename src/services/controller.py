@@ -18,10 +18,12 @@ class Controller:
             self.menu_repository = menu_repository
             self.user_repository = user_repository
 
+        self.user = None
+
     def generate_menu(self):
         menu = GeneratorService(self.meal_repository).generate()
 
-        self.menu_repository.insert_menu(menu)
+        self.menu_repository.insert_menu(menu, self.user)
 
     def fetch_meals(self):
         return self.meal_repository.find_all_meals()
@@ -30,7 +32,7 @@ class Controller:
         return self.meal_repository.find_all_ingredients()
 
     def fetch_menu(self):
-        menu = self.menu_repository.find_menu()
+        menu = self.menu_repository.find_menu(self.user)
 
         if isinstance(menu, int):
             return None
@@ -74,6 +76,16 @@ class Controller:
             return self.user_repository.add_user(username, password)
 
         return None
+
+    def login_user(self, username, password):
+        result = self.user_repository.find_by_username(username)
+
+        if (not result or username not in result.name or password not in result.password):
+            return None
+
+        self.user = result
+
+        return 0
 
     def _check_duplicates_item(self, item, which=False):
         if which is False:

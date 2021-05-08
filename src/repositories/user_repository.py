@@ -45,7 +45,7 @@ class UserRepository:
 
         results = self.i_o.read("SELECT * FROM users")
 
-        users = [User(user['username'], user['password']) for user in results]
+        users = [User(user['username'], user['password'], user['id']) for user in results]
 
         return users
 
@@ -65,6 +65,6 @@ class UserRepository:
         if isinstance(result, list) and len(result) > 0:
             result = result[0]
 
-            return User(result['username'], result['password'])
+            return User(result['username'], result['password'], result['id'])
 
         return None

@@ -6,7 +6,7 @@ class User:
         password: salasana.
     """
 
-    def __init__(self, name, password):
+    def __init__(self, name, password, db_id):
         """Konstruktori, luo uuden käyttäjän
 
         Args:
@@ -16,3 +16,4 @@ class User:
 
         self.name = name
         self.password = password
+        self.id = db_id

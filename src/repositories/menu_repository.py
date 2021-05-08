@@ -11,20 +11,24 @@ class MenuRepository:
         self.i_o = InputOutput()
         self.meal_repo = meal_repository
 
-    def initialize_menus(self):
-        """Metodi taulun alustamiselle, joka ei toistaiseksi säilö aiempia ruokalistoja
-        """
+    def initialize_menus(self, user):
+        """Metodi taulun alustamiselle, joka ei toistaiseksi säilö aiempia ruokalistoja"""
+
+        self.i_o.write("DELETE FROM menus WHERE userID = ?", [user.id])
+
+    def empty_menu_table(self):
+        """Metodi koko menu-taulun tyhjentämiselle, käytetään lähinnä testaamisessa."""
 
         self.i_o.run_command("DELETE FROM menus")
 
-    def insert_menu(self, menu):
-        values = [(meal.db_id,menu.date) for meal in menu.meals]
+    def insert_menu(self, menu, user):
+        values = [(meal.db_id, user.id, menu.date) for meal in menu.meals]
 
-        self.initialize_menus()
-        self.i_o.write("INSERT INTO menus (mealID, date) VALUES (?, ?)", values, False)
+        self.initialize_menus(user)
+        self.i_o.write("INSERT INTO menus (mealID, userID, date) VALUES (?, ?, ?)", values, False)
 
-    def find_menu(self):
-        meals = self.i_o.read("SELECT * FROM menus")
+    def find_menu(self, user):
+        meals = self.i_o.read("SELECT * FROM menus WHERE userID = ?", user.id)
 
         if len(meals) == 0:
             return -1
