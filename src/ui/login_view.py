@@ -102,6 +102,7 @@ class CreateUserView:
         self._frame = None
         self._username = StringVar()
         self._password = StringVar()
+        self._config_file = StringVar()
 
         self._initialize()
 
@@ -117,6 +118,7 @@ class CreateUserView:
         self._header()
         self._directions()
         self._create_user_view()
+        self._config_set()
         self._actions()
 
         self._frame.pack()
@@ -176,6 +178,17 @@ class CreateUserView:
         end_session.grid(row = 0, column = 1, padx = 15, pady = 5)
 
         action_frame.pack()
+
+    def _config_set(self):
+        parent_frame = ttk.Frame(self._frame)
+
+        text = "Mikäli olet määritellyt oman ruokalajikokoelman, syötä tiedoston nimi:"
+        conf_label = Label(parent_frame, text = text, pady = 20, justify = constants.CENTER)
+        conf_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF", textvariable = self._config_file)
+
+        conf_label.pack()
+        conf_entry.pack()
+        parent_frame.pack()
 
     def _process_add_user(self):
         if (len(self._username.get()) < 5 or

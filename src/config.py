@@ -10,3 +10,6 @@ except FileNotFoundError:
 
 DATABASE_FILENAME = os.getenv('DATABASE_FILENAME') or 'food.db'
 DATABASE_FILE_PATH = os.path.join(dirname, '..', 'data', DATABASE_FILENAME)
+
+DEFAULT_SET_FILENAME = os.getenv('DEFAULT_SET_FILENAME') or 'default.csv'
+DEFAULT_SET_FILE_PATH = os.path.join(dirname, '..', 'data', DEFAULT_SET_FILENAME)
