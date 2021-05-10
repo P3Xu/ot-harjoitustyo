@@ -21,6 +21,7 @@ class UI:
 
     def start(self):
         self._show_login_view()
+        #self._show_create_user_view()
 
     def _show_main_view(self):
         self._empty_view()

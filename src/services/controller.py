@@ -1,9 +1,12 @@
+from entities.user import User
 from entities.meal import Meal
+from entities.menu import Menu
 from entities.ingredient import Ingredient
 from services.generator import GeneratorService
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
+from repositories.config_repository import ConfigRepository
 
 class Controller:
     """Kontrolleri-luokka."""
@@ -13,17 +16,21 @@ class Controller:
             self.meal_repository = MealRepository()
             self.user_repository = UserRepository()
             self.menu_repository = MenuRepository(self.meal_repository)
+            self.config_repository = ConfigRepository()
         else:
             self.meal_repository = meal_repository
             self.menu_repository = menu_repository
             self.user_repository = user_repository
+            self.config_repository = ConfigRepository()
 
         self.user = None
+        """SIIVOA NÄMÄ VÄLITTÖMÄSTI KUN SAAT TESTIT TOIMIMAAN"""
 
     def generate_menu(self):
         menu = GeneratorService(self.meal_repository, self.user).generate()
 
-        self.menu_repository.insert_menu(menu, self.user)
+        if isinstance(menu, Menu):
+            self.menu_repository.insert_menu(menu, self.user)
 
     def fetch_meals(self):
         return self.meal_repository.find_all_meals(self.user)
@@ -43,37 +50,45 @@ class Controller:
         inserted_ingredients = []
 
         for ingredient in ingredients:
-            check = self._check_duplicates_item(ingredient)
+            ingredient = ingredient.capitalize()
+            check = self.meal_repository.fetch_item_id(ingredient, False)
 
-            if isinstance(check, list):
-                inserted_ingredient = self.meal_repository.insert_ingredient(
-                    Ingredient(ingredient.capitalize())
+            if check:
+                db_ingredient = Ingredient(ingredient, check)
+            else:
+                db_ingredient = self.meal_repository.insert_ingredient(
+                    Ingredient(ingredient)
                 )
 
-                inserted_ingredients.append(inserted_ingredient)
-
-            else:
-                inserted_ingredients.append(check)
+            inserted_ingredients.append(db_ingredient)
 
         return inserted_ingredients
 
     def add_meal(self, meal, ingredients):
-        check = self._check_duplicates_item(meal, True)
+        db_ingredients = self.add_ingredients(ingredients)
 
-        if isinstance(check, list):
-            ingredients = self.add_ingredients(ingredients)
+        meal = self.meal_repository.insert_meal(
+            Meal(meal.capitalize(), db_ingredients),
+            self.user
+        )
 
-            self.meal_repository.insert_meal(Meal(meal.capitalize(), ingredients), self.user)
+        return meal
 
-            return 0
-
-        return -1
-
-    def add_user(self, username, password):
+    def add_user(self, username, password, config_file=False):
         check = self._check_duplicates_username(username)
 
         if not check:
-            return self.user_repository.add_user(username, password)
+            if config_file:
+                meals = self.config_repository.read_meals(config_file)
+            else:
+                meals = self.config_repository.read_meals()
+
+            uid = self.user_repository.add_user(username, password)
+
+            self.user = User(username, password, uid)
+            self._insert_default_meals(meals)
+
+            return 0
 
         return None
 
@@ -87,11 +102,15 @@ class Controller:
 
         return 0
 
-    def _check_duplicates_item(self, item, which=False):
-        if which is False:
-            return self.meal_repository.find_single_ingredient(str(item), self.user)
+    def _insert_default_meals(self, meals):
+        for meal in meals:
+            self.add_meal(meal.name, meal.ingredients)
 
-        return self.meal_repository.find_single_meal(str(item), self.user)
+    def _check_duplicates_item(self, item, meal=False):
+        if not meal:
+            return self.meal_repository.fetch_item_id(item, self.user, False)
+            # poistettu str() itemin ympäriltä
+        return self.meal_repository.find_single_meal(item, self.user)
 
     def _check_duplicates_username(self, username):
         return self.user_repository.find_by_username(username)

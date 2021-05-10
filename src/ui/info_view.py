@@ -24,7 +24,7 @@ class InfoView:
         self._show_information()
         self._frame.pack()
 
-        self._root.after(3000, self._views[self._view_number])
+        self._root.after(2500, self._views[self._view_number])
 
     def _show_information(self):
         parent_frame = Frame(self._frame, padx = 20, pady = 20)

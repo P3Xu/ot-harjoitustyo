@@ -1,5 +1,8 @@
 from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label, Entry, Text, constants
+from tkinter.filedialog import askopenfile
 from entities.user import User
+
+from config import DEFAULT_SET_FILE_PATH
 
 class LoginView:
     def __init__(self, root, controller, views):
@@ -100,9 +103,9 @@ class CreateUserView:
         self._views = views
 
         self._frame = None
+        self._config_file = None
         self._username = StringVar()
         self._password = StringVar()
-        self._config_file = StringVar()
 
         self._initialize()
 
@@ -118,7 +121,6 @@ class CreateUserView:
         self._header()
         self._directions()
         self._create_user_view()
-        self._config_set()
         self._actions()
 
         self._frame.pack()
@@ -135,7 +137,10 @@ class CreateUserView:
     def _directions(self):
         parent_frame = ttk.Frame(self._frame)
 
-        text = "Käyttäjätunnuksen ja salasanan pituus on oltava vähintään viisi merkkiä."
+        text = "Käyttäjätunnuksen ja salasanan pituus on oltava vähintään viisi merkkiä.\n\n" + \
+            "Mikäli haluat määritellä oman vakiokokoelman ruokalajeille, voit ladata sen " + \
+            "painamalla \"Lataa .csv\"-painiketta.\nMuussa tapauksessa sovellus käyttää omaa " + \
+            "oletuskokoelmaa."
         dir_label = Label(parent_frame, text = text, pady = 20)
 
         dir_label.pack()
@@ -145,19 +150,37 @@ class CreateUserView:
         parent_frame = Frame(self._frame)
 
         username_label = Label(parent_frame, text = "Käyttäjänimi:")
-        username_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF", textvariable = self._username)
+        username_entry = Entry(
+            parent_frame,
+            width = 20,
+            bg = "#FFFFFF",
+            textvariable = self._username)
         username_entry.focus_set()
-        
-        password_label = Label(parent_frame, text = "Salasana:")
-        password_entry = Entry(parent_frame, show = "*", width = 20, bg = "#FFFFFF", textvariable = self._password)
-        password_entry.bind("<Return>", lambda x: self._process_add_user())
-        submit = Button(parent_frame, text = "Luo käyttäjä", height = 2, command = lambda: self._process_add_user())
 
-        username_label.grid(row = 0, column = 0, pady = 2   )
+        password_label = Label(parent_frame, text = "Salasana:")
+        password_entry = Entry(
+            parent_frame, show = "*",
+            width = 20, bg = "#FFFFFF",
+            textvariable = self._password)
+        password_entry.bind("<Return>", lambda x: self._process_add_user())
+        
+        submit = Button(
+            parent_frame, text = "Luo käyttäjä",
+            height = 2,
+            command = lambda: self._process_add_user())
+        add_config = Button(
+            parent_frame,
+            text = "Lataa\n.csv",
+            height = 2,
+            command = lambda: self._process_add_config())
+
+        username_label.grid(row = 0, column = 0, pady = 2)
         username_entry.grid(row = 0, column = 1, padx = 2)
         password_label.grid(row = 1, column = 0)
         password_entry.grid(row = 1, column = 1, padx = 2)
-        submit.grid(row = 0, column = 2, rowspan = 2)
+        add_config.grid(row = 0, column = 2, rowspan = 2)
+        submit.grid(row = 0, column = 3, rowspan = 2)
+
         parent_frame.pack()
 
     def _actions(self):
@@ -179,16 +202,10 @@ class CreateUserView:
 
         action_frame.pack()
 
-    def _config_set(self):
-        parent_frame = ttk.Frame(self._frame)
+    def _process_add_config(self):
+        file_path = askopenfile(mode="r", filetypes=(("CSV Files", "*.csv"),))
 
-        text = "Mikäli olet määritellyt oman ruokalajikokoelman, syötä tiedoston nimi:"
-        conf_label = Label(parent_frame, text = text, pady = 20, justify = constants.CENTER)
-        conf_entry = Entry(parent_frame, width = 20, bg = "#FFFFFF", textvariable = self._config_file)
-
-        conf_label.pack()
-        conf_entry.pack()
-        parent_frame.pack()
+        self._config_file = file_path
 
     def _process_add_user(self):
         if (len(self._username.get()) < 5 or
@@ -200,9 +217,9 @@ class CreateUserView:
                 self._views[2]
                 ("Käyttäjätunnuksen ja salasanan tulee olla vähintään 5 merkkiä pitkä!", 5))
         else:
-            status = self._ctrl.add_user(self._username.get(), self._password.get())
+            add = self._ctrl.add_user(self._username.get(), self._password.get(), self._config_file)
 
-            if isinstance(status, int):
+            if isinstance(add, int):
                 self._root.after(0, self._views[2]("Tunnuksen luonti onnistui!", 4))
-            if not status:
+            elif not add:
                 self._root.after(0, self._views[2]("Tunnus on jo olemassa, valitse toinen.", 5))

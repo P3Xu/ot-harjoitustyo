@@ -11,6 +11,9 @@ class MealRepository:
         """
         self.i_o = InputOutput()
 
+        """TÄNNEKIN VOISI HARKITA OMAA USERS-ATTRIBUUTTIA???"""
+
+
     def find_all_meals(self, user):
         """EN OLE VARMA TUOSTA DISTINCTISTA, KATSELLAAN SITÄ VIELÄ"""
 
@@ -47,8 +50,8 @@ class MealRepository:
         return result
 
     def find_all_ingredients(self, user):
-        ingredients = self.i_o.read("""SELECT * FROM ingredients I LEFT JOIN meal_relations R ON
-            I.id = R.ingredientID WHERE R.userID = ?""", [user.id])
+        ingredients = self.i_o.read("""SELECT DISTINCT I.name, I.id FROM meal_relations R LEFT JOIN
+            ingredients I ON R.ingredientID = I.id WHERE R.userID = ?""", [user.id])
 
         ingredients = [
             Ingredient(
@@ -75,22 +78,37 @@ class MealRepository:
 
         return result
 
+    def fetch_item_id(self, item, meal=True):
+        if meal:
+            query = "SELECT * FROM meals WHERE name = ?"
+        else:
+            query = "SELECT * FROM ingredients WHERE name = ?"
+
+        result = self.i_o.read(query, [item])
+
+        if len(result) > 0:
+            return result[0]['id']
+
+        return None
+
     def insert_ingredient(self, ingredient):
-        query = "INSERT OR IGNORE INTO ingredients (name) VALUES (?)"
+        query = "INSERT INTO ingredients (name) VALUES (?)"
 
         db_id = self.i_o.write(query, [ingredient.name])
 
         return Ingredient(ingredient.name, db_id)
 
     def insert_meal(self, meal, user):
-        query = "INSERT OR IGNORE INTO meals (name) VALUES (?)"
+        check = self.fetch_item_id(meal.name)
 
-        db_id = self.i_o.write(query, [meal.name])
+        query = "INSERT INTO meals (name) VALUES (?)"
+
+        meal_db_id = check if check else self.i_o.write(query, [meal.name])
 
         for ingredient in meal.ingredients:
-            self._insert_relation((db_id, user.id, ingredient.db_id))
+            self._insert_relation((user.id, meal_db_id, ingredient.db_id))
 
-        return db_id
+        return meal_db_id
 
     def empty_tables(self):
         self.i_o.run_command("DELETE FROM meals")
@@ -103,13 +121,13 @@ class MealRepository:
             LEFT JOIN meals M ON R.mealID = M.id
             WHERE M.id = ? AND R.userID = ?"""
 
-        items = self.i_o.read(query, [meal_id, user.id])
-        items = [Ingredient(item['name'], item['id']) for item in items]
+        results = self.i_o.read(query, [meal_id, user.id])
+        items = [Ingredient(item['name'], item['id']) for item in results]
 
         return items
 
     def _insert_relation(self, relation):
-        query = "INSERT INTO meal_relations (mealID, userID, ingredientID) VALUES (?, ?, ?)"
-        (meal_id, user_id, ingredient_id) = relation
+        query = "INSERT OR IGNORE INTO meal_relations (userID, mealID, ingredientID) VALUES (?,?,?)"
+        (user_id, meal_id, ingredient_id) = relation
 
-        self.i_o.write(query, [meal_id, user_id, ingredient_id])
+        self.i_o.write(query, [user_id, meal_id, ingredient_id])

@@ -30,6 +30,9 @@ class GeneratorService:
         generated = []
         source = self.repository.find_all_meals(self.user)
 
+        if len(source) < 7:
+            return -1
+
         while len(generated) < 7:
             item = source[random.randint(0,len(source)-1)]
 

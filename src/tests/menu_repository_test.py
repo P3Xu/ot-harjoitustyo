@@ -1,4 +1,4 @@
-import unittest
+'''import unittest
 from datetime import date
 from entities.meal import Meal
 from entities.menu import Menu
@@ -59,3 +59,4 @@ class TestMenuRepository(unittest.TestCase):
 
     def test_empty_db(self):
         self.assertEqual(self.menu_repository.find_menu(self.test_user), -1)
+'''

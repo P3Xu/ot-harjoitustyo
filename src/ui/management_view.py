@@ -118,14 +118,8 @@ class ManagementView:
         elif ingredients[0] in "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna":
             self._root.after(0, self._views[1])
         else:
-            status = self._ctrl.add_meal(meal, ingredients)
-
-            if status == 0:
-                message = "Ruokalaji lisättiin kirjastoon!"
-            if status == -1:
-                message = "Ruokalaji löytyy jo kirjastosta\nLisää toinen ruokalaji, tai poista olemassaoleva (poistamista ei vielä implementoitu)."
-
-            self._views[2](message, 1)
+            self._ctrl.add_meal(meal, ingredients)
+            self._views[2]("Ruokalaji lisättiin kirjastoon!", 1)
 
     def _entry_event(self, entry=True):
         if self._entry_variables['text state'] and not entry:

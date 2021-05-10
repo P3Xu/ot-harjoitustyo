@@ -1,14 +1,13 @@
 from entities.meal import Meal
-from entities.ingredient import Ingredient
+from config import DEFAULT_SET_FILE_PATH
 
-class DefaultSetRepository:
-    def __init__(self, file_path):
-        self._path = file_path
+class ConfigRepository:
 
-    def read_meals(self):
+    def read_meals(self, csv_file=False):
+        path = csv_file if csv_file else open(DEFAULT_SET_FILE_PATH)
         meals = []
 
-        with open(self._path) as file:
+        with path as file:
             new_meal = None
             ingredients = []
 
@@ -24,12 +23,12 @@ class DefaultSetRepository:
                     new_meal = meal
 
                 if meal in new_meal:
-                    ingredients.append(Ingredient(ingredient))
+                    ingredients.append(ingredient)
                 else:
                     meals.append(Meal(new_meal, ingredients.copy()))
                     ingredients.clear()
                     new_meal = meal
-                    ingredients.append(Ingredient(ingredient))
+                    ingredients.append(ingredient)
 
             meals.append(Meal(new_meal, ingredients))
 

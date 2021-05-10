@@ -29,4 +29,5 @@
 | 6.5. | 8 | Testejä ja refaktorointia, uutta toiminnallisuutta |
 | 8.5. | 10 | Users-featurea eteenpäin, eiliset testit kankkulan kaivoon |
 | 9.5. | 3 | Uusi repository-luokka, users-feature jatkuu |
-| Yht. | 153 | |
+| 10.5. | 10 | Users-integraatio viimein testejä vaille valmis, loppusuora alkaa |
+| Yht. | 163 | |

@@ -32,10 +32,10 @@ def create_tables():
 
     cursor.execute("""
         CREATE TABLE meal_relations (
-            id INTEGER PRIMARY KEY,
-            mealID INTEGER REFERENCES meals,
             userID INTEGER REFERENCES users,
-            ingredientID INTEGER REFERENCES ingredients
+            mealID INTEGER REFERENCES meals,
+            ingredientID INTEGER REFERENCES ingredients,
+            PRIMARY KEY(userID, mealID, ingredientID)
         );
     """)
 
@@ -78,7 +78,7 @@ def insert_default_data():
 def initialize_database():
     drop_tables()
     create_tables()
-    insert_default_data()
+    #insert_default_data()
 
 if __name__ == "__main__":
     initialize_database()
