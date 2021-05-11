@@ -34,11 +34,11 @@ class GeneratorService:
             return -1
 
         while len(generated) < 7:
-            item = source[random.randint(0,len(source)-1)]
+            item = source[random.randint(0, len(source)-1)]
 
             if item not in generated:
                 generated.append(item)
 
         random.shuffle(generated)
 
-        return Menu(generated, date.today())
+        return Menu(generated, date.today(), self.user)

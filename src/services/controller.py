@@ -6,31 +6,32 @@ from services.generator import GeneratorService
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
-from repositories.config_repository import ConfigRepository
+from repositories.library_repository import LibraryRepository
 
 class Controller:
     """Kontrolleri-luokka."""
 
-    def __init__(self, meal_repository = None, menu_repository = None, user_repository = None):
-        if not meal_repository and not menu_repository and not user_repository:
-            self.meal_repository = MealRepository()
-            self.user_repository = UserRepository()
+    def __init__(self,
+        meal_repository = MealRepository(),
+        menu_repository = None,
+        user_repository = UserRepository(),
+        library_repository = LibraryRepository()):
+
+        self.meal_repository = meal_repository
+        self.menu_repository = menu_repository
+        self.user_repository = user_repository
+        self.lib_repository = library_repository
+
+        if not self.menu_repository:
             self.menu_repository = MenuRepository(self.meal_repository)
-            self.config_repository = ConfigRepository()
-        else:
-            self.meal_repository = meal_repository
-            self.menu_repository = menu_repository
-            self.user_repository = user_repository
-            self.config_repository = ConfigRepository()
 
         self.user = None
-        """SIIVOA NÄMÄ VÄLITTÖMÄSTI KUN SAAT TESTIT TOIMIMAAN"""
 
     def generate_menu(self):
         menu = GeneratorService(self.meal_repository, self.user).generate()
 
         if isinstance(menu, Menu):
-            self.menu_repository.insert_menu(menu, self.user)
+            self.menu_repository.insert_menu(menu)
 
     def fetch_meals(self):
         return self.meal_repository.find_all_meals(self.user)
@@ -79,16 +80,16 @@ class Controller:
 
         if not check:
             if config_file:
-                meals = self.config_repository.read_meals(config_file)
+                meals = self.lib_repository.read_meals(config_file)
             else:
-                meals = self.config_repository.read_meals()
+                meals = self.lib_repository.read_meals()
 
             uid = self.user_repository.add_user(username, password)
 
             self.user = User(username, password, uid)
             self._insert_default_meals(meals)
 
-            return 0
+            return uid
 
         return None
 
@@ -105,12 +106,6 @@ class Controller:
     def _insert_default_meals(self, meals):
         for meal in meals:
             self.add_meal(meal.name, meal.ingredients)
-
-    def _check_duplicates_item(self, item, meal=False):
-        if not meal:
-            return self.meal_repository.fetch_item_id(item, self.user, False)
-            # poistettu str() itemin ympäriltä
-        return self.meal_repository.find_single_meal(item, self.user)
 
     def _check_duplicates_username(self, username):
         return self.user_repository.find_by_username(username)

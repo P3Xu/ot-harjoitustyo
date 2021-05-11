@@ -1,29 +1,37 @@
-"""import unittest
+import unittest
 from entities.meal import Meal
 from entities.menu import Menu
 from entities.user import User
 from entities.ingredient import Ingredient
-from entities.default_set import DefaultSet
+from services.controller import Controller
+from repositories.io import InputOutput as test_io
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
-from services.controller import Controller
+from repositories.library_repository import LibraryRepository
+from tests.assets.meal_set import MealSet as test_set
 
 class TestControllerRepository(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.meal_repository = MealRepository()
-        cls.user_repository = UserRepository()
-        cls.menu_repository = MenuRepository(cls.meal_repository)
-        cls.controller = Controller(cls.meal_repository, cls.menu_repository, cls.user_repository)
+        cls.i_o = test_io()
+        cls.meal_repository = MealRepository(cls.i_o)
+        cls.user_repository = UserRepository(cls.i_o)
+        cls.menu_repository = MenuRepository(cls.meal_repository, cls.i_o)
+        cls.library_repository = LibraryRepository()
+        cls.controller = Controller(
+            cls.meal_repository,
+            cls.menu_repository,
+            cls.user_repository,
+            cls.library_repository)
 
-        cls.meals = DefaultSet().meals
-        cls.ingredients = DefaultSet().ingredients
-        cls.meal_relations = DefaultSet().relations
+        cls.meals = test_set().meals
+        cls.ingredients = test_set().ingredients
+        cls.meal_relations = test_set().relations
 
-        cls.mealset = cls._prepare_meals()
         cls.users = cls._prepare_users()
+        cls.mealset = cls._prepare_meals()
 
     @classmethod
     def _prepare_meals(cls):
@@ -80,16 +88,12 @@ class TestControllerRepository(unittest.TestCase):
         self.assertIsNone(self.controller.login_user("Lordi", "Voldemort"))
 
     def test_d_add_meal(self):
-        last_pieces = self.mealset.pop()
-        (piece_meal, piece_ingredients) = last_pieces
+        self.meal_repository.empty_tables()
 
         for pieces in self.mealset:
             (meal, ingredients) = pieces
 
             self.controller.add_meal(meal, ingredients)
-
-        self.assertEqual(self.controller.add_meal(piece_meal, piece_ingredients), 0)
-        self.assertEqual(self.controller.add_meal(piece_meal, piece_ingredients), -1)
 
         results = self.controller.fetch_meals()
 
@@ -118,6 +122,7 @@ class TestControllerRepository(unittest.TestCase):
     def test_g_fetch_ingredients(self):
         results = self.controller.fetch_ingredients()
 
+        self.assertIsNotNone(results[0].db_id)
         self.assertIsInstance(results[0], Ingredient)
         self.assertEqual(results[-1].name, self.ingredients[-1])
 
@@ -130,4 +135,15 @@ class TestControllerRepository(unittest.TestCase):
         self.assertIsInstance(result, Menu)
         self.assertIsInstance(result.meals[0], Meal)
         self.assertIsInstance(result.meals[0].ingredients[0], Ingredient)
-"""
+
+        self.menu_repository.empty_menu_table()
+
+        self.assertIsNone(self.controller.fetch_menu())
+
+    def test_i_fetch_on_empty_tables(self):
+        self.meal_repository.empty_tables()
+
+        self.assertEqual(len(self.controller.fetch_meals()), 0)
+        self.assertEqual(len(self.controller.fetch_ingredients()), 0)
+
+    """LOPUKSI VIELÄ INTEGRAATIOTESTIT ERIKSEEN KUNHAN KAIKKI ON IMPLEMENTOITU!"""

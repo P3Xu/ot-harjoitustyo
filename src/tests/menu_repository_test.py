@@ -1,62 +1,64 @@
-'''import unittest
+import unittest
 from datetime import date
 from entities.meal import Meal
 from entities.menu import Menu
 from entities.user import User
 from entities.ingredient import Ingredient
-from entities.default_set import DefaultSet
+from repositories.io import InputOutput as test_io
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
+from tests.assets.meal_set import MealSet as test_set
 
 class TestMenuRepository(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.i_o = test_io()
         cls.meal_repository = MealRepository()
-        cls.menu_repository = MenuRepository(cls.meal_repository)
+        cls.menu_repository = MenuRepository(cls.meal_repository, cls.i_o)
+        cls.meal_set = test_set(cls.meal_repository)
+
         cls.meal_repository.empty_tables()
-        cls.mealset = DefaultSet().create_meals()
-        cls.ingredients = DefaultSet().create_ingredients()
-        cls.meals = cls._prepare_meal_repository()
-        cls.test_user = User("Paavo", "Pesusieni", 1)
 
-    @classmethod
-    def _prepare_meal_repository(cls):
-        meals = []
+        cls.test_user1 = User("Paavo", "Pesusieni", 1)
+        cls.test_user2 = User("Matti", "Meikäläinen", 2)
 
-        for meal in cls.mealset:
-
-            for i in range(len(meal.ingredients)):
-
-                ingredient = cls.ingredients[meal.ingredients[i]]
-                meal.ingredients[i] = cls.meal_repository.insert_ingredient(ingredient)
-
-            meals.append(Meal(meal.name, meal.ingredients, cls.meal_repository.insert_meal(meal)))
-
-        return meals
+        cls.meals = cls.meal_set.create_meals(cls.test_user1)
 
     def setUp(self):
         self.menu_repository.empty_menu_table()
 
-    def test_insert_and_find_menu(self):
-        """
-            Toistaiseksi kaikki samassa, tämä on vielä niin pieni luokka että tuntui
-            turhalta yrittää väkisin vääntää erillisiä testi-caseja tai pistää
-            kumpaankin samanlaisia testejä.
-        """
-        meals = self.meals.copy()
-        meals.pop()
+    def test_insert_menu(self):
+        self.menu_repository.insert_menu(Menu(self.meals, date.today(), self.test_user1))
+        self.menu_repository.insert_menu(Menu(self.meals, date.today(), self.test_user2))
 
-        self.menu_repository.insert_menu(Menu(meals, date.today()), self.test_user)
-        menu = self.menu_repository.find_menu(self.test_user)
+        menu_1 = self.menu_repository.find_menu(self.test_user1)
+        menu_2 = self.menu_repository.find_menu(self.test_user2)
+
+        self.assertEqual(len(menu_1.meals), 7)
+        self.assertEqual(len(menu_2.meals), 7)
+        self.assertEqual(menu_1.user.id, self.test_user1.id)
+        self.assertEqual(menu_2.user.id, self.test_user2.id)
+
+    def test_find_menu(self):
+        self.menu_repository.insert_menu(Menu(self.meals, date.today(), self.test_user1))
+
+        menu = self.menu_repository.find_menu(self.test_user1)
 
         self.assertIsInstance(menu, Menu)
+        self.assertIsInstance(menu.user, User)
         self.assertIsInstance(menu.meals, list)
         self.assertIsInstance(menu.meals[0], Meal)
         self.assertIsInstance(menu.meals[0].ingredients[0], Ingredient)
-        self.assertEqual(len(menu.meals), 7)
         self.assertEqual(len(menu.meals[0].ingredients), len(self.meals[0].ingredients))
 
-    def test_empty_db(self):
-        self.assertEqual(self.menu_repository.find_menu(self.test_user), -1)
-'''
+    def test_empty_and_init(self):
+        self.assertEqual(self.menu_repository.find_menu(self.test_user1), -1)
+
+        self.menu_repository.insert_menu(Menu(self.meals, date.today(), self.test_user1))
+        self.menu_repository.insert_menu(Menu(self.meals, date.today(), self.test_user2))
+
+        self.assertEqual(len(self.menu_repository.i_o.read("SELECT * FROM menus")), 14)
+
+        self.menu_repository._initialize_menus(self.test_user2)
+        self.assertEqual(len(self.menu_repository.i_o.read("SELECT * FROM menus")), 7)

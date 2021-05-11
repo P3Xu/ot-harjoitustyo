@@ -6,7 +6,7 @@ class Menu:
         date: aikaleima ruokalistan luonnille.
     """
 
-    def __init__(self, meals, date):
+    def __init__(self, meals, date, user):
         """Konstruktori, luo uuden ruokalistan.
 
         Args:
@@ -16,6 +16,7 @@ class Menu:
 
         self.meals = meals
         self.date = date
+        self.user = user
 
     def get_meals(self):
         """Metodi, jolla haetaan ruokalistan ruokalajit.

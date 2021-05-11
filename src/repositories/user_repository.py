@@ -1,5 +1,5 @@
 from entities.user import User
-from repositories.io import InputOutput
+from repositories.io import InputOutput as default_io
 
 class UserRepository:
     """Luokka, joka hoitaa sovelluksen käyttäjiin liittyvät tietokantatoiminnot.
@@ -8,13 +8,13 @@ class UserRepository:
         i_o: I/O, jolla hoidetaan kannan luku- ja kirjoitustoiminnot.
     """
 
-    def __init__(self):
+    def __init__(self, i_o=default_io()):
         """
         Konstruktori, alustaa attribuutin I/O-olion. I/O hoitaa keskitetysti repository-luokkien
         luku- ja kirjoitustoiminnot tietokannassa.
         """
 
-        self.i_o = InputOutput()
+        self.i_o = i_o
 
     def add_user(self, username, password):
         """Metodi, joka lisää uuden käyttäjän tietokantaan.

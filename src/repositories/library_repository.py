@@ -1,10 +1,11 @@
 from entities.meal import Meal
 from config import DEFAULT_SET_FILE_PATH
 
-class ConfigRepository:
+class LibraryRepository:
 
     def read_meals(self, csv_file=False):
-        path = csv_file if csv_file else open(DEFAULT_SET_FILE_PATH)
+        """LISÄTTY "R" POISTA JOS EI TOIMI"""
+        path = csv_file if csv_file else open(DEFAULT_SET_FILE_PATH, "r")
         meals = []
 
         with path as file:

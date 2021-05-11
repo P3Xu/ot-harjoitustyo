@@ -1,7 +1,7 @@
 import unittest
 import sqlite3
-from repositories.io import InputOutput
-from entities.default_set import DefaultSet
+from repositories.io import InputOutput as test_io
+from tests.assets.meal_set import MealSet as test_set
 from init_database import initialize_database as init
 
 class TestInputOutput(unittest.TestCase):
@@ -10,9 +10,9 @@ class TestInputOutput(unittest.TestCase):
     def setUpClass(cls):
         init()
 
-        cls.io = InputOutput()
-        cls.meals = DefaultSet().meals
-        cls.ingredients = DefaultSet().ingredients
+        cls.io = test_io()
+        cls.meals = test_set().meals
+        cls.ingredients = test_set().ingredients
 
     def test_a_write(self):
         pop_meal = self.meals.pop()

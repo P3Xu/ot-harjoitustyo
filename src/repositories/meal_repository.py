@@ -1,22 +1,17 @@
 from entities.meal import Meal
 from entities.ingredient import Ingredient
-from repositories.io import InputOutput
+from repositories.io import InputOutput as default_io
 
 class MealRepository:
     """[summary]
     """
 
-    def __init__(self):
+    def __init__(self, i_o=default_io()):
         """[summary]
         """
-        self.i_o = InputOutput()
-
-        """TÄNNEKIN VOISI HARKITA OMAA USERS-ATTRIBUUTTIA???"""
-
+        self.i_o = i_o
 
     def find_all_meals(self, user):
-        """EN OLE VARMA TUOSTA DISTINCTISTA, KATSELLAAN SITÄ VIELÄ"""
-
         meals = self.i_o.read("""SELECT DISTINCT M.name, m.id FROM meals M LEFT JOIN
             meal_relations R ON M.id = R.mealID WHERE userID = ?""", [user.id])
 
