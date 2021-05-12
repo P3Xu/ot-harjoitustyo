@@ -1,13 +1,10 @@
 from entities.meal import Meal
 from entities.ingredient import Ingredient
+from repositories.meal_repository import MealRepository as default_repo
 
-class DefaultSet():
-    """[summary]
-    """
-
-    def __init__(self):
-        """[summary]
-        """
+class MealSet():
+    def __init__(self, repository=default_repo()):
+        self.repository = repository
 
         self.meals = [
             'Makaronilaatikko',
@@ -16,9 +13,7 @@ class DefaultSet():
             'Pizza',
             'Pinaattilätyt',
             'Kaalilaatikko',
-            'Possuwokki',
-            'Kalapuikot'
-        ]
+            'Possuwokki']
 
         self.ingredients = [
             'Jauheliha',
@@ -37,9 +32,7 @@ class DefaultSet():
             'Kaali',
             'Riisiä',
             'Possun fileesuikale',
-            'Wokkivihannekset',
-            'Kalapuikot'
-        ]
+            'Wokkivihannekset']
 
         self.relations = [
             (0, 0),
@@ -60,11 +53,12 @@ class DefaultSet():
             (5, 13),
             (5, 14),
             (6, 15),
-            (6, 16),
-            (7, 17),
-        ]
+            (6, 16)]
 
-    def create_meals(self):
+    def get_repository(self):
+        return self.repository
+
+    def create_meals(self, user):
         meals = []
 
         for i in range(len(self.meals)):
@@ -74,11 +68,20 @@ class DefaultSet():
                 (meal_id, ingredient_id) = relation
 
                 if meal_id == i:
-                    ingredients.append(ingredient_id)
+                    check = self.repository.fetch_item_id(self.ingredients[ingredient_id], False)
 
-            meals.append(
-                Meal(self.meals[i], ingredients)
-            )
+                    if check:
+                        db_ingredient = Ingredient(self.ingredients[ingredient_id], check)
+                    else:
+                        db_ingredient = self.repository.insert_ingredient(
+                            Ingredient(self.ingredients[ingredient_id]))
+
+                    ingredients.append(db_ingredient)
+
+            meal = Meal(self.meals[i], ingredients)
+            meal.db_id = self.repository.insert_meal(meal, user)
+
+            meals.append(meal)
 
         return meals
 
@@ -89,13 +92,3 @@ class DefaultSet():
             ingredients.append(Ingredient(ingredient))
 
         return ingredients
-
-    def create_db_relations(self):
-        relations = []
-
-        for relation in self.relations:
-            (meal_id, ingredient_id) = relation
-
-            relations.append((meal_id+1, ingredient_id+1))
-
-        return relations

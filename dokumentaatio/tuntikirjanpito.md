@@ -24,4 +24,11 @@
 | 27.4. | 11 | GUI yms viimeistely palautusta varten |
 | 1.5. | 4 | Aloitettu uusi, users-branch |
 | 3.5. | 4 | Users-featuren kanssa puuhastelua, gitin treenaamista |
-| Yht. | 121 | |
+| 4.5. | 7 | Users-featurea, dokumentaatiota |
+| 5.5. | 4 | Repository-luokkien refaktorointi, testejä ja uusia luokkia | 
+| 6.5. | 8 | Testejä ja refaktorointia, uutta toiminnallisuutta |
+| 8.5. | 10 | Users-featurea eteenpäin, eiliset testit kankkulan kaivoon |
+| 9.5. | 3 | Uusi repository-luokka, users-feature jatkuu |
+| 10.5. | 10 | Users-implementaatio viimein testejä vaille valmis, loppusuora alkaa |
+| 11.5. | 10 | Users-implementaatio merge-valmis, testit valmiit |
+| Yht. | 173 | |

@@ -1,5 +1,7 @@
 from ui.main_view import MainView
-from ui.management_view import ManagementView, InfoView
+from ui.management_view import ManagementView
+from ui.info_view import InfoView
+from ui.login_view import LoginView, CreateUserView
 from services.controller import Controller
 
 class UI:
@@ -8,16 +10,18 @@ class UI:
         self._current_view = None
         self._ctrl = Controller()
         self._views = [
-            self._show_main_view,
-            self._show_management_view,
-            self._show_information_view,
-            self._end_session
+            self._show_main_view,           #0
+            self._show_management_view,     #1
+            self._show_information_view,    #2
+            self._end_session,              #3
+            self._show_login_view,          #4
+            self._show_create_user_view     #5
         ]
         self.msg = None
 
     def start(self):
-        self._show_main_view()
-        #self._show_management_view()
+        self._show_login_view()
+        #self._show_create_user_view()
 
     def _show_main_view(self):
         self._empty_view()
@@ -31,10 +35,23 @@ class UI:
         self._current_view = ManagementView(self._root, self._ctrl, self._views)
         self._current_view.pack()
 
-    def _show_information_view(self, msg):
+    def _show_information_view(self, msg, view_number):
         self._empty_view()
 
-        self._current_view = InfoView(self._root, self._ctrl, self._views, msg)
+        self._current_view = InfoView(self._root, self._ctrl, self._views, msg, view_number)
+        self._current_view.pack()
+
+    def _show_login_view(self):
+        self._empty_view()
+
+        self._current_view = LoginView(self._root, self._ctrl, self._views)
+        self._current_view.pack()
+
+    def _show_create_user_view(self):
+        self._empty_view()
+
+        self._current_view = CreateUserView(self._root, self._ctrl, self._views)
+
         self._current_view.pack()
 
     def _empty_view(self):

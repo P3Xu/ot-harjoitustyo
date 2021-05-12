@@ -20,8 +20,14 @@ class MainView:
 
     def _generate_menu(self):
         self._ctrl.generate_menu()
+        check_status = self._ctrl.fetch_menu()
 
-        self._root.after(0, self._views[0])
+        if not check_status:
+            msg = "Kirjastossa ei ole tarpeeksi ruokia ruokalistan generoimiseen, generaattori" + \
+                " tarvitsee vähintään seitsemän eri ruokalajia generoidakseen ruokalistan."
+            self._root.after(0, self._views[2](msg, 0))
+        else:
+            self._root.after(0, self._views[0])
 
     def _initialize(self):
         self._frame = Frame(self._root, padx = 50, pady = 20)

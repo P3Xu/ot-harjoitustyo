@@ -118,8 +118,8 @@ class ManagementView:
         elif ingredients[0] in "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna":
             self._root.after(0, self._views[1])
         else:
-            status = self._ctrl.add_meal(meal, ingredients)
-            self._views[2](status)
+            self._ctrl.add_meal(meal, ingredients)
+            self._views[2]("Ruokalaji lisättiin kirjastoon!", 1)
 
     def _entry_event(self, entry=True):
         if self._entry_variables['text state'] and not entry:
@@ -150,44 +150,3 @@ class ManagementView:
 
         action_frame.pack()
         wrapper.pack()
-
-class InfoView:
-    def __init__(self, root, controller, views, msg):
-        self._root = root
-        self._ctrl = controller
-        self._views = views
-        self._status = msg
-
-        self._frame = None
-
-        self._initialize()
-
-    def pack(self):
-        self._frame.pack()
-
-    def destroy(self):
-        self._frame.destroy()
-
-    def _initialize(self):
-        self._frame = Frame(self._root)
-
-        self._show_information()
-
-        self._frame.pack()
-
-        self._root.after(2000, self._views[1])
-
-    def _show_information(self):
-        parent_frame = Frame(self._frame, padx = 20, pady = 20)
-
-        if self._status == 0:
-            status_text = "Ruokalaji lisättiin kirjastoon!"
-        elif self._status < 0:
-            status_text = "Ruokalaji löytyy jo kirjastosta\nLisää toinen ruokalaji, tai poista olemassaoleva (poistamista ei vielä implementoitu)."
-        else:
-            status_text = "VITTUKU EI TAAS MILLÄÄ"
-
-        status_label = Label(parent_frame, text = status_text, padx = 10, pady = 10, justify = constants.CENTER)
-
-        status_label.pack()
-        parent_frame.pack()

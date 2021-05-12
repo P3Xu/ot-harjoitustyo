@@ -9,7 +9,7 @@ from entities.menu import Menu
 class GeneratorService:
     """Luokka palvelulle, joka generoi listan."""
 
-    def __init__(self, repository):
+    def __init__(self, repository, user):
         """Luokan konstruktori. Luo kyseisen palvelun.
 
         Args:
@@ -17,6 +17,7 @@ class GeneratorService:
             joka suorittaa tietokantatoiminnot.
         """
         self.repository = repository
+        self.user = user
 
     def generate(self):
         """Vaatimaton generointi-algoritmi, joka arpoo ruokalajeista
@@ -27,14 +28,17 @@ class GeneratorService:
         """
 
         generated = []
-        source = self.repository.find_all_meals()
+        source = self.repository.find_all_meals(self.user)
+
+        if len(source) < 7:
+            return -1
 
         while len(generated) < 7:
-            item = source[random.randint(0,len(source)-1)]
+            item = source[random.randint(0, len(source)-1)]
 
             if item not in generated:
                 generated.append(item)
 
         random.shuffle(generated)
 
-        return Menu(generated, date.today())
+        return Menu(generated, date.today(), self.user)

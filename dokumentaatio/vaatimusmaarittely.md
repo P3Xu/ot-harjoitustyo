@@ -16,6 +16,7 @@ Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänä
 ## Perusversion toiminnallisuus
 - **Update:** Kirjautuminen puuttuu vielä täysin, tällä hetkellä ei ole oikein tiedossa onko edes tarpeellista implementoida
 - **Viikko 5:** Sama tilanne yhä
+- **Viikko 6:** Kirjautumista alettu implementoimaan. Tällä hetkellä graafinen osuus valmis, mutta pellin alla-toiminnallisuus puuttuu vielä aivan täysin. Aloitettu repositoryn kirjoittaminen sekä controllerin testaus ennen uusia metodeja. 
 ### Ennen sisäänkirjautumista
 
 - Käyttäjätunnuksen luonti, jossa käyttäjä voi luoda itselleen tunnuksen järjestelmään
@@ -24,6 +25,7 @@ Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänä
 	- Kirjautuminen onnistuu, jos tunnus on oikein
 	- Mikäli tunnusta ei ole olemassa, järjestelmä ilmoittaa siitä
 
+**Viikko 6:** Käyttäjä voi luoda itselleen käyttäjätunnuksen, mutta virheitä ei vielä havaita eikä käyttäjätunnus tallennus mihinkään.
 ### Kirjautumisen jälkeen
 
 - Käyttäjä näkee viimeisimmän generoidun ruokalistan, mikäli sellainen on generoitu
@@ -37,6 +39,7 @@ Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänä
 	- Syödäänkö jotain ruokaa vain yhtenä vai useampana päivänä
 	- Syödäänkö jonain päivänä ulkona/noutoruokaa
 - Käyttäjä voi kirjautua ulos järjestelmästä
+**Viikko 6:** No periaatteessa käyttäjä voi kirjautua tällä hetkellä ulos painamalla "Lopeta" :D
 
 Ruokalista luodaan aina viikoksi kerrallaan ja oletusarvoisesti yksi ruokalaji on generoitu aina yhdeksi päiväksi, eli sovellus ei erottele esimerkiksi lounasta ja päivällistä erikseen.
 	- **Tällä hetkellä tämä on vielä näin**

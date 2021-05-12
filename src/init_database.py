@@ -1,17 +1,18 @@
 from database_connection import get_database_connection
-from entities.default_set import DefaultSet
 
-def drop_tables(connection):
+connection = get_database_connection()
+
+def drop_tables():
     cursor = connection.cursor()
 
     cursor.execute('DROP TABLE IF EXISTS meals;')
     cursor.execute('DROP TABLE IF EXISTS ingredients;')
-    cursor.execute('DROP TABLE IF EXISTS relations;')
+    cursor.execute('DROP TABLE IF EXISTS meal_relations;')
     cursor.execute('DROP TABLE IF EXISTS menus;')
-
+    cursor.execute('DROP TABLE IF EXISTS users')
     connection.commit()
 
-def create_tables(connection):
+def create_tables():
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -20,7 +21,6 @@ def create_tables(connection):
             name TEXT UNIQUE
         );
     """)
-    connection.commit()
 
     cursor.execute("""
         CREATE TABLE meals (
@@ -28,49 +28,38 @@ def create_tables(connection):
             name TEXT UNIQUE
         );
     """)
-    connection.commit()
 
     cursor.execute("""
-        CREATE TABLE relations (
-            id INTEGER PRIMARY KEY,
+        CREATE TABLE meal_relations (
+            userID INTEGER REFERENCES users,
             mealID INTEGER REFERENCES meals,
-            ingredientID INTEGER REFERENCES commodities
+            ingredientID INTEGER REFERENCES ingredients,
+            PRIMARY KEY(userID, mealID, ingredientID)
         );
     """)
-    connection.commit()
 
     cursor.execute("""
         CREATE TABLE menus (
             id INTEGER PRIMARY KEY,
             mealID INTEGER REFERENCES meals,
+            userID INTEGER REFERENCES users,
             date DATE
         );
     """)
-    connection.commit()
 
-def insert_default_data(connection):
-    cursor = connection.cursor()
-    default_set = DefaultSet()
-
-    meals = [(meal,) for meal in default_set.meals]
-    ingredients = [(ingredient,) for ingredient in default_set.ingredients]
-    relations = default_set.create_db_relations()
-
-    cursor.executemany(
-        "INSERT INTO meals (name) VALUES (?)", meals)
-    cursor.executemany(
-        "INSERT INTO ingredients (name) VALUES (?)", ingredients)
-    cursor.executemany(
-        "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)", relations)
+    cursor.execute("""
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY,
+            username TEXT UNIQUE,
+            password TEXT
+        );
+    """)
 
     connection.commit()
 
 def initialize_database():
-    connection = get_database_connection()
-
-    drop_tables(connection)
-    create_tables(connection)
-    insert_default_data(connection)
+    drop_tables()
+    create_tables()
 
 if __name__ == "__main__":
     initialize_database()

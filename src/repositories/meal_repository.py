@@ -1,48 +1,52 @@
 from entities.meal import Meal
 from entities.ingredient import Ingredient
-from database_connection import get_database_connection
+from repositories.io import InputOutput as default_io
 
 class MealRepository:
     """[summary]
     """
 
-    def __init__(self):
+    def __init__(self, i_o=default_io()):
         """[summary]
         """
-        self.connection = get_database_connection()
+        self.i_o = i_o
 
-    def find_all_meals(self):
-        meals = self._read("SELECT * FROM meals")
+    def find_all_meals(self, user):
+        meals = self.i_o.read("""SELECT DISTINCT M.name, m.id FROM meals M LEFT JOIN
+            meal_relations R ON M.id = R.mealID WHERE userID = ?""", [user.id])
 
         meals = [
             Meal(
                 meal['name'],
-                self._find_meal_ingredients(meal['id']),
+                self._find_meal_ingredients(meal['id'], user),
                 meal['id']
             )
         for meal in meals]
 
         return meals
 
-    def find_single_meal(self, criterion):
+    def find_single_meal(self, criterion, user):
         if isinstance(criterion, str):
-            query = "SELECT * FROM meals WHERE name = ? LIMIT 1"
+            query = """SELECT M.name, M.id FROM meals M LEFT JOIN meal_relations R ON
+                M.id = R.mealID WHERE M.name = ? AND R.userID = ?"""
         elif isinstance(criterion, int):
-            query = "SELECT * FROM meals WHERE id = ? LIMIT 1"
+            query = """SELECT M.name, M.id FROM meals M LEFT JOIN meal_relations R ON
+                M.id = R.mealID WHERE M.id = ? AND R.userID = ?"""
         else:
             return None
 
-        result = self._read(query, criterion)
+        result = self.i_o.read(query, [criterion, user.id])
 
         if len(result) > 0:
-            result = result[0]
+            res = result[0]
 
-            return Meal(result['name'], self._find_meal_ingredients(result['id']), result['id'])
+            return Meal(res['name'],self._find_meal_ingredients(res['id'],user), res['id'])
 
         return result
 
-    def find_all_ingredients(self):
-        ingredients = self._read("SELECT * FROM ingredients")
+    def find_all_ingredients(self, user):
+        ingredients = self.i_o.read("""SELECT DISTINCT I.name, I.id FROM meal_relations R LEFT JOIN
+            ingredients I ON R.ingredientID = I.id WHERE R.userID = ?""", [user.id])
 
         ingredients = [
             Ingredient(
@@ -53,13 +57,14 @@ class MealRepository:
 
         return ingredients
 
-    def find_single_ingredient(self, criterion):
+    def find_single_ingredient(self, criterion, user):
         if isinstance(criterion, str):
-            query = "SELECT * FROM ingredients WHERE name = ?"
+            query = """SELECT * FROM ingredients I LEFT JOIN meal_relations R ON
+                I.id = R.ingredientID WHERE I.name = ? AND R.userID = ?"""
         else:
             return None
 
-        result = self._read(query, criterion)
+        result = self.i_o.read(query, [criterion, user.id])
 
         if len(result) > 0:
             ingredient = result[0]
@@ -68,63 +73,56 @@ class MealRepository:
 
         return result
 
-    def insert_ingredient(self, ingredient):
-        query = "INSERT OR IGNORE INTO ingredients (name) VALUES (?)"
+    def fetch_item_id(self, item, meal=True):
+        if meal:
+            query = "SELECT * FROM meals WHERE name = ?"
+        else:
+            query = "SELECT * FROM ingredients WHERE name = ?"
 
-        db_id = self._write(query, [ingredient.name])
+        result = self.i_o.read(query, [item])
+
+        if len(result) > 0:
+            return result[0]['id']
+
+        return None
+
+    def insert_ingredient(self, ingredient):
+        query = "INSERT INTO ingredients (name) VALUES (?)"
+
+        db_id = self.i_o.write(query, [ingredient.name])
 
         return Ingredient(ingredient.name, db_id)
 
-    def insert_meal(self, meal):
-        query = "INSERT OR IGNORE INTO meals (name) VALUES (?)"
+    def insert_meal(self, meal, user):
+        check = self.fetch_item_id(meal.name)
 
-        db_id = self._write(query, [meal.name])
+        query = "INSERT INTO meals (name) VALUES (?)"
+
+        meal_db_id = check if check else self.i_o.write(query, [meal.name])
 
         for ingredient in meal.ingredients:
-            self._insert_relation((db_id, ingredient.db_id))
+            self._insert_relation((user.id, meal_db_id, ingredient.db_id))
 
-        return db_id
+        return meal_db_id
 
     def empty_tables(self):
-        self.connection.execute("DELETE FROM meals")
-        self.connection.execute("DELETE FROM relations")
-        self.connection.execute("DELETE FROM ingredients")
-        self.connection.commit()
+        self.i_o.run_command("DELETE FROM meals")
+        self.i_o.run_command("DELETE FROM meal_relations")
+        self.i_o.run_command("DELETE FROM ingredients")
 
-    def _find_meal_ingredients(self, meal_id):
+    def _find_meal_ingredients(self, meal_id, user):
         query = """SELECT I.id, I.name FROM ingredients I
-            LEFT JOIN relations R ON I.id = R.ingredientID
+            LEFT JOIN meal_relations R ON I.id = R.ingredientID
             LEFT JOIN meals M ON R.mealID = M.id
-            WHERE M.id = ?"""
+            WHERE M.id = ? AND R.userID = ?"""
 
-        items = self._read(query, meal_id)
-        items = [Ingredient(item['name'], item['id']) for item in items]
+        results = self.i_o.read(query, [meal_id, user.id])
+        items = [Ingredient(item['name'], item['id']) for item in results]
 
         return items
 
     def _insert_relation(self, relation):
-        query = "INSERT INTO relations (mealID, ingredientID) VALUES (?, ?)"
-        (meal_id, ingredient_id) = relation
+        query = "INSERT OR IGNORE INTO meal_relations (userID, mealID, ingredientID) VALUES (?,?,?)"
+        (user_id, meal_id, ingredient_id) = relation
 
-        self._write(query, [meal_id, ingredient_id])
-
-    def _read(self, query, var=False):
-        try:
-            with self.connection:
-                if var is False:
-                    results = self.connection.execute(query).fetchall()
-                else:
-                    results = self.connection.execute(query,[var]).fetchall()
-
-                return results
-
-        except self.connection.Error as error:
-            return error
-
-    def _write(self, query, value):
-        cursor = self.connection.cursor()
-
-        cursor.execute(query, value)
-        self.connection.commit()
-
-        return cursor.lastrowid
+        self.i_o.write(query, [user_id, meal_id, ingredient_id])
