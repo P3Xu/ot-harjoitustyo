@@ -5,10 +5,6 @@ def start(ctx):
     ctx.run("python3 src/index.py")
 
 @task
-def start_cli(ctx):
-    ctx.run("python src/main.py")
-
-@task
 def test(ctx):
     ctx.run("pytest src")
 
@@ -22,7 +18,7 @@ def coverage_report(ctx):
 
 @task
 def build(ctx):
-    ctx.run("python3 src/init_database.py")
+    ctx.run("python3 src/build.py")
 
 @task
 def lint(ctx):
