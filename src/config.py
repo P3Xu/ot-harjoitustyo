@@ -13,3 +13,6 @@ DATABASE_FILE_PATH = os.path.join(dirname, '..', 'data', DATABASE_FILENAME)
 
 DEFAULT_SET_FILENAME = os.getenv('DEFAULT_SET_FILENAME') or 'default.csv'
 DEFAULT_SET_FILE_PATH = os.path.join(dirname, '..', 'data', DEFAULT_SET_FILENAME)
+
+WISHLIST_DIRNAME = os.getenv('WISHLIST_DIRNAME') or 'wishlists'
+WISHLIST_DIR_PATH = os.path.join(dirname, '..', 'data', WISHLIST_DIRNAME)

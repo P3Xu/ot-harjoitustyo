@@ -64,7 +64,7 @@ class ManagementView:
         parent_frame.pack(side = view_side)
 
     def _generate_listbox(self, parent, meal=True):
-        if meal is not True:
+        if not meal:
             items = self._ctrl.fetch_ingredients()
             items.sort(key = lambda x: x.name)
         else:
@@ -73,8 +73,12 @@ class ManagementView:
 
         items_box = Listbox(parent, bg = "#FFFFFF")
 
+        if meal:
+            items_box.bind("<Double-Button-1>",
+                lambda x: self._process_remove(items_box.get(constants.ACTIVE)))
+
         for i, item in enumerate(items):
-            items_box.insert(i, item.name)
+            items_box.insert(i, item)
 
         return items_box
 
@@ -161,3 +165,6 @@ class ManagementView:
         self._ctrl.logout_user()
 
         self._root.after(0, self._views[4])
+
+    def _process_remove(self, item):
+        self._root.after(0, self._views[6](item))

@@ -106,6 +106,21 @@ class Controller:
     def logout_user(self):
         self.user = None
 
+    def remove_meal(self, meal):
+        get_meal = self.meal_repository.find_single_meal(meal, self.user)
+        get_menu = self.fetch_menu()
+
+        if get_menu:
+            menu_meals = [meal.name for meal in get_menu.meals]
+
+            if get_meal.name in menu_meals:
+                self.menu_repository.initialize_menus(self.user)
+
+        self.meal_repository.remove_meal(get_meal, self.user)
+
+    def export_wishlist(self, wishlist):
+        return self.lib_repository.write_wishlist(wishlist)
+
     def _insert_default_meals(self, meals):
         for meal in meals:
             self.add_meal(meal.name, meal.ingredients)

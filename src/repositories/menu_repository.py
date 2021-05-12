@@ -20,7 +20,7 @@ class MenuRepository:
         user = menu.user
         values = [(meal.db_id, user.id, menu.date) for meal in menu.meals]
 
-        self._initialize_menus(user)
+        self.initialize_menus(user)
         self.i_o.write("INSERT INTO menus (mealID, userID, date) VALUES (?, ?, ?)", values, False)
 
     def find_menu(self, user):
@@ -34,7 +34,7 @@ class MenuRepository:
 
         return Menu(meals, date, user)
 
-    def _initialize_menus(self, user):
+    def initialize_menus(self, user):
         """Metodi taulun alustamiselle, joka ei toistaiseksi säilö aiempia ruokalistoja"""
 
         self.i_o.write("DELETE FROM menus WHERE userID = ?", [user.id])

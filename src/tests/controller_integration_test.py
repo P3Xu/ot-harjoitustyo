@@ -10,21 +10,13 @@ from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
 from repositories.library_repository import LibraryRepository
 from tests.assets.meal_set import MealSet as test_set
+from config import DEFAULT_SET_FILE_PATH
 
-class TestControllerRepository(unittest.TestCase):
-
+class TestControllerRepositoryAsIntegration(unittest.TestCase):
+    
     @classmethod
     def setUpClass(cls):
-        cls.i_o = test_io()
-        cls.meal_repository = MealRepository(cls.i_o)
-        cls.user_repository = UserRepository(cls.i_o)
-        cls.menu_repository = MenuRepository(cls.meal_repository, cls.i_o)
-        cls.library_repository = LibraryRepository()
-        cls.controller = Controller(
-            cls.meal_repository,
-            cls.menu_repository,
-            cls.user_repository,
-            cls.library_repository)
+        cls.controller = Controller()
 
         cls.meals = test_set().meals
         cls.ingredients = test_set().ingredients
@@ -59,11 +51,11 @@ class TestControllerRepository(unittest.TestCase):
         users.append(User("Gunnar", "Surströmming<3", 3))
 
         return users
-
+    
     def test_a_empty_all(self):
-        self.meal_repository.empty_tables()
-        self.menu_repository.empty_menu_table()
-        self.user_repository.empty_users_table()
+        self.controller.meal_repository.empty_tables()
+        self.controller.menu_repository.empty_menu_table()
+        self.controller.user_repository.empty_users_table()
 
         self.controller.user = self.users[0]
 
@@ -78,7 +70,10 @@ class TestControllerRepository(unittest.TestCase):
             self.assertEqual(returns[i], user.id)
 
         self.assertIsNone(self.controller.add_user(self.users[0].name, self.users[0].password))
-        self.assertEqual(len(self.user_repository.find_all_users()), len(self.users))
+        self.assertEqual(len(self.controller.f), len(self.users))
+
+        user = User("Matti", "Näsä", 4)
+        self.assertEqual(self.controller.add_user(user.name, user.password, DEFAULT_SET_FILE_PATH), 4)
 
     def test_c_login_user(self):
         user = self.users[0]
@@ -140,10 +135,26 @@ class TestControllerRepository(unittest.TestCase):
 
         self.assertIsNone(self.controller.fetch_menu())
 
-    def test_i_fetch_on_empty_tables(self):
+    def test_i_remove_meal(self):
+        test_meal = self.meals[0]
+
+        self.assertEqual(len(self.controller.fetch_meals()), len(self.meals))
+
+        self.controller.remove_meal(test_meal)
+        results = self.controller.fetch_meals()
+
+        meals = [meal.name for meal in results]
+
+        self.assertNotIn(test_meal, meals)
+        self.assertEqual(len(results), len(self.meals)-1)
+
+    def test_j_fetch_on_empty_tables(self):
         self.meal_repository.empty_tables()
 
         self.assertEqual(len(self.controller.fetch_meals()), 0)
         self.assertEqual(len(self.controller.fetch_ingredients()), 0)
 
-    """LOPUKSI VIELÄ INTEGRAATIOTESTIT ERIKSEEN KUNHAN KAIKKI ON IMPLEMENTOITU!"""
+    def test_k_logout(self):
+        self.controller.logout_user()
+
+        self.assertIsNone(self.controller.user)

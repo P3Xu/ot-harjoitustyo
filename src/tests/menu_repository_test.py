@@ -60,5 +60,5 @@ class TestMenuRepository(unittest.TestCase):
 
         self.assertEqual(len(self.menu_repository.i_o.read("SELECT * FROM menus")), 14)
 
-        self.menu_repository._initialize_menus(self.test_user2)
+        self.menu_repository.initialize_menus(self.test_user2)
         self.assertEqual(len(self.menu_repository.i_o.read("SELECT * FROM menus")), 7)

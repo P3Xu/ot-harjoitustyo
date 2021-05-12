@@ -18,6 +18,15 @@ class MainView:
     def destroy(self):
         self._frame.destroy()
 
+    def _initialize(self):
+        self._frame = Frame(self._root, padx = 50, pady = 20)
+
+        self._header()
+        self._variables = MenuView(self._frame, self._ctrl).meal_variables
+        self._actions()
+
+        self._frame.pack()
+
     def _generate_menu(self):
         self._ctrl.generate_menu()
         check_status = self._ctrl.fetch_menu()
@@ -28,15 +37,6 @@ class MainView:
             self._root.after(0, self._views[2](msg, 0))
         else:
             self._root.after(0, self._views[0])
-
-    def _initialize(self):
-        self._frame = Frame(self._root, padx = 50, pady = 20)
-
-        self._header()
-        self._variables = MenuView(self._frame, self._ctrl).meal_variables
-        self._actions()
-
-        self._frame.pack()
 
     def _header(self):
         header_frame = ttk.Frame(self._frame)
@@ -71,11 +71,17 @@ class MainView:
             text = "Lopeta",
             command = self._views[3]
         )
+        wish_list = ttk.Button(
+            action_frame,
+            text = "Koosta kauppalista",
+            command = self._views[7]
+        )
 
-        generate_menu.grid(row = 0, column = 0, padx = 15, pady = 5)
-        manage_items.grid(row = 0, column = 1, padx = 15, pady = 5)
-        logout.grid(row = 0, column = 2, padx = 15, pady = 5)
-        end_session.grid(row = 0, column = 3, padx = 15, pady = 5)
+        generate_menu.grid(row = 0, column = 0, padx = 10, pady = 5)
+        wish_list.grid(row = 0, column = 1, padx = 10, pady = 5)
+        manage_items.grid(row = 0, column = 2, padx = 10, pady = 5)
+        logout.grid(row = 0, column = 3, padx = 10, pady = 5)
+        end_session.grid(row = 0, column = 4, padx = 10, pady = 5)
 
         action_frame.pack()
         wrapper.pack()

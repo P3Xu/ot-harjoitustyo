@@ -2,6 +2,8 @@ from ui.main_view import MainView
 from ui.management_view import ManagementView
 from ui.info_view import InfoView
 from ui.login_view import LoginView, CreateUserView
+from ui.remove_item_view import RemoveItemView
+from ui.wishlist_view import WishlistView
 from services.controller import Controller
 
 class UI:
@@ -15,13 +17,14 @@ class UI:
             self._show_information_view,    #2
             self._end_session,              #3
             self._show_login_view,          #4
-            self._show_create_user_view     #5
+            self._show_create_user_view,    #5
+            self._show_remove_item_view,    #6
+            self._show_wishlist_view        #7
         ]
         self.msg = None
 
     def start(self):
         self._show_login_view()
-        #self._show_create_user_view()
 
     def _show_main_view(self):
         self._empty_view()
@@ -51,7 +54,18 @@ class UI:
         self._empty_view()
 
         self._current_view = CreateUserView(self._root, self._ctrl, self._views)
+        self._current_view.pack()
 
+    def _show_remove_item_view(self, item):
+        self._empty_view()
+
+        self._current_view = RemoveItemView(self._root, self._ctrl, self._views, item)
+        self._current_view.pack()
+
+    def _show_wishlist_view(self):
+        self._empty_view()
+
+        self._current_view = WishlistView(self._root, self._ctrl, self._views)
         self._current_view.pack()
 
     def _empty_view(self):

@@ -2,8 +2,6 @@ from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label, En
 from tkinter.filedialog import askopenfile
 from entities.user import User
 
-from config import DEFAULT_SET_FILE_PATH
-
 class LoginView:
     def __init__(self, root, controller, views):
         self._root = root

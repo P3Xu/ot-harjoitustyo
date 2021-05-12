@@ -1,10 +1,11 @@
+from datetime import datetime
+from pathlib import Path
 from entities.meal import Meal
-from config import DEFAULT_SET_FILE_PATH
+from config import DEFAULT_SET_FILE_PATH, WISHLIST_DIR_PATH
 
 class LibraryRepository:
 
     def read_meals(self, csv_file=False):
-        """LISÄTTY "R" POISTA JOS EI TOIMI"""
         path = csv_file if csv_file else open(DEFAULT_SET_FILE_PATH, "r")
         meals = []
 
@@ -34,3 +35,16 @@ class LibraryRepository:
             meals.append(Meal(new_meal, ingredients))
 
         return meals
+
+    def write_wishlist(self, items):
+        timestamp = datetime.now().strftime("%d_%m_%H%M%S")
+        file_name = "/kauppalista"+timestamp+".txt"
+        file_path = Path(WISHLIST_DIR_PATH+file_name)
+
+        file_path.touch()
+
+        with file_path.open(mode = "w") as file:
+            for item in items:
+                file.write(f"{item}"+"\n")
+
+        return file_name
