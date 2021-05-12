@@ -61,7 +61,11 @@ class MainView:
             text = "Hallitse ruokia ja aineksia",
             command = self._views[1]
         )
-
+        logout = ttk.Button(
+            action_frame,
+            text = "Kirjaudu ulos",
+            command = lambda: self._process_logout()
+        )
         end_session = ttk.Button(
             action_frame,
             text = "Lopeta",
@@ -70,7 +74,13 @@ class MainView:
 
         generate_menu.grid(row = 0, column = 0, padx = 15, pady = 5)
         manage_items.grid(row = 0, column = 1, padx = 15, pady = 5)
-        end_session.grid(row = 0, column = 2, padx = 15, pady = 5)
+        logout.grid(row = 0, column = 2, padx = 15, pady = 5)
+        end_session.grid(row = 0, column = 3, padx = 15, pady = 5)
 
         action_frame.pack()
         wrapper.pack()
+
+    def _process_logout(self):
+        self._ctrl.logout_user()
+
+        self._root.after(0, self._views[4])

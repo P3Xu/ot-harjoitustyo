@@ -144,9 +144,20 @@ class ManagementView:
             text = "Lopeta",
             command = self._views[3]
         )
+        logout = ttk.Button(
+            action_frame,
+            text = "Kirjaudu ulos",
+            command = lambda: self._process_logout()
+        )
 
         back.grid(row = 0, column = 0, padx = 15, pady = 5)
-        end_session.grid(row = 0, column = 1, padx = 15, pady = 5)
+        end_session.grid(row = 0, column = 2, padx = 15, pady = 5)
+        logout.grid(row = 0, column = 1, padx = 15, pady = 5)
 
         action_frame.pack()
         wrapper.pack()
+
+    def _process_logout(self):
+        self._ctrl.logout_user()
+
+        self._root.after(0, self._views[4])

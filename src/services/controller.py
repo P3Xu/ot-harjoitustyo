@@ -103,6 +103,9 @@ class Controller:
 
         return 0
 
+    def logout_user(self):
+        self.user = None
+
     def _insert_default_meals(self, meals):
         for meal in meals:
             self.add_meal(meal.name, meal.ingredients)
