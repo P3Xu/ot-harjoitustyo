@@ -32,4 +32,5 @@
 | 10.5. | 10 | Users-implementaatio viimein testejä vaille valmis, loppusuora alkaa |
 | 11.5. | 10 | Users-implementaatio merge-valmis, testit valmiit |
 | 12.5. | 9 | Ruokalajien poisto, kauppalistan export ja uloskirjaus implementoitu, sekä lisätty testeihin |
-| Yht. | 182 | |
+| 13.5. | 10 | UI:n ja testien viimeistely, dokumentaation aloitus |
+| Yht. | 192 | |
