@@ -104,10 +104,10 @@ class MealRepository:
             self._insert_relation((user.id, meal_db_id, ingredient.db_id))
 
         return meal_db_id
-    
+
     def remove_meal(self, meal, user):
         query = "DELETE FROM meal_relations WHERE userID = ? AND mealID = ?"
-        
+
         return self.i_o.write(query, [user.id, meal.db_id])
 
     def empty_tables(self):

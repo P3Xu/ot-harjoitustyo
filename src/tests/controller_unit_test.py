@@ -3,13 +3,13 @@ from entities.meal import Meal
 from entities.menu import Menu
 from entities.user import User
 from entities.ingredient import Ingredient
+from entities.meal_set import MealSet as test_set
 from services.controller import Controller
 from repositories.io import InputOutput as test_io
 from repositories.meal_repository import MealRepository
 from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
 from repositories.library_repository import LibraryRepository
-from tests.assets.meal_set import MealSet as test_set
 
 class TestControllerRepositoryAsUnit(unittest.TestCase):
 

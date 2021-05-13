@@ -2,9 +2,9 @@ import unittest
 from pathlib import Path
 from config import WISHLIST_DIR_PATH
 from repositories.library_repository import LibraryRepository
-from tests.assets.meal_set import MealSet as test_set
 from entities.user import User
 from entities.meal import Meal
+from entities.meal_set import MealSet as test_set
 from init_default_set import initialize_default_set
 from init_wishlist_dir import initialize_wishlist_dir
 

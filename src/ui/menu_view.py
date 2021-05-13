@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, Frame, constants
+from tkinter import StringVar, Frame, constants, LabelFrame, Label
 
 class MenuView:
     def __init__(self, root, controller):
@@ -27,18 +27,19 @@ class MenuView:
         self._frame.destroy()
 
     def _initialize(self):
-        self._frame = Frame(self._root, padx = 30, pady = 10)
+        self._frame = Frame(self._root, padx = 30, pady = 30, bg = "#FFFFEA")
 
         self._view_menu()
 
         self._frame.pack()
 
     def _view_menu(self):
-        self._menu_frame = ttk.LabelFrame(self._frame, text = "Ruokalista", padding = 10)
+        self._menu_frame = LabelFrame(
+            self._frame, text = "Ruokalista", padx = 30, pady = 20, bg = "#FFFFEA")
         menu_items = self._generate_menu_view()
 
         if menu_items is None:
-            msg = ttk.Label(self._menu_frame, text = "Generoi ruokalista ensin!")
+            msg = Label(self._menu_frame, text = "Generoi ruokalista ensin!", bg = "#FFFFEA")
 
             msg.pack()
 
@@ -67,9 +68,14 @@ class MenuView:
         meal_labels = []
 
         for day, day_frame, meal_frame in zip(self.days, day_frames, meal_frames):
-            day_label = ttk.Label(day_frame, text = day)
+            day_label = Label(day_frame, text = day, bg = "#FFFFEA")
             meal_variable = StringVar()
-            meal_label = ttk.Label(meal_frame, textvariable = meal_variable, padding = 10, justify = constants.CENTER)
+            meal_label = Label(
+                meal_frame,
+                textvariable = meal_variable,
+                padx = 10, pady = 10,
+                justify = constants.CENTER,
+                bg = "#FFFFEA")
 
             day_labels.append(day_label)
             meal_labels.append(meal_label)

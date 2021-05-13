@@ -1,7 +1,7 @@
 import unittest
 import sqlite3
 from repositories.io import InputOutput as test_io
-from tests.assets.meal_set import MealSet as test_set
+from entities.meal_set import MealSet as test_set
 from init_database import initialize_database as init
 
 class TestInputOutput(unittest.TestCase):

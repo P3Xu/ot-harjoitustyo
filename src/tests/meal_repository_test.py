@@ -2,9 +2,9 @@ import unittest
 from entities.meal import Meal
 from entities.user import User
 from entities.ingredient import Ingredient
+from entities.meal_set import MealSet as test_set
 from repositories.io import InputOutput as test_io
 from repositories.meal_repository import MealRepository
-from tests.assets.meal_set import MealSet as test_set
 
 class TestMealRepository(unittest.TestCase):
 

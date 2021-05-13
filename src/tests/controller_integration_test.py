@@ -1,19 +1,20 @@
 import unittest
+from pathlib import Path
+from datetime import datetime
 from entities.meal import Meal
 from entities.menu import Menu
 from entities.user import User
 from entities.ingredient import Ingredient
+from entities.meal_set import MealSet as test_set
 from services.controller import Controller
-from repositories.io import InputOutput as test_io
-from repositories.meal_repository import MealRepository
-from repositories.menu_repository import MenuRepository
-from repositories.user_repository import UserRepository
-from repositories.library_repository import LibraryRepository
-from tests.assets.meal_set import MealSet as test_set
-from config import DEFAULT_SET_FILE_PATH
+from config import DEFAULT_SET_FILE_PATH, WISHLIST_DIR_PATH
 
 class TestControllerRepositoryAsIntegration(unittest.TestCase):
-    
+    """
+    Tämä on lähes sama setti kuin kyseisen luokan yksikkötestitkin, mutta testattuna
+    luokan omilla riippuvuuksilla ja joissain testimetodeissa on jonkin verran eroja.
+    """
+
     @classmethod
     def setUpClass(cls):
         cls.controller = Controller()
@@ -51,7 +52,7 @@ class TestControllerRepositoryAsIntegration(unittest.TestCase):
         users.append(User("Gunnar", "Surströmming<3", 3))
 
         return users
-    
+
     def test_a_empty_all(self):
         self.controller.meal_repository.empty_tables()
         self.controller.menu_repository.empty_menu_table()
@@ -70,10 +71,12 @@ class TestControllerRepositoryAsIntegration(unittest.TestCase):
             self.assertEqual(returns[i], user.id)
 
         self.assertIsNone(self.controller.add_user(self.users[0].name, self.users[0].password))
-        self.assertEqual(len(self.controller.f), len(self.users))
+        self.assertEqual(len(self.controller.user_repository.find_all_users()), len(self.users))
 
         user = User("Matti", "Näsä", 4)
-        self.assertEqual(self.controller.add_user(user.name, user.password, DEFAULT_SET_FILE_PATH), 4)
+        add_user = self.controller.add_user(user.name, user.password, open(DEFAULT_SET_FILE_PATH))
+
+        self.assertEqual(add_user, 4)
 
     def test_c_login_user(self):
         user = self.users[0]
@@ -83,7 +86,7 @@ class TestControllerRepositoryAsIntegration(unittest.TestCase):
         self.assertIsNone(self.controller.login_user("Lordi", "Voldemort"))
 
     def test_d_add_meal(self):
-        self.meal_repository.empty_tables()
+        self.controller.meal_repository.empty_tables()
 
         for pieces in self.mealset:
             (meal, ingredients) = pieces
@@ -131,30 +134,40 @@ class TestControllerRepositoryAsIntegration(unittest.TestCase):
         self.assertIsInstance(result.meals[0], Meal)
         self.assertIsInstance(result.meals[0].ingredients[0], Ingredient)
 
-        self.menu_repository.empty_menu_table()
+        self.controller.menu_repository.empty_menu_table()
 
         self.assertIsNone(self.controller.fetch_menu())
 
     def test_i_remove_meal(self):
-        test_meal = self.meals[0]
+        self.controller.generate_menu()
 
-        self.assertEqual(len(self.controller.fetch_meals()), len(self.meals))
+        self.assertIsInstance(self.controller.add_meal("Lihakeitto", ["Liha"]), int)
 
-        self.controller.remove_meal(test_meal)
+        test_meal1 = self.meals[0]
+        get_meals = self.controller.fetch_meals()
+        test_meal2 = get_meals[-1].name
+
+        self.assertEqual(len(get_meals), len(self.meals)+1)
+
+        self.controller.remove_meal(test_meal2)
+        self.controller.remove_meal(test_meal1)
+
         results = self.controller.fetch_meals()
-
         meals = [meal.name for meal in results]
 
-        self.assertNotIn(test_meal, meals)
+        self.assertNotIn(test_meal1, meals)
+        self.assertNotIn(test_meal2, meals)
         self.assertEqual(len(results), len(self.meals)-1)
+        self.assertIsNone(self.controller.remove_meal("Avaruusmössö"))
 
-    def test_j_fetch_on_empty_tables(self):
-        self.meal_repository.empty_tables()
+    def test_j_export_wishlist(self):
+        timestamp = datetime.now().strftime("%d_%m_%H%M%S")
+        file_name = "/kauppalista"+timestamp+".txt"
+        wishlist = ["Makaroni", "Jauheliha", "Sipuli"]
 
-        self.assertEqual(len(self.controller.fetch_meals()), 0)
-        self.assertEqual(len(self.controller.fetch_ingredients()), 0)
+        path = Path(WISHLIST_DIR_PATH+file_name)
 
-    def test_k_logout(self):
-        self.controller.logout_user()
+        self.assertAlmostEqual(self.controller.export_wishlist(wishlist), file_name)
+        self.assertTrue(path.is_file())
 
-        self.assertIsNone(self.controller.user)
+        path.unlink()

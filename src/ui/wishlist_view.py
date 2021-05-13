@@ -1,4 +1,4 @@
-from tkinter import ttk, Frame, Label, Listbox, Scrollbar, Button, constants
+from tkinter import Frame, Label, Listbox, Scrollbar, Button, constants, LabelFrame
 from ui.menu_view import MenuView
 
 class WishlistView:
@@ -8,39 +8,48 @@ class WishlistView:
         self._ctrl = controller
 
         self._frame = None
+        self._wrapper = None
         self._variables = None
         self._wishlist = None
 
         self._initialize()
 
     def pack(self):
-        self._frame.pack()
+        self._wrapper.pack()
 
     def destroy(self):
-        self._frame.destroy()
+        self._wrapper.destroy()
 
     def _initialize(self):
-        self._frame = Frame(self._root, padx = 50, pady = 20)
+        self._wrapper = Frame(self._root, padx = 20, pady = 20, bg = "#FFFFEA")
+        border = Frame(self._wrapper, padx = 2, pady = 2, bg = "#000000")
+        self._frame = Frame(border, padx = 40, pady = 50, bg = "#FFFFEA")
 
         self._variables = MenuView(self._frame, self._ctrl).meal_variables
         self._generate_wishlist()
         self._actions()
 
-        self._frame.pack()
+        self._frame.pack(expand=True)
+        border.pack(expand=True)
+        self._wrapper.pack(expand=True)
 
     def _generate_wishlist(self):
-        parent_frame = Frame(self._frame, pady = 15)
-        wrapper = Frame(parent_frame, pady = 15)
+        parent_frame = LabelFrame(
+            self._frame, text = "Kauppalista", padx = 150, pady = 30, bg = "#FFFFEA")
+        wrapper = Frame(parent_frame, pady = 10, bg = "#FFFFEA")
+        button_wrapper = Frame(parent_frame, pady = 20, bg = "#FFFFEA")
 
-        item_label = Label(wrapper, text = "Ruokalistan raaka-aineet:", pady = 2)
-        item_scroll = Scrollbar(wrapper)
+        item_label = Label(wrapper, text = "Ruokalistan raaka-aineet:", pady = 2, bg = "#FFFFEA")
+        item_scroll = Scrollbar(wrapper, bg = "#FFFFEA")
 
         item_box = self._get_listbox(wrapper)
         save_button = Button(
-            parent_frame,
+            button_wrapper,
             text = "Tallenna kauppalista\ntiedostoon",
             command = lambda: self._process_save(),
-            pady = 5)
+            pady = 5,
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
 
         item_box.config(yscrollcommand = item_scroll.set)
         item_scroll.config(command = item_box.yview)
@@ -50,8 +59,10 @@ class WishlistView:
         item_box.pack(side = constants.LEFT)
         item_scroll.pack(side = constants.RIGHT, fill = constants.Y)
 
-        wrapper.pack()
         save_button.pack()
+
+        wrapper.pack()
+        button_wrapper.pack()
         parent_frame.pack()
 
     def _get_listbox(self, parent):
@@ -74,28 +85,31 @@ class WishlistView:
         return item_box
 
     def _actions(self):
-        wrapper = Frame(self._frame, pady = 20)
-        action_frame = ttk.LabelFrame(wrapper, text = "Toiminnot", padding = 20)
+        wrapper = Frame(self._frame, pady = 30, bg = "#FFFFEA")
+        action_frame = LabelFrame(wrapper, text = "Toiminnot", padx = 20, pady = 20, bg = "#FFFFEA")
 
-        back = ttk.Button(
+        back = Button(
             action_frame,
             text = "Palaa takaisin",
-            command = self._views[0]
-        )
-        end_session = ttk.Button(
+            command = self._views[0],
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
+        end_session = Button(
             action_frame,
             text = "Lopeta",
-            command = self._views[3]
-        )
-        logout = ttk.Button(
+            command = self._views[3],
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
+        logout = Button(
             action_frame,
             text = "Kirjaudu ulos",
-            command = lambda: self._process_logout()
-        )
+            command = lambda: self._process_logout(),
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
 
-        back.grid(row = 0, column = 0, padx = 15, pady = 5)
-        logout.grid(row = 0, column = 1, padx = 15, pady = 5)
-        end_session.grid(row = 0, column = 2, padx = 15, pady = 5)
+        back.grid(row = 0, column = 0, padx = 15)
+        logout.grid(row = 0, column = 1, padx = 15)
+        end_session.grid(row = 0, column = 2, padx = 15)
 
         action_frame.pack()
         wrapper.pack()

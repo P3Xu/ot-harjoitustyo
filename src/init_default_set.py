@@ -1,7 +1,7 @@
 from pathlib import Path
 from config import DEFAULT_SET_FILE_PATH
-from tests.assets.meal_set import MealSet as default_set
 from entities.user import User
+from entities.meal_set import MealSet as default_set
 
 def initialize_default_set():
     file_path = Path(DEFAULT_SET_FILE_PATH)

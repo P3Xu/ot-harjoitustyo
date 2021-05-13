@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, Listbox, Scrollbar, Button, Frame, Label, Entry, Text, constants
+from tkinter import StringVar,Listbox,Scrollbar,Button,Frame,Label,Entry,Text,constants,LabelFrame
 from ui.menu_view import MenuView
 
 class ManagementView:
@@ -8,34 +8,43 @@ class ManagementView:
         self._views = views
 
         self._frame = None
+        self._wrapper = None
         self._menu_variables = None
         self._entry_variables = {
             "entry state": True,
             "text state": True,
             "entry": StringVar(),
-            "textbox": None,
-        }
+            "textbox": None,}
 
         self._initialize()
 
     def pack(self):
-        self._frame.pack()
+        self._wrapper.pack()
 
     def destroy(self):
-        self._frame.destroy()
+        self._wrapper.destroy()
 
     def _initialize(self):
-        self._frame = Frame(self._root, padx = 50, pady = 20)
+        self._wrapper = Frame(self._root, padx = 20, pady = 20, bg = "#FFFFEA")
+        border = Frame(self._wrapper, padx = 2, pady = 2, bg = "#000000")
+        self._frame = Frame(border, padx = 50, pady = 10, bg = "#FFFFEA")
+        meals_frame = LabelFrame(
+            self._frame, text = "Kirjasto", padx = 150, pady = 10, bg = "#FFFFEA")
 
         self._menu_variables = MenuView(self._frame, self._ctrl).meal_variables
-        self._items_view()
-        self._insert_meal_view()
+
+        self._items_view(meals_frame)
+        self._insert_meal_view(meals_frame)
+        meals_frame.pack()
+
         self._actions()
 
-        self._frame.pack()
+        self._frame.pack(expand=True)
+        border.pack(expand=True)
+        self._wrapper.pack(expand=True)
 
-    def _items_view(self):
-        parent_frame = Frame(self._frame)
+    def _items_view(self, parent):
+        parent_frame = Frame(parent, bg = "#FFFFEA")
 
         self._generate_items_view(parent_frame)
         self._generate_items_view(parent_frame, False)
@@ -43,18 +52,19 @@ class ManagementView:
         parent_frame.pack()
 
     def _generate_items_view(self, parent, meal=True):
-        parent_frame = Frame(parent, pady = 30)
+        parent_frame = Frame(parent, bg = "#FFFFEA")
 
         if meal is True:
             items_box = self._generate_listbox(parent_frame)
             view_side = constants.LEFT
-            item_label = Label(parent_frame, text = "Lisätyt ruokalajit:", pady = 2)
+            item_label = Label(parent_frame, text = "Lisätyt ruokalajit:", pady = 2, bg = "#FFFFEA")
         else:
             items_box = self._generate_listbox(parent_frame, False)
             view_side = constants.RIGHT
-            item_label = Label(parent_frame, text = "Lisätyt raaka-aineet:", pady = 2)
+            item_label = Label(
+                parent_frame, text = "Lisätyt raaka-aineet:", pady = 2, bg = "#FFFFEA")
 
-        items_scrollbar = Scrollbar(parent_frame)
+        items_scrollbar = Scrollbar(parent_frame, bg = "#FFFFEA")
         items_box.config(yscrollcommand = items_scrollbar.set)
         items_scrollbar.config(command = items_box.yview)
 
@@ -82,8 +92,8 @@ class ManagementView:
 
         return items_box
 
-    def _insert_meal_view(self):
-        parent_frame = Frame(self._frame, pady = 15)
+    def _insert_meal_view(self, parent):
+        parent_frame = Frame(parent, pady = 15, bg = "#FFFFEA")
 
         entry_var = self._entry_variables['entry']
         entry_var.set("Kirjoita tähän ruokalajin nimi")
@@ -102,8 +112,13 @@ class ManagementView:
         ingredients_entry.bind("<Button-1>", lambda x: self._entry_event(False))
         ingredients_entry.bind("<Key>", lambda x: self._entry_event(False))
 
-        submit = Button(parent_frame, text = "Lisää", command = lambda: self._insert_meal_to_db())
-        header_label = Label(parent_frame, text = "Lisää uusi ruokalaji:", pady = 2)
+        submit = Button(
+            parent_frame,
+            text = "Lisää",
+            command = lambda: self._insert_meal_to_db(),
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
+        header_label = Label(parent_frame, text = "Lisää uusi ruokalaji:", pady = 2, bg = "#FFFFEA")
 
         header_label.pack()
         meal_entry.pack()
@@ -112,14 +127,14 @@ class ManagementView:
         parent_frame.pack()
 
     def _insert_meal_to_db(self):
-        """PÄÄSTÄÄ TOISTAISEKSI MYÖS TYHJÄT MERKKIJONOT JA RIVINVAIHDOT LÄPI, KORJATAAN MYÖHEMMIN"""
-
         meal = self._entry_variables['entry'].get()
         ingredients = self._entry_variables['textbox'].get(0.0, constants.END).splitlines()
 
-        if meal in "Kirjoita tähän ruokalajin nimi":
+        if meal in "Kirjoita tähän ruokalajin nimi" or len(meal.strip()) == 0:
             self._root.after(0, self._views[1])
-        elif ingredients[0] in "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna":
+        elif (ingredients[0] in "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna"
+            or len(ingredients[0].strip()) == 0 or len(ingredients[-1].strip()) == 0):
+
             self._root.after(0, self._views[1])
         else:
             self._ctrl.add_meal(meal, ingredients)
@@ -135,28 +150,31 @@ class ManagementView:
             self._entry_variables['entry state'] = False
 
     def _actions(self):
-        wrapper = Frame(self._frame, pady = 20)
-        action_frame = ttk.LabelFrame(wrapper, text = "Toiminnot", padding = 20)
+        wrapper = Frame(self._frame, pady = 30, bg = "#FFFFEA")
+        action_frame = LabelFrame(wrapper, text = "Toiminnot", padx = 20, pady = 20, bg = "#FFFFEA")
 
-        back = ttk.Button(
+        back = Button(
             action_frame,
             text = "Palaa takaisin",
-            command = self._views[0]
-        )
-        end_session = ttk.Button(
+            command = self._views[0],
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
+        end_session = Button(
             action_frame,
             text = "Lopeta",
-            command = self._views[3]
-        )
-        logout = ttk.Button(
+            command = self._views[3],
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
+        logout = Button(
             action_frame,
             text = "Kirjaudu ulos",
-            command = lambda: self._process_logout()
-        )
+            command = lambda: self._process_logout(),
+            bg = "#FFFFEA",
+            activebackground = "#FFFFFF")
 
-        back.grid(row = 0, column = 0, padx = 15, pady = 5)
-        end_session.grid(row = 0, column = 2, padx = 15, pady = 5)
-        logout.grid(row = 0, column = 1, padx = 15, pady = 5)
+        back.grid(row = 0, column = 0, padx = 15)
+        end_session.grid(row = 0, column = 2, padx = 15)
+        logout.grid(row = 0, column = 1, padx = 15)
 
         action_frame.pack()
         wrapper.pack()

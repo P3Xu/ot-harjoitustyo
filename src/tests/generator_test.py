@@ -7,7 +7,7 @@ from entities.menu import Menu
 from entities.user import User
 from entities.meal import Meal
 from entities.ingredient import Ingredient
-from tests.assets.meal_set import MealSet as test_set
+from entities.meal_set import MealSet as test_set
 
 class TestGeneratorService(unittest.TestCase):
 
