@@ -1,9 +1,29 @@
+"""Meal set-moduuli, joka tarjoaa sovelluksen ruokalajien vakiokirjaston ja sen metodit."""
+
 from entities.meal import Meal
 from entities.ingredient import Ingredient
 from repositories.meal_repository import MealRepository as default_repo
 
 class MealSet():
+    """MealSet-luokka tarjoaa listat ja metodit vakio-ruokalajeista raaka-aineineen.
+
+    Metodeilla voidaan luoda ruokalajeista ja raaka-aineista ilmentymiä, tai listoja voidaan
+    käyttää semmoisenaan, esimerkiksi testaamisessa. Listan ruokalajeista alustetaan myös
+    sovelluksen käyttäjien vakiokirjasto, josta ruokalajit luetaan.
+    """
+
     def __init__(self, repository=default_repo()):
+        """Konstruktori, alustaa listat ja tarvittavan repository-luokan.
+
+        Repository voidaan tarjota parametrina, tai sitten käytetään omaa importtia. Testeissä
+        on kätevä tarjota parametrina sama repository-luokka, jota käytetään testaamiseen. Tällöin
+        ruokalajit ja raaka-aineet ovat metodien pyytämisen jälkeen valmiiksi
+        oikeassa tietokannassa.
+
+        Args:
+            repository: vapaaehtoinen repository-luokka, joka hoitaa tietokantatoiminnot.
+        """
+
         self.repository = repository
 
         self.meals = [
@@ -56,9 +76,23 @@ class MealSet():
             (6, 16)]
 
     def get_repository(self):
+        """Palauttaa luokan käyttämän repository-luokan."""
+
         return self.repository
 
     def create_meals(self, user):
+        """Luo attribuutin ruokalajilistasta listallisen ruokalajien ilmentymiä.
+
+        Ruokalajit lisätään samalla myös tietokantaan ja liitetään parametrina
+        annettuun käyttäjään.
+
+        Args:
+            user: käyttäjä, johon ruokalajit liitetään.
+
+        Returns:
+            Palauttaa listan ruokalajien ilmentymiä, eli Meal-objekteja.
+        """
+
         meals = []
 
         for i in range(len(self.meals)):
@@ -86,6 +120,12 @@ class MealSet():
         return meals
 
     def create_ingredients(self):
+        """Luo attribuutin listasta listallisen raaka-aineiden ilmentymiä.
+
+        Returns:
+            Palauttaa listallisen Ingredient-objekteja.
+        """
+
         ingredients = []
 
         for ingredient in self.ingredients:

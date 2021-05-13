@@ -1,9 +1,10 @@
 class Menu:
-    """Luokka viikon ruokalistalle.
+    """Viikon ruokalistan ilmentymä.
 
     Attributes:
         meals: lista ruokalajeja, Meal-olioiden muodossa.
         date: aikaleima ruokalistan luonnille.
+        user: ruokalistan käyttäjä.
     """
 
     def __init__(self, meals, date, user):
@@ -12,6 +13,7 @@ class Menu:
         Args:
             meals: lista ruokalajeja, Meal-olioiden muodossa.
             date: aikaleima ruokalistan luonnille.
+            user: käyttäjä, johon kyseinen ruokalista liitetään.
         """
 
         self.meals = meals
@@ -22,7 +24,7 @@ class Menu:
         """Metodi, jolla haetaan ruokalistan ruokalajit.
 
         Returns:
-            Palauttaa ruokalistan ruokalajit, eli listallisen Meal-olioita.
+            Palauttaa ruokalistan ruokalajit, eli listallisen Meal-objekteja.
         """
 
         return self.meals

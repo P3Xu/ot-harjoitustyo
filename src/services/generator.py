@@ -1,30 +1,34 @@
-"""
-    Generator-moduuli, jonka GeneratorService-luokka huolehtii
-    ruokalistan generoinnista.
-"""
+"""Generator-moduuli, jonka GeneratorService-luokka toimittaa generoidun ruokalistan."""
+
 import random
 from datetime import date
 from entities.menu import Menu
 
 class GeneratorService:
-    """Luokka palvelulle, joka generoi listan."""
+    """Luokka palvelulle, joka generoi viikon ruokalistan."""
 
     def __init__(self, repository, user):
-        """Luokan konstruktori. Luo kyseisen palvelun.
+        """Konstruktori, alustaa generaattorin.
 
         Args:
-            repository: saa parametrina Repository-olion,
-            joka suorittaa tietokantatoiminnot.
+            repository: repository-luokka, joka hoitaa ruokalajien tietokantatoiminnot.
+            user: käyttäjä, johon luotu ruokalista liitetään.
         """
+
         self.repository = repository
         self.user = user
 
     def generate(self):
-        """Vaatimaton generointi-algoritmi, joka arpoo ruokalajeista
-           viikon ruokalistan satunnaisessa järjestyksessä.
+        """Metodi, joka generoi ruokalistan.
+
+        Vaatimaton generointi-algoritmi, joka arpoo ruokalajeista viikon ruokalistan
+        satunnaiseen järjestykseen, ilman duplikaatteja.
+
+        Tarvitsee vähintään seitsemän eri ruokalajia voidakseen generoida listan.
 
         Returns:
-            Palauttaa Menu-oliona viikon ruokalistan.
+            Palauttaa -1 jos tietokannassa ei ole tarpeeksi ruokalajeja, tai onnistuessaan
+            Menu-olion, joka sisältää listan ruokalajit Meal-olioina.
         """
 
         generated = []

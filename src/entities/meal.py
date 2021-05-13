@@ -13,7 +13,7 @@ class Meal:
         Args:
             name: ruokalajin nimi.
             ingredients: lista raaka-aineista, yleensä listallinen Ingredient-olioita.
-            db_id: tietokannan id, mikäli olemassa. Vapaaehtoinen.
+            db_id: tietokannan uniikki id-numero, mikäli olemassa. Vapaaehtoinen.
         """
 
         self.name = name
@@ -24,6 +24,7 @@ class Meal:
         """Metodi, joka palauttaa olion nimen merkkijonona.
 
         Returns:
-            Olion nimi merkkijonona.
+            Ilmentymän nimi merkkijonona.
         """
+
         return self.name

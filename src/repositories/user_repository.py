@@ -9,9 +9,10 @@ class UserRepository:
     """
 
     def __init__(self, i_o=default_io()):
-        """
-        Konstruktori, alustaa attribuutin I/O-olion. I/O hoitaa keskitetysti repository-luokkien
+        """Konstruktori, alustaa attribuutin I/O-olion. I/O hoitaa keskitetysti repository-luokkien
         luku- ja kirjoitustoiminnot tietokannassa.
+
+        I/O-objekti voidaan antaa parametrina, tai oletusarvoisesti käytetään importattua moduulia.
         """
 
         self.i_o = i_o
@@ -20,7 +21,7 @@ class UserRepository:
         """Metodi, joka lisää uuden käyttäjän tietokantaan.
 
         Args:
-            username: käyttäjän käyttäjätunnus.
+            username: käyttäjän käyttäjätunnus str-muodossa.
             password: käyttäjän salasana. Tässä tapauksessa valitettavasti ihan vain plaintextina.
 
         Returns:
@@ -40,7 +41,7 @@ class UserRepository:
         """Metodilla haetaan kaikki lisätyt käyttäjät tietokannasta.
 
         Returns:
-            Palauttaa listallisen User-olioita.
+            Palauttaa listallisen User-objekteja.
         """
 
         results = self.i_o.read("SELECT * FROM users")
@@ -53,10 +54,10 @@ class UserRepository:
         """Metodilla haetaan yksittäinen käyttäjä tietokannasta.
 
         Args:
-            username: käyttäjätunnus, jota kannasta etsitään.
+            username: merkkijonona käyttäjätunnus, jota tietokannasta etsitään.
 
         Returns:
-            Palauttaa joko etsityn käyttäjän User-oliona jos sellainen löytyy, tai muussa
+            Palauttaa joko etsityn käyttäjän User-objektina jos sellainen löytyy, tai muussa
             tapauksessa Nonen, mikäli käyttäjää ei löydy tai sattuu jokin poikkeus.
         """
 

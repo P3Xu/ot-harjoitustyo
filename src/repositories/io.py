@@ -9,11 +9,15 @@ class InputOutput:
     """
 
     def __init__(self):
+        """Konstruktori, alustaa tietokanta-yhteyden ja käytetyn cursor-objektin."""
+
         self.connection = get_database_connection()
         self.cursor = self.connection.cursor()
 
     def read(self, query, variables=False):
         """Lukumetodi, lukee tietokantaa.
+
+        Toimii joko muuttujilla, tai ilman. Muuttujat tarjotaan parametrina.
 
         Args:
             query: suoritettava tietokantakysely.

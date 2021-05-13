@@ -1,9 +1,10 @@
 class User:
-    """Luokka käyttäjälle.
+    """Käyttäjän ilmentymä.
 
     Attributes:
         name: käyttäjänimi.
         password: salasana.
+        db_id: käyttäjän id-numero tietokannassa.
     """
 
     def __init__(self, name, password, db_id):
@@ -12,6 +13,7 @@ class User:
         Args:
             name: käyttäjänimi.
             password: salasana.
+            db_id: tietokannan uniikki id-numero.
         """
 
         self.name = name
