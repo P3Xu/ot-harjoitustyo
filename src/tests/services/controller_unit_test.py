@@ -11,7 +11,7 @@ from repositories.menu_repository import MenuRepository
 from repositories.user_repository import UserRepository
 from repositories.library_repository import LibraryRepository
 
-class TestControllerRepositoryAsUnit(unittest.TestCase):
+class TestControllerServiceAsUnit(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

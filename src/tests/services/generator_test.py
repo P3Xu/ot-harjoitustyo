@@ -24,7 +24,7 @@ class TestGeneratorService(unittest.TestCase):
 
         cls.meals = cls.meal_set.create_meals(cls.test_user)
         cls.ingredients = cls.meal_set.create_ingredients()
-        
+
         cls.test_menu = cls.generator.generate()
 
     def test_generate_returns_correct_object(self):

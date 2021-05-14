@@ -9,7 +9,7 @@ from entities.meal_set import MealSet as test_set
 from services.controller import Controller
 from config import DEFAULT_SET_FILE_PATH, WISHLIST_DIR_PATH
 
-class TestControllerRepositoryAsIntegration(unittest.TestCase):
+class TestControllerServiceAsIntegration(unittest.TestCase):
     """
     Tämä on lähes sama setti kuin kyseisen luokan yksikkötestitkin, mutta testattuna
     luokan omilla riippuvuuksilla ja joissain testimetodeissa on jonkin verran eroja.
