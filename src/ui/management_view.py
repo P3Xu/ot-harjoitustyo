@@ -1,8 +1,26 @@
+"""UI-moduuli, joka tarjoaa sovelluksen hallintanäkymän."""
+
 from tkinter import StringVar,Listbox,Scrollbar,Button,Frame,Label,Entry,Text,constants,LabelFrame
 from ui.menu_view import MenuView
 
 class ManagementView:
+    """Luokka sovelluksen hallintanäkymälle.
+
+    Hallintanäkymässä on mahdollista hallita sovelluksen ruokalajeja sekä raaka-aineita.
+    Olemassaolevien ruokien ja raaka-aineiden tarkastelun lisäksi näkymässä on mahdollista
+    poistaa ruokalaji kirjastosta, tai lisätä uusi ruokalaji raaka-aineineen kirjastoon.
+    """
+
     def __init__(self, root, controller, views):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: isäntäkehys, johon näkymän pääkehys kiinnitetään.
+            controller: käytettävä controller-luokka.
+            views: lista muista sovelluksen näkymistä, joihin voi siirtyä kutsumalla halutun
+                näkymän numeroa listalta.
+        """
+
         self._root = root
         self._ctrl = controller
         self._views = views
@@ -19,12 +37,21 @@ class ManagementView:
         self._initialize()
 
     def pack(self):
+        """Pakkaa pääkehyksen."""
+
         self._wrapper.pack()
 
     def destroy(self):
+        """Tuhoaa pääkehyksen."""
+
         self._wrapper.destroy()
 
     def _initialize(self):
+        """Alustaa näkymän.
+
+        Luo tarvittavat kehykset ja kutsuu näkymän metodeja, jotka luovat näkymän komponentit.
+        """
+
         self._wrapper = Frame(self._root, padx = 20, pady = 20, bg = "#FFFFEA")
         border = Frame(self._wrapper, padx = 2, pady = 2, bg = "#000000")
         self._frame = Frame(border, padx = 50, pady = 10, bg = "#FFFFEA")
@@ -44,6 +71,12 @@ class ManagementView:
         self._wrapper.pack(expand=True)
 
     def _items_view(self, parent):
+        """Pyytää listauskentät ruokalajeille ja raaka-aineille.
+
+        Args:
+            parent: isäntäkehys, johon alikehys liitetään.
+        """
+
         parent_frame = Frame(parent, bg = "#FFFFEA")
 
         self._generate_items_view(parent_frame)
@@ -52,6 +85,17 @@ class ManagementView:
         parent_frame.pack()
 
     def _generate_items_view(self, parent, meal=True):
+        """Generoi listauskenttäkokonaisuuden.
+
+        Listauskenttäkokonaisuus generoidaan joko ruokalajille tai raaka-aineelle
+        parametristä riippuen.
+
+        Args:
+            parent: isäntäkehys, johon kenttä sidotaan.
+            meal: vipu, jolla metodille kerrotaan, käsitelläänkö ruokalajien vai
+            raaka-aineiden kenttää. Oletuksena käsitellään ruokalajien kenttää.
+        """
+
         parent_frame = Frame(parent, bg = "#FFFFEA")
 
         if meal is True:
@@ -74,6 +118,21 @@ class ManagementView:
         parent_frame.pack(side = view_side)
 
     def _generate_listbox(self, parent, meal=True):
+        """Generoi listauskentän.
+
+        Listauskenttä generoidaan parametrista riippuen joko ruokalajille tai raaka-aineelle.
+        Kenttään syötetään jommat kummat arvoksi ja ruokalajin tapauksessa kenttään sidotaan
+        triggeri tuplaklikkaukselle, jolla päästään poistamaan ruokalajeja kirjastosta.
+
+        Args:
+            parent: isäntäkehys, johon kenttä sidotaan.
+            meal: vipu, jolla metodille kerrotaan, käsitelläänkö ruokalajien vai
+            raaka-aineiden kenttää. Oletuksena käsitellään ruokalajien kenttää.
+
+        Returns:
+            Palauttaa listbox-objektin, joka sisältää ruokalajit tai raaka-aineet.
+        """
+
         if not meal:
             items = self._ctrl.fetch_ingredients()
             items.sort(key = lambda x: x.name)
@@ -93,6 +152,12 @@ class ManagementView:
         return items_box
 
     def _insert_meal_view(self, parent):
+        """Luo ruokalajien lisäämiseen tarvittavat komponentit näkymään.
+
+        Args:
+            parent: isäntäkehys, johon näkymä sidotaan.
+        """
+
         parent_frame = Frame(parent, pady = 15, bg = "#FFFFEA")
 
         entry_var = self._entry_variables['entry']
@@ -127,6 +192,13 @@ class ManagementView:
         parent_frame.pack()
 
     def _insert_meal_to_db(self):
+        """Prosessoi ruokalajin lisäämisen tietokantaan.
+
+        Metodi tarkistaa, ettei kantaan yritetä lisätä oletustekstiä tai pelkästä välilyönnistä
+        koostuvia merkkijonoja. Jos kaikki on kunnossa, pyydetään controlleria lisäämään ruokalaji
+        tietokantaan ja informoidaan käyttäjää onnistuneesta lisäyksestä.
+        """
+
         meal = self._entry_variables['entry'].get()
         ingredients = self._entry_variables['textbox'].get(0.0, constants.END).splitlines()
 
@@ -141,6 +213,12 @@ class ManagementView:
             self._views[2]("Ruokalaji lisättiin kirjastoon!", 1)
 
     def _entry_event(self, entry=True):
+        """Prosessoi inputtien tyhjentämisen klikattaessa.
+
+        Args:
+            entry: vipu sille, että kumpaa inputtia käsitellään.
+        """
+
         if self._entry_variables['text state'] and not entry:
             self._entry_variables['textbox'].delete(0.0, constants.END)
             self._entry_variables['text state'] = False
@@ -150,6 +228,8 @@ class ManagementView:
             self._entry_variables['entry state'] = False
 
     def _actions(self):
+        """Luo painikkeet muihin näkymiin siirtymistä varten."""
+
         wrapper = Frame(self._frame, pady = 30, bg = "#FFFFEA")
         action_frame = LabelFrame(wrapper, text = "Toiminnot", padx = 20, pady = 20, bg = "#FFFFEA")
 
@@ -180,9 +260,13 @@ class ManagementView:
         wrapper.pack()
 
     def _process_logout(self):
+        """Prosessoi käyttäjän uloskirjautumisen."""
+
         self._ctrl.logout_user()
 
         self._root.after(0, self._views[4])
 
     def _process_remove(self, item):
+        """Prosessoi ruokalajin poistopyynnön."""
+
         self._root.after(0, self._views[6](item))

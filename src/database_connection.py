@@ -1,3 +1,5 @@
+"""Moduuli, joka luo tarvittavan tietokantayhteyden."""
+
 import sqlite3
 from config import DATABASE_FILE_PATH
 

@@ -1,8 +1,12 @@
+"""Moduuli, joka alustaa tarvittavat tietokantarakenteet tietokantaan."""
+
 from database_connection import get_database_connection
 
 connection = get_database_connection()
 
 def drop_tables():
+    """Poistaa samannimiset taulut, mikäli sellaisia on jo olemassa."""
+
     cursor = connection.cursor()
 
     cursor.execute('DROP TABLE IF EXISTS meals;')
@@ -13,6 +17,8 @@ def drop_tables():
     connection.commit()
 
 def create_tables():
+    """Luo tarvittavat tietokantataulut kantaan."""
+
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -58,6 +64,8 @@ def create_tables():
     connection.commit()
 
 def initialize_database():
+    """Kutsuu alustusmetodeja."""
+
     drop_tables()
     create_tables()
 

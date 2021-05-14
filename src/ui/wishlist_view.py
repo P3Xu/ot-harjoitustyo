@@ -1,8 +1,26 @@
+"""UI-moduuli, joka tarjoaa näkymän ruokalistan raaka-aineiden kauppalistalle."""
+
 from tkinter import Frame, Label, Listbox, Scrollbar, Button, constants, LabelFrame
 from ui.menu_view import MenuView
 
 class WishlistView:
+    """Luokka kauppalistanäkymälle.
+
+    Tässä luokassa luodaan näkymä kauppalistanäkymälle, jossa näkyy viikon ruokalista, sekä
+    ruokalistaan liittyvät raaka-aineet aakkosjärjestyksessä. Näkymässä on mahdollisuus tallentaa
+    kauppalista tekstitiedostoon.
+    """
+
     def __init__(self, root, controller, views):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: isäntäkehys, johon näkymän pääkehys kiinnitetään.
+            controller: käytettävä controller-luokka.
+            views: lista muista sovelluksen näkymistä, joihin voi siirtyä kutsumalla halutun
+                näkymän numeroa listalta.
+        """
+
         self._root = root
         self._views = views
         self._ctrl = controller
@@ -15,12 +33,18 @@ class WishlistView:
         self._initialize()
 
     def pack(self):
+        """Pakkaa pääkehyksen."""
+
         self._wrapper.pack()
 
     def destroy(self):
+        """Tuhoaa pääkehyksen."""
+
         self._wrapper.destroy()
 
     def _initialize(self):
+        """Alustaa näkymän."""
+
         self._wrapper = Frame(self._root, padx = 20, pady = 20, bg = "#FFFFEA")
         border = Frame(self._wrapper, padx = 2, pady = 2, bg = "#000000")
         self._frame = Frame(border, padx = 40, pady = 50, bg = "#FFFFEA")
@@ -34,6 +58,12 @@ class WishlistView:
         self._wrapper.pack(expand=True)
 
     def _generate_wishlist(self):
+        """Luo näkymän kauppalista-osuuden.
+
+        Metodi lisää näkymään listauskentän ja painikkeen listan tallentamiseksi.
+        Kentän sisältö pyydetään toiselta metodilta.
+        """
+
         parent_frame = LabelFrame(
             self._frame, text = "Kauppalista", padx = 150, pady = 30, bg = "#FFFFEA")
         wrapper = Frame(parent_frame, pady = 10, bg = "#FFFFEA")
@@ -66,6 +96,20 @@ class WishlistView:
         parent_frame.pack()
 
     def _get_listbox(self, parent):
+        """Luo listauskentän ruokalistan raaka-aineille.
+
+        Kenttään pyydetään controllerilta ruokalista, jonka ruokalajien raaka-aineiden nimet
+        iteroidaan läpi ja lisätään settiin duplikaattien välttämiseksi. Tämän jälkeen setti
+        käännetään listaksi ja järjestetään aakkosjärjestykseen, jonka jälkeen se syötetään
+        kentän arvoiksi.
+
+        Args:
+            parent: isäntäkehys, johon kenttä sidotaan.
+
+        Returns:
+            Palauttaa valmiin listauskentän näkymään sijoitettavaksi.
+        """
+
         menu = self._ctrl.fetch_menu()
         items = set()
 
@@ -85,6 +129,8 @@ class WishlistView:
         return item_box
 
     def _actions(self):
+        """Luo painikkeet muihin näkymiin siirtymiseksi."""
+
         wrapper = Frame(self._frame, pady = 30, bg = "#FFFFEA")
         action_frame = LabelFrame(wrapper, text = "Toiminnot", padx = 20, pady = 20, bg = "#FFFFEA")
 
@@ -115,12 +161,19 @@ class WishlistView:
         wrapper.pack()
 
     def _process_save(self):
+        """Prosessoi tallennuspyynnön.
+
+        Tulostaa käyttäjälle tiedoston nimen, johon kauppalista tallennettiin.
+        """
+
         file_name = self._ctrl.export_wishlist(self._wishlist)
         msg = "Kauppalista tallennettiin onnistuneesti tiedostoon "+file_name[1:]
 
         self._root.after(0, self._views[2](msg, 7))
 
     def _process_logout(self):
+        """Prosessoi käyttäjän uloskirjautumisen."""
+
         self._ctrl.logout_user()
 
         self._root.after(0, self._views[4])

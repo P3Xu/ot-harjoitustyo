@@ -1,3 +1,5 @@
+"""Moduuli, joka alustaa määritellyn hakemiston sovelluksen tulostamille kauppalistoille."""
+
 from pathlib import Path
 from config import WISHLIST_DIR_PATH
 

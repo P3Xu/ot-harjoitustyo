@@ -1,3 +1,8 @@
+"""
+Moduuli, joka huolehtii kaikista tarvittavista alustustoimenpiteistä ennen sovelluksen
+ensimmäistä käynnistämistä.
+"""
+
 from init_database import initialize_database
 from init_default_set import initialize_default_set
 from init_wishlist_dir import initialize_wishlist_dir

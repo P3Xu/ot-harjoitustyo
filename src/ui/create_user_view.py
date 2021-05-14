@@ -1,8 +1,28 @@
+"""UI-moduuli, joka tarjoaa käyttäjien lisäämiseen tarkoitetun näkymän."""
+
 from tkinter import ttk, StringVar, Button, Frame, Label, Entry
 from tkinter.filedialog import askopenfile
 
 class CreateUserView:
+    """Luokka näkymälle käyttäjien lisäämistä varten.
+
+    Luokka tarjoaa käyttäjälle näkymän, jossa on kentät käyttäjätunnukselle ja salasanalle sekä
+    mahdollisuus ladata käyttäjän koneelta oma ruokalajien oletuskirjasto CSV-muotoisena. Lisäksi
+    näkymästä on mahdollisuus lopettaa ohjelma, palata takaisin kirjautumisäkymään, tai luoda
+    käyttäjä, jonka jälkeen kerrotaan onnistuiko käyttäjän lisääminen ja palataan automaattisesti
+    joko kirjautumisnäkymään, tai epäonnistuessa takaisin luontinäkymään.
+    """
+
     def __init__(self, root, controller, views):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: isäntäkehys, johon näkymän pääkehys kiinnitetään.
+            controller: käytettävä controller-luokka.
+            views: lista muista sovelluksen näkymistä, joihin voi siirtyä kutsumalla halutun
+                näkymän numeroa listalta.
+        """
+
         self._root = root
         self._ctrl = controller
         self._views = views
@@ -16,12 +36,22 @@ class CreateUserView:
         self._initialize()
 
     def pack(self):
+        """Pakkaa pääkehyksen."""
+
         self._wrapper.pack()
 
     def destroy(self):
+        """Tuhoaa pääkehyksen."""
+
         self._wrapper.destroy()
 
     def _initialize(self):
+        """Alustaa näkymän.
+
+        Kutsuu näkymän metodeja, jotka luovat kukin oman osansa näkymän komponenteista. Lopuksi
+        näkymät pakataan paikoilleen.
+        """
+
         self._wrapper = Frame(self._root, padx = 20, pady = 20, bg = "#FFFFEA")
         border = Frame(self._wrapper, padx = 2, pady = 2, bg = "#000000")
         self._frame = Frame(border, padx = 40, pady = 50, bg = "#FFFFEA")
@@ -36,6 +66,8 @@ class CreateUserView:
         self._wrapper.pack(expand=True)
 
     def _header(self):
+        """Näkymän otsikko rakennetaan tässä metodissa."""
+
         header_frame = Frame(self._frame, bg = "#FFFFEA")
 
         header_label = Label(header_frame, text = "Luo uusi käyttäjä", pady = 30, bg = "#FFFFEA")
@@ -45,6 +77,8 @@ class CreateUserView:
         header_frame.pack()
 
     def _directions(self):
+        """Näkymän ohjeet tunnuksen luomista varten tehdään tässä näkymässä."""
+
         parent_frame = ttk.Frame(self._frame)
 
         text = "Käyttäjätunnuksen ja salasanan pituus on oltava vähintään viisi merkkiä.\n\n" + \
@@ -57,6 +91,8 @@ class CreateUserView:
         parent_frame.pack()
 
     def _create_user_view(self):
+        """Tämä metodi tuottaa tarvittavat kentät ja napit käyttäjän lisäämistä varten."""
+
         parent_frame = Frame(self._frame, pady = 10, bg = "#FFFFEA")
 
         username_label = Label(parent_frame, text = "Käyttäjänimi:", bg = "#FFFFEA")
@@ -98,6 +134,8 @@ class CreateUserView:
         parent_frame.pack()
 
     def _actions(self):
+        """Tässä metodissa luodaan napit näkymästä pois liikkumista varten."""
+
         action_frame = Frame(self._frame, padx = 20, pady = 40, bg = "#FFFFEA")
 
         back = Button(
@@ -119,11 +157,26 @@ class CreateUserView:
         action_frame.pack()
 
     def _process_add_config(self):
+        """Tämä metodi tarjoaa latausmahdollisuuden CSV-tiedostolle.
+
+        Kutsutaan "Lataa .csv"-nappia painamalla, joka tallentaa ladatun tiedoston luokan
+        config_file-attribuutin arvoksi.
+        """
+
         file_path = askopenfile(mode="r", filetypes=(("CSV Files", "*.csv"),))
 
         self._config_file = file_path
 
     def _process_add_user(self):
+        """Prosessoi käyttäjän lisäämisen.
+
+        Metodi tarkistaa, että syötetty käyttäjätunnus ja salasana ovat ilmoitettujen vaatimusten
+        mukaisia ja ilmoittaa käyttäjälle, mikäli näin ei ole. Lopulta jos kaikki on kunnossa,
+        yritetäään käyttäjän lisäämistä ja ilmoitetaan käyttäjälle, onnistuiko lisääminen vai
+        oliko valittu käyttäjätunnus kenties jo käytössä. Mikäli onnistui, siirrytään
+        kirjautumisnäkymään ja jos ei, pysytään tässä näkymässä.
+        """
+
         if (len(self._username.get()) < 5 or
             len(self._password.get()) < 5 or
             self._username.get() == len(self._username.get()) * " "):

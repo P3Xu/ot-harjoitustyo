@@ -1,7 +1,22 @@
+"""UI-moduuli, joka tarjoaa sovelluksen ruokalistanäkymän."""
+
 from tkinter import StringVar, Frame, constants, LabelFrame, Label
 
 class MenuView:
+    """Luokka ruokalistanäkymälle.
+
+    Tässä luokassa koostetaan generoitu ruokalista paikoilleen näkymään. Näkymä voidaan liittää
+    helposti osaksi muita näkymiä sen ollessa oma itsenäinen kokonaisuutensa.
+    """
+
     def __init__(self, root, controller):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: isäntäkehys, johon näkymän pääkehys kiinnitetään.
+            controller: käytettävä controller-luokka.
+        """
+
         self._root = root
         self.ctrl = controller
 
@@ -21,12 +36,18 @@ class MenuView:
         self._initialize()
 
     def pack(self):
+        """Pakkaa pääkehyksen."""
+
         self._frame.pack()
 
     def destroy(self):
+        """Tuhoaa pääkehyksen."""
+
         self._frame.destroy()
 
     def _initialize(self):
+        """Alustaa näkymän."""
+
         self._frame = Frame(self._root, padx = 30, pady = 30, bg = "#FFFFEA")
 
         self._view_menu()
@@ -34,6 +55,8 @@ class MenuView:
         self._frame.pack()
 
     def _view_menu(self):
+        """Rakentaa ruokalistanäkymän."""
+
         self._menu_frame = LabelFrame(
             self._frame, text = "Ruokalista", padx = 30, pady = 20, bg = "#FFFFEA")
         menu_items = self._generate_menu_view()
@@ -57,6 +80,16 @@ class MenuView:
         self._menu_frame.pack()
 
     def _generate_menu_view(self):
+        """Generoi ruokalistanäkymän sisällön näkymään.
+
+        Metodi pyytää ruokalistan ilmentymän controllerilta ja asettelee ruokalajit
+        paikoilleen näkymään.
+
+        Returns:
+            Palauttaa monikon listoja, joissa on tarvittavat Labelit ja Framet näkymän
+            muodostamiseksi.
+        """
+
         if not self.ctrl.fetch_menu():
             return None
 

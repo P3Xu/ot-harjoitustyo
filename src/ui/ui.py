@@ -1,3 +1,5 @@
+"""UI-luokkien päämoduuli. Suorittaa näkymiin liittyvät toiminnallisuudet."""
+
 from ui.main_view import MainView
 from ui.management_view import ManagementView
 from ui.info_view import InfoView
@@ -8,24 +10,40 @@ from ui.wishlist_view import WishlistView
 from services.controller import Controller
 
 class UI:
+    """UI-luokkien pääluokka.
+
+    Tässä luokassa suoritetaan kaikkien muiden UI-luokkien kontrollointi. Muut näkymät tarjotaan
+    parametrina listassa kaikille näkymille, jolloin niihin siirtymistä on helppo pyytää kutsumalla
+    vain pääluokan metodia listasta. Luokka kutsuu pyytävän luokan tuhoamismetodia ja vaihtaa sitten
+    näkymäkseen pyydetyn luokan näkymän. Joillekin metodeille voi antaa myös parametreja kutsussa.
+    """
+
     def __init__(self, root):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: saa parametrina isäntänäkymän, johon näkymät sidotaan.
+        """
+
         self._root = root
         self._current_view = None
         self._ctrl = Controller()
         self._views = [
-            self._show_main_view,           #0
-            self._show_management_view,     #1
-            self._show_information_view,    #2
-            self._end_session,              #3
-            self._show_login_view,          #4
-            self._show_create_user_view,    #5
-            self._show_remove_item_view,    #6
-            self._show_wishlist_view,       #7
+            self._show_main_view,
+            self._show_management_view,
+            self._show_information_view,
+            self._end_session,
+            self._show_login_view,
+            self._show_create_user_view,
+            self._show_remove_item_view,
+            self._show_wishlist_view,
             self
         ]
         self.user = None
 
     def start(self):
+        """Käynnistää sovelluksen ensimmäisenä näytettävän näkymän, eli kirjautumisnäkymän."""
+
         self._show_login_view()
 
     def _show_main_view(self):

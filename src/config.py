@@ -1,3 +1,5 @@
+"""Moduuli, joka määrittelee käytettävät konfiguraatiot .env-tiedoston pohjalta."""
+
 import os
 from dotenv import load_dotenv
 
@@ -16,3 +18,5 @@ DEFAULT_SET_FILE_PATH = os.path.join(dirname, '..', 'data', DEFAULT_SET_FILENAME
 
 WISHLIST_DIRNAME = os.getenv('WISHLIST_DIRNAME') or 'wishlists'
 WISHLIST_DIR_PATH = os.path.join(dirname, '..', 'data', WISHLIST_DIRNAME)
+
+MESSAGE_SHOWTIME = os.getenv('MESSAGE_SHOWTIME') or 4500

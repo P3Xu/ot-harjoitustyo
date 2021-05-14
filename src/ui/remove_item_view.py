@@ -1,7 +1,24 @@
+"""UI-moduuli, joka tarjoaa varmistusnäkymän ruokalajin poistamiselle."""
+
 from tkinter import Button, Frame, Label
 
 class RemoveItemView:
+    """Luokka ruokalajin poistonäkymälle.
+
+    Tässä näkymässä käyttäjältä varmistetaan ruokalajin poistaminen.
+    """
+
     def __init__(self, root, controller, views, item):
+        """Konstruktori, alustaa luokan attribuutit.
+
+        Args:
+            root: isäntäkehys, johon näkymän pääkehys kiinnitetään.
+            controller: käytettävä controller-luokka.
+            views: lista muista sovelluksen näkymistä, joihin voi siirtyä kutsumalla halutun
+                näkymän numeroa listalta.
+            item: poistettava ruokalaji.
+        """
+
         self._root = root
         self._ctrl = controller
         self._views = views
@@ -12,12 +29,18 @@ class RemoveItemView:
         self._initialize()
 
     def pack(self):
+        """Pakkaa pääkehyksen."""
+
         self._frame.pack()
 
     def destroy(self):
+        """Tuhoaa pääkehyksen."""
+
         self._frame.destroy()
 
     def _initialize(self):
+        """Alustaa näkymän."""
+
         self._frame = Frame(self._root, padx = 50, pady = 40, bg = "#FFFFEA")
 
         self._show_confirm_request()
@@ -26,6 +49,8 @@ class RemoveItemView:
         self._frame.pack()
 
     def _show_confirm_request(self):
+        """Luo näkymän tekstikomponentin."""
+
         parent_frame = Frame(self._frame, padx = 20, pady = 20, bg = "#FFFFEA")
 
         text_pre = "Haluatko varmasti poistaa ruokalajin"
@@ -43,6 +68,8 @@ class RemoveItemView:
         parent_frame.pack()
 
     def _actions(self):
+        """Luo painikkeet joilla joko prosessoidaan poisto tai palataan takaisin."""
+
         parent_frame = Frame(self._frame, pady = 10, bg = "#FFFFEA")
 
         yes_button = Button(
@@ -66,6 +93,12 @@ class RemoveItemView:
         parent_frame.pack()
 
     def _process_remove(self):
+        """Prosessoi poistotoimenpiteen.
+
+        Pyytää controlleria poistamaan annetun ruokalajin tietokannasta.
+        Informoi käyttäjää onnistuneesta poistosta ja palaa takaisin hallintanäkymään.
+        """
+
         self._ctrl.remove_meal(self._item)
 
         self._root.after(0, self._views[2]("Ruokalaji poistettu onnistuneesti kirjastosta.", 1))
