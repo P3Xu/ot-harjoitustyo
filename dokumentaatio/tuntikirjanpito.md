@@ -34,4 +34,5 @@
 | 12.5. | 9 | Ruokalajien poisto, kauppalistan export ja uloskirjaus implementoitu, sekä lisätty testeihin |
 | 13.5. | 10 | UI:n ja testien viimeistely, dokumentaation aloitus |
 | 14.5. | 10 | Dokumentaatiota |
-| Yht. | 202 | |
+| 15.5. | 10 | Dokumentointia, viimeistelyä palautusta varten |
+| Yht. | 212 | |

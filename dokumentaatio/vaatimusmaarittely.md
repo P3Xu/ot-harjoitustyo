@@ -10,52 +10,44 @@ Sovelluksen luonteesta johtuen sovelluksella on vain normaaleja käyttäjiä.
 
 ## Käyttöliittymä
 
-Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille. Sitten päänäkymä, jossa näkyy generoitu viikon ruokalista sekä toiminnot uuden ruokalistan generoinnille, sekä ruokalajien ja raaka-aineiden lisäämiselle. Ruokalistan generoinnissa näkyy jonkinlainen parametrivalikko. Lisäksi näkyy mahdollisuus kirjautua ulos järjestelmästä.
-	- **Tehty:** Tekstipohjainen käyttöliittymä, käyttäjä voi generoida ruokalistan ja tarkastella ruokalajeja sekä raaka-aineita, sekä lisäksi lisätä uusia ruokalajeja kirjastoon, joista menu generoidaan
-	- **Viikko 5:** Graafinen alkanut valmistua myös, samat toiminnot kuin tekstipohjaisessakin. Bugeja ainakin sen verran, että tyhjät merkkijonot ja rivinvaihdot menee lisäyksestä toistaiseksi vielä läpi.
+Näkymät sisäänkirjautumiselle, sekä käyttäjän luonnille.
+Sitten päänäkymä, jossa näkyy generoitu viikon ruokalista sekä toiminnot uuden ruokalistan generoinnille, kauppalistan tulostukselle, sekä ruokalajien ja raaka-aineiden lisäämiselle. Lisäksi näkyy mahdollisuus kirjautua ulos järjestelmästä tai lopettaa ohjelma.
+Kauppalistanäkymässä näkyy viikon ruokalista, sen raaka-aineet listassa sekä mahdollisuus tulostaa kauppalista tekstitiedostoon. Lisäksi on painikkeet joilla voi siirtyä takaisin päänäkymään, kirjautua ulos tai lopettaa sovelluksen.
+Ruoka-aineiden hallintanäkymässä näkyy ruokalistanäkymä, kaikki käyttäjän ruokalajit ja raaka-aineet omissa listoissaan, sekä syötekentät uusien ruokalajien ja niiden raaka-aineiden lisäämiselle. Lisäksi on painikkeet takaisin päänäkymään, ulos kirjautumiselle sekä sovelluksen lopettamiselle. Hallintanäkymässä on myös mahdollisuus poistaa ruokalajeja tuplaklikkaamalla, jolloin avautuu varmistusnäkymä jossa kysytään käyttäjältä, haluaako tämä varmasti poistaa kyseisen ruokalajin.
+Lisäksi on vielä erilaisia viestinäkymiä, joissa sovellus kertoo käyttäjälle, kuinka suoritettu toiminto sujui; onnistuiko vai kohdattiinko ongelmia.
+
 ## Perusversion toiminnallisuus
-- **Update:** Kirjautuminen puuttuu vielä täysin, tällä hetkellä ei ole oikein tiedossa onko edes tarpeellista implementoida
-- **Viikko 5:** Sama tilanne yhä
-- **Viikko 6:** Kirjautumista alettu implementoimaan. Tällä hetkellä graafinen osuus valmis, mutta pellin alla-toiminnallisuus puuttuu vielä aivan täysin. Aloitettu repositoryn kirjoittaminen sekä controllerin testaus ennen uusia metodeja. 
+
 ### Ennen sisäänkirjautumista
 
 - Käyttäjätunnuksen luonti, jossa käyttäjä voi luoda itselleen tunnuksen järjestelmään
-	- Vaatimukset tunnuksen minimipituus 5 merkkiä ja uniikki tunnus; järjestelmä ilmoittaa, mikäli nämä ehdot eivät täyty
+	- Vaatimukset tunnuksen sekä salasanan minimipituus 5 merkkiä ja uniikki tunnus; järjestelmä ilmoittaa, mikäli nämä ehdot eivät täyty
 - Kirjautuminen järjestelmään
 	- Kirjautuminen onnistuu, jos tunnus on oikein
 	- Mikäli tunnusta ei ole olemassa, järjestelmä ilmoittaa siitä
 
-**Viikko 6:** Käyttäjä voi luoda itselleen käyttäjätunnuksen, mutta virheitä ei vielä havaita eikä käyttäjätunnus tallennus mihinkään.
 ### Kirjautumisen jälkeen
 
 - Käyttäjä näkee viimeisimmän generoidun ruokalistan, mikäli sellainen on generoitu
-	- **Tehty**
 - Käyttäjä voi generoida uuden ruokalistan
-	- **Tehty**
+- Käyttäjä voi tarkastella ja tulostaa itselleen viikon kauppalistan ruokalistan pohjalta
 - Käyttäjä voi lisätä ruokia kirjastoon, jonka pohjalta lista generoidaan
 	- Käyttäjä voi määritellä, mistä raaka-aineista ruoka koostuu
-		- **Molemmat tehty**
-- Käyttäjä voi asettaa joitain parametrejä listan generoinnille
-	- Syödäänkö jotain ruokaa vain yhtenä vai useampana päivänä
-	- Syödäänkö jonain päivänä ulkona/noutoruokaa
+- Käyttäjä voi poistaa ruokalajeja listasta
 - Käyttäjä voi kirjautua ulos järjestelmästä
-**Viikko 6:** No periaatteessa käyttäjä voi kirjautua tällä hetkellä ulos painamalla "Lopeta" :D
+- Käyttäjä voi lopettaa ohjelman suorituksen
 
 Ruokalista luodaan aina viikoksi kerrallaan ja oletusarvoisesti yksi ruokalaji on generoitu aina yhdeksi päiväksi, eli sovellus ei erottele esimerkiksi lounasta ja päivällistä erikseen.
-	- **Tällä hetkellä tämä on vielä näin**
-
-**Tilanne:** Projekti laahaa tällä hetkellä hieman jäljessä (omasta) aikataulusta, graafisen käyttöliittymän tekoa ei ole ehditty vielä edes aloittaa. 
-	- **Viikko 5:** Graafinen ihan ok mallilla, seuraavaksi mahdollisesti lisää toiminnallisuutta
 
 ## Jatkokehitysideoita
 
-Järjestelmään resurssien puitteissa lisättävää toiminnallisuutta:
-
+Perusversiota voidaan tulevaisuudessa jatkojalostaa esimerkiksi seuraavanlaisesti:
+- Käyttäjä voi editoida ruokalajeja
 - Ruokalista huomioi erikseen esimerkiksi lounaan ja päivällisen/illallisen
-- Käyttäjä voi koostaa ostoslistan (ns. kauppalapun) generoidun ruokalistan perusteella
-	- Budjetointimahdollisuus; koostaa listan annetulla budjetilla
 - Käyttäjä voi tarkastella vanhoja ruokalistoja
 - Ruokalistojen editointi
 - Statistiikan keruu ja käpistely
 - Ruokavalioiden huomiointi, esimerkiksi täysin vegaaninen ruokalista jne
 - Ruokapäiväkirjan suunnittelu ja seuranta
+- [Nightmare](https://doom.fandom.com/wiki/Skill_level):
+	- Web-käli ja joku integraatio jossa kauppalistan voi ajaa suoraan K- tai S-ryhmän verkkokauppaan ja tarvitsee painaa vain "Tilaa"
