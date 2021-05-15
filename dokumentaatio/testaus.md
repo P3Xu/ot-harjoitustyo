@@ -24,7 +24,7 @@ Lisäksi kolmen jälkimmäisen luokan käyttämää yhteistä `InputOutput`-luok
 
 ### Testauskattavuus
 
-Sovelluksen käyttöliittymä jätettiin automaattitestauksen ulkopuolelle. Käyttöliittymää lukuunottamatta sovelluksen testauksen haarautumakattavuus on 97%.
+Sovelluksen käyttöliittymä jätettiin automaattitestauksen ulkopuolelle. Käyttöliittymää lukuunottamatta sovelluksen testauksen haarautumakattavuus on 98%.
 
 ![](./pictures/coverage_report.png)
 
