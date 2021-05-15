@@ -36,7 +36,7 @@ Sovelluksen järjestelmätestausta on suoritettu lähinnä manuaalisesti.
 
 ### Asennus ja konfigurointi
 
-Sovelluksen järjestelmätestausta on suoritettu [käyttöohjeen](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md) mukaisesti lähinnä muutamassa eri Linux-ympäristössä, sekä aiemmassa kehitysvaiheessa myös nopeasti Windows-ympäristössä. 
+Sovelluksen järjestelmätestausta on suoritettu [käyttöohjeen](https://github.com/P3Xu/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md) mukaisesti lähinnä muutamassa eri Linux-ympäristössä, sekä hieman myös Windows-ympäristössä. 
 
 Testauksessa on kokeiltu, että `.env`-tiedostossa tehdyt muutokset toimivat oikein. 
 
