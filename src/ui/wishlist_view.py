@@ -168,14 +168,16 @@ class WishlistView:
         """
 
         save_dir = askdirectory()
-        file_path = self._ctrl.export_wishlist(self._wishlist, save_dir)
 
-        if isinstance(file_path, IOError):
-            msg = "Hakemistoon ei ole tarvittavia oikeuksia.\nValitse toinen hakemisto."
-        else:
-            msg = "Kauppalista tallennettiin onnistuneesti tiedostoon "+file_path
+        if not isinstance(save_dir, tuple):
+            file_path = self._ctrl.export_wishlist(self._wishlist, save_dir)
 
-        self._root.after(0, self._views[2](msg, 7))
+            if isinstance(file_path, IOError):
+                msg = "Hakemistoon ei ole tarvittavia oikeuksia.\nValitse toinen hakemisto."
+            else:
+                msg = "Kauppalista tallennettiin onnistuneesti tiedostoon "+file_path
+
+            self._root.after(0, self._views[2](msg, 7))
 
     def _process_logout(self):
         """Prosessoi käyttäjän uloskirjautumisen."""
