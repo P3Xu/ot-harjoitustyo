@@ -1,0 +1,39 @@
+// Creating tables
+Table ingredients as I {
+  id int [pk, increment] // auto-increment
+  name text
+}
+
+Table meals as M {
+  id int [pk, increment] // auto-increment
+  name text
+ }
+ 
+Table menus as N {
+  id int [pk, increment] // auto-increment
+  mealID int
+  userID int
+  date date
+ }
+
+Table users as U {
+  id int [pk, increment] // auto-increment
+  name text
+  password text
+ }
+ 
+Table meal_relations as R {
+  userID int 
+  mealID int
+  ingredientID int
+ }
+
+// Creating references
+// You can also define relaionship separately
+// > many-to-one; < one-to-many; - one-to-one
+Ref: R.userID > U.id  
+Ref: R.mealID > M.id
+Ref: R.ingredientID > I.id
+Ref: N.mealID > M.id
+Ref: N.userID > U.id
+//----------------------------------------------//
