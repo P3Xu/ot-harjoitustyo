@@ -111,4 +111,6 @@ Sovelluksen pakkausrakenteesta johtuen kaikki toiminnallisuudet toimivat samalla
 
 ## Ohjelman rakenteeseen jääneet heikkoudet
 
-Käyttöliittymä saattaa olla paikoin hieman epäintuitiivinen, sekä käytettävästä ympäristöstä riippuen jotkin käyttöliittymän komponentit eivät välttämättä näy oikein. Esimerkiksi hyvin pieniresoluutioisella näytöllä varsinkin hallintanäkymässä saattaa jäädä painikkeet piiloon. Lisäksi tkinterin ominaisuuksiin vaikuttaa kuuluvan sellainen, että sovelluksen näkymät aukeavat ruudulla mihin sattuu. Myöskin ikkunan _resize_ saattaa saada näkymän sekaisin, kun palaa _maximized_-tilasta takaisin normaaliin. 
+Käyttöliittymä saattaa olla paikoin hieman epäintuitiivinen, sekä käytettävästä ympäristöstä riippuen jotkin käyttöliittymän komponentit eivät välttämättä näy oikein. Esimerkiksi hyvin pieniresoluutioisella näytöllä varsinkin hallintanäkymässä saattaa jäädä painikkeet piiloon. Lisäksi tkinterin ominaisuuksiin vaikuttaa kuuluvan sellainen, että sovelluksen näkymät aukeavat ruudulla mihin sattuu. Myöskin ikkunan _resize_ saattaa saada näkymän sekaisin, kun palaa _maximized_-tilasta takaisin normaaliin. Lisäksi kauppalistan tallennushakemistoa valittaessa, mikäli painaa _cancel_, saattaa tulostua virheviesti, jonka on tarkoitus tulostua vain yritettäessä tallentaa hakemistoon, johon ei ole kirjoitusoikeuksia.
+
+Lisäksi yksittäisiä ruokalajeja ei pääse tällä hetkellä käsittelemään erikseen. Käyttöliittymästä ei siis ole esimerkiksi mahdollista nähdä, mitkä raaka-aineet liittyvät mihinkin ruokalajiin.

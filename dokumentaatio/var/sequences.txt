@@ -1,0 +1,65 @@
+title Login
+
+User->+UI: click "Kirjaudu sisään"
+UI->+ControllerService: login_user("Hagrid", "kurpitsa666")
+ControllerService->+UserRepository: find_by_username("Hagrid")
+UserRepository->+InputOutput: read(query, "Hagrid")
+InputOutput-->-UserRepository: results
+UserRepository-->-ControllerService: user
+ControllerService-->-UI: 0
+UI->UI: _show_main_view()
+UI-->-User:
+
+title Create user
+
+User->+UI: click "Luo uusi käyttäjä"
+UI->+ControllerService: add_user("Hagrid", "kurpitsa666")
+ControllerService->ControllerService: _check_duplicates_username("Hagrid")
+ControllerService->+LibraryRepository: read_meals()
+LibraryRepository-->-ControllerService: meals
+ControllerService->+UserRepository: add_user("Hagrid", "kurpitsa666")
+UserRepository-->-ControllerService: uid
+ControllerService->ControllerService: self._user = User("Hagrid", "kurpitsa666", uid)
+ControllerService->ControllerService: _insert_default_meals(meals)
+ControllerService-->-UI: uid
+UI->UI: _show_information_view("Lisäys onnistui!")
+UI->UI: _show_login_view()
+UI-->-User:
+
+title Generate menu
+
+User->+UI: click "Generoi ruokalista"
+UI->+ControllerService: generate_menu()
+ControllerService->+GeneratorService: generate()
+GeneratorService-->-ControllerService: Menu
+ControllerService->-MenuRepository: insert_menu(menu)
+activate MenuRepository
+MenuRepository->MenuRepository: initialize_menus(user)
+MenuRepository->-InputOutput: write(query, values)
+InputOutput-->MenuRepository: None
+UI->UI: _show_main_view()
+UI-->-User:
+
+title Add meal
+
+User->+UI: click "Lisää"
+UI->+ControllerService: add_meal(meal, ingredients)
+ControllerService->ControllerService: add_ingredients(ingredients)
+ControllerService->+MealRepository: fetch_item_id(ingredient, False)
+MealRepository-->-ControllerService: id
+ControllerService->+MealRepository: insert_ingredient(ingredient)
+MealRepository->+InputOutput: write(query, values)
+InputOutput-->-MealRepository: id
+MealRepository-->-ControllerService: Ingredient
+ControllerService-->ControllerService: inserted_ingredients
+ControllerService->+MealRepository: insert_meal(Meal)
+MealRepository->MealRepository: fetch_item_id(meal.name)
+MealRepository->+InputOutput: write(query, values)
+InputOutput-->-MealRepository: id
+MealRepository->MealRepository: _insert_relation((relation))
+MealRepository->InputOutput: write(query, values)
+MealRepository-->-ControllerService: id
+ControllerService-->-UI: id
+UI->UI: _show_information_view("Ruokalaji lisättiin onnistuneesti.")
+UI->UI: _show_management_view()
+UI-->-User:
