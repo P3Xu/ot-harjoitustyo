@@ -6,7 +6,7 @@ from entities.user import User
 from entities.meal import Meal
 from entities.meal_set import MealSet as test_set
 from init_default_set import initialize_default_set
-from init_wishlist_dir import initialize_wishlist_dir
+from tests.init_wishlist_dir import initialize_wishlist_dir
 
 class TestLibraryRepository(unittest.TestCase):
     def setUp(self):
@@ -31,10 +31,11 @@ class TestLibraryRepository(unittest.TestCase):
 
     def test_write_wishlist(self):
         meal = self.meals[0]
-        file_name = self.repository.write_wishlist(meal.ingredients)
+        file_path = self.repository.write_wishlist(meal.ingredients, WISHLIST_DIR_PATH)
+        path = Path(file_path)
         items = []
 
-        with open(WISHLIST_DIR_PATH+file_name) as file:
+        with open(file_path) as file:
             for row in file:
                 row = row.replace("\n", "")
 
@@ -43,7 +44,15 @@ class TestLibraryRepository(unittest.TestCase):
         for i, ingredient in enumerate(meal.ingredients):
             self.assertEqual(items[i], ingredient.name)
 
-        Path(WISHLIST_DIR_PATH+file_name).unlink()
+        path.unlink()
+
+        path = Path(WISHLIST_DIR_PATH)
+        path.chmod(444)
+        result = self.repository.write_wishlist(meal.ingredients, WISHLIST_DIR_PATH)
+
+        self.assertIsInstance(result, IOError)
+
+        path.chmod(755)
 
 class TestInitDir(unittest.TestCase):
     def setUp(self):

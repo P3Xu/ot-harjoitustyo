@@ -86,22 +86,27 @@ class Controller:
         """Lisää tietokantaan yhden ruokalajin raaka-aineet.
 
         Saa argumenttina listallisen raaka-aineita str-muodossa, jotka iteroidaan läpi ja lisätään
-        yksitellen tietokantaan. Jokaisen kohdalla tarkistetaan, löytyykö ingredients-taulusta jo
-        samanniminen raaka-aine ja matchin sattuessa luodaan Ingredient-objekti, jolle annetaan
-        saatu tietokannan id. Muutoin tallennetaan uusi raaka-aine tietokantaan, jonka jälkeen
-        luodaan Ingredient-objekti, jolle annetaan saatu tietokanta-id mukaan. Lopuksi tallennetaan
-        kummassa tahansa tapauksessa luotu objekti palautettavaan listaan.
+        yksitellen tietokantaan. Jokaisen kohdalla tarkistetaan, onko merkkijono tyhjä sekä
+        löytyykö ingredients-taulusta jo samanniminen raaka-aine ja matchin sattuessa luodaan
+        Ingredient-objekti, jolle annetaan saatu tietokannan id. Muutoin tallennetaan uusi
+        raaka-aine tietokantaan, jonka jälkeen luodaan Ingredient-objekti, jolle annetaan saatu
+        tietokanta-id mukaan. Lopuksi tallennetaan kummassa tahansa tapauksessa luotu
+        objekti palautettavaan listaan.
 
         Args:
             ingredients: lista yhden ruokalajin raaka-aineita str-muodossa.
 
         Returns:
-            Palauttaa listan, joka sisältää ruokalajin raaka-aineiden ilmentymiä.
+            Palauttaa listan, joka sisältää ruokalajin raaka-aineiden ilmentymiä. Tai Nonen,
+            mikäli lista on tyhjä.
         """
 
         inserted_ingredients = []
 
         for ingredient in ingredients:
+            if len(ingredient.strip()) == 0:
+                continue
+
             ingredient = ingredient.capitalize()
             check = self.meal_repository.fetch_item_id(ingredient, False)
 
@@ -113,24 +118,29 @@ class Controller:
 
             inserted_ingredients.append(db_ingredient)
 
-        return inserted_ingredients
+        return None if len(inserted_ingredients) == 0 else inserted_ingredients
 
     def add_meal(self, meal, ingredients):
         """Lisää tietokantaan ruokalajin.
 
         Metodi lisää tietokantaan annetun ruokalajin. Metodi ei erikseen tarkista ruokalajin
-        olemassaoloa, vaan laittaa Meal-objektin raaka-aineet saatuaan suoraan eteenpäin
-        repository-luokalle.
+        olemassaoloa tietokannassa, vaan laittaa Meal-objektin raaka-aineet saatuaan suoraan
+        eteenpäin repository-luokalle. Mikäli raaka-aineita ei ole, keskeytyy suoritus ja
+        palautetaan None.
 
         Args:
             meal: lisättävän ruokalajin nimi str-muotoisena.
             ingredients: lisättävän ruokalajin raaka-aineet listana str-muodossa.
 
         Returns:
-            Palauttaa tietokantaan lisätyn ruokalajin id-numeron.
+            Palauttaa tietokantaan lisätyn ruokalajin id-numeron, tai Nonen mikäli raaka-aineita
+            ei ole.
         """
 
         db_ingredients = self.add_ingredients(ingredients)
+
+        if not db_ingredients:
+            return None
 
         meal = self.meal_repository.insert_meal(
             Meal(meal.capitalize(), db_ingredients), self.user)
@@ -231,7 +241,7 @@ class Controller:
 
             self.meal_repository.remove_meal(get_meal, self.user)
 
-    def export_wishlist(self, wishlist):
+    def export_wishlist(self, wishlist, directory):
         """Pyytää kirjasto-repositorya tulostamaan ruokalistan raaka-aineet.
 
         Generoidun ruokalistan raaka-aineet tulostetaan tekstitiedostoon.
@@ -239,10 +249,10 @@ class Controller:
         Args:
             wishlist: ruokalistan raaka-aineiden nimet str-muotoisena listassa.
         Returns:
-            Palauttaa generoidun tekstitiedoston nimen, esimerkiksi testejä varten.
+            Palauttaa generoidun tekstitiedoston polun merkkijonona.
         """
 
-        return self.lib_repository.write_wishlist(wishlist)
+        return self.lib_repository.write_wishlist(wishlist, directory)
 
     def _insert_default_meals(self, meals):
         for meal in meals:

@@ -33,7 +33,7 @@ class MealSet():
             'Pizza',
             'Pinaattilätyt',
             'Kaalilaatikko',
-            'Possuwokki']
+            'Lihaa ja perunaa']
 
         self.ingredients = [
             'Jauheliha',
@@ -48,11 +48,11 @@ class MealSet():
             'Aurajuusto',
             'Pizzajauhot',
             'Hiiva',
-            'Pinaattilätty',
+            'Pinaattilätyt',
             'Kaali',
             'Riisiä',
-            'Possun fileesuikale',
-            'Wokkivihannekset']
+            'Liha',
+            'Peruna']
 
         self.relations = [
             (0, 0),

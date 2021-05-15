@@ -203,14 +203,24 @@ class ManagementView:
         ingredients = self._entry_variables['textbox'].get(0.0, constants.END).splitlines()
 
         if meal in "Kirjoita tähän ruokalajin nimi" or len(meal.strip()) == 0:
-            self._root.after(0, self._views[1])
-        elif (ingredients[0] in "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna"
-            or len(ingredients[0].strip()) == 0 or len(ingredients[-1].strip()) == 0):
+            self._root.after(0, self._views[2]("Syötä kenttään ruokalajin nimi.", 1))
 
-            self._root.after(0, self._views[1])
+        elif (ingredients[0] == "Kirjoita tähän ruokalajin aineosat rivinvaihdolla eroteltuna"
+            or(len(ingredients) <= 1 and len(ingredients[0].strip()) == 0)):
+
+            msg = "Ruokalajilla pitää olla vähintään yksi raaka-aine."
+            self._root.after(0, self._views[2](msg, 1))
+
         else:
-            self._ctrl.add_meal(meal, ingredients)
-            self._views[2]("Ruokalaji lisättiin kirjastoon!", 1)
+            status = self._ctrl.add_meal(meal, ingredients)
+
+            if status:
+                msg = "Ruokalaji lisättiin kirjastoon!"
+            else:
+                msg = "Ruokalajin lisäys epäonnistui. Ruokalajilla pitää olla vähintään yksi " + \
+                    "raaka-aine."
+
+            self._views[2](msg, 1)
 
     def _entry_event(self, entry=True):
         """Prosessoi inputtien tyhjentämisen klikattaessa.

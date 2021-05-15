@@ -97,6 +97,7 @@ class TestControllerServiceAsIntegration(unittest.TestCase):
 
         self.assertEqual(len(results), len(self.meals))
         self.assertEqual(results[0].name, self.meals[0])
+        self.assertIsNone(self.controller.add_meal(self.meals[0], []))
 
     def test_e_add_ingredients(self):
         results = self.controller.fetch_ingredients()
@@ -106,6 +107,7 @@ class TestControllerServiceAsIntegration(unittest.TestCase):
         self.assertEqual(results[0].name, ingredients[0])
         self.assertIsInstance(self.controller.add_ingredients(ingredients), list)
         self.assertEqual(len(self.controller.add_ingredients(ingredients)), len(ingredients))
+        self.assertIsNone(self.controller.add_ingredients(['', '', '']))
 
     def test_f_fetch_meals(self):
         results = self.controller.fetch_meals()
@@ -166,8 +168,9 @@ class TestControllerServiceAsIntegration(unittest.TestCase):
         wishlist = ["Makaroni", "Jauheliha", "Sipuli"]
 
         path = Path(WISHLIST_DIR_PATH+file_name)
+        result = WISHLIST_DIR_PATH+file_name
 
-        self.assertAlmostEqual(self.controller.export_wishlist(wishlist), file_name)
+        self.assertEqual(self.controller.export_wishlist(wishlist, WISHLIST_DIR_PATH), result)
         self.assertTrue(path.is_file())
 
         path.unlink()

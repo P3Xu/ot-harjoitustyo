@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from entities.meal import Meal
-from config import DEFAULT_SET_FILE_PATH, WISHLIST_DIR_PATH
+from config import DEFAULT_SET_FILE_PATH
 
 class LibraryRepository:
     """Luokka, joka lukee CSV-muotoiset ruokalajien vakiokirjastot, sekä tulostaa kauppalistan.
@@ -57,7 +57,7 @@ class LibraryRepository:
 
         return meals
 
-    def write_wishlist(self, items):
+    def write_wishlist(self, items, directory):
         """Kirjoittaa kauppalistan tekstitiedostoon.
 
         Kirjoittaa parametrina annetun kauppalistan tekstitiedostoon, jonka nimi muodostuu
@@ -74,12 +74,16 @@ class LibraryRepository:
 
         timestamp = datetime.now().strftime("%d_%m_%H%M%S")
         file_name = "/kauppalista"+timestamp+".txt"
-        file_path = Path(WISHLIST_DIR_PATH+file_name)
+        file_path = Path(directory+file_name)
 
-        file_path.touch()
+        try:
+            file_path.touch()
 
-        with file_path.open(mode = "w") as file:
-            for item in items:
-                file.write(f"{item}"+"\n")
+            with file_path.open(mode = "w") as file:
+                for item in items:
+                    file.write(f"{item}"+"\n")
 
-        return file_name
+            return directory+file_name
+
+        except IOError as error:
+            return error

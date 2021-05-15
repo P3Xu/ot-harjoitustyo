@@ -1,6 +1,7 @@
 """UI-moduuli, joka tarjoaa näkymän ruokalistan raaka-aineiden kauppalistalle."""
 
 from tkinter import Frame, Label, Listbox, Scrollbar, Button, constants, LabelFrame
+from tkinter.filedialog import askdirectory
 from ui.menu_view import MenuView
 
 class WishlistView:
@@ -163,11 +164,16 @@ class WishlistView:
     def _process_save(self):
         """Prosessoi tallennuspyynnön.
 
-        Tulostaa käyttäjälle tiedoston nimen, johon kauppalista tallennettiin.
+        Tulostaa käyttäjälle polun, johon kauppalista tallennettiin.
         """
 
-        file_name = self._ctrl.export_wishlist(self._wishlist)
-        msg = "Kauppalista tallennettiin onnistuneesti tiedostoon "+file_name[1:]
+        save_dir = askdirectory()
+        file_path = self._ctrl.export_wishlist(self._wishlist, save_dir)
+
+        if isinstance(file_path, IOError):
+            msg = "Hakemistoon ei ole tarvittavia oikeuksia.\nValitse toinen hakemisto."
+        else:
+            msg = "Kauppalista tallennettiin onnistuneesti tiedostoon "+file_path
 
         self._root.after(0, self._views[2](msg, 7))
 

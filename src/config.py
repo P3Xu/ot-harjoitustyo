@@ -16,7 +16,10 @@ DATABASE_FILE_PATH = os.path.join(dirname, '..', 'data', DATABASE_FILENAME)
 DEFAULT_SET_FILENAME = os.getenv('DEFAULT_SET_FILENAME') or 'default.csv'
 DEFAULT_SET_FILE_PATH = os.path.join(dirname, '..', 'data', DEFAULT_SET_FILENAME)
 
-WISHLIST_DIRNAME = os.getenv('WISHLIST_DIRNAME') or 'wishlists'
+WISHLIST_DIRNAME = os.getenv('WISHLIST_DIRNAME') or 'not_set'
 WISHLIST_DIR_PATH = os.path.join(dirname, '..', 'data', WISHLIST_DIRNAME)
+
+ICON_NAME = os.getenv('ICON_NAME') or 'icon.ico'
+ICON_PATH = os.path.join(dirname, ICON_NAME)
 
 MESSAGE_SHOWTIME = os.getenv('MESSAGE_SHOWTIME') or 4500
